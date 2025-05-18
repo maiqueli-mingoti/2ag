@@ -9,9 +9,9 @@ Abaixo está a estrutura de diretórios e arquivos do projeto:
   - **`requisitos.pdf`**: Documento compilado com os requisitos do sistema.
 
 - **`assets/`**: Diretório contendo os recursos visuais.
-  - **`2ag - Logotipo apenas símbolo.svg`**
-  - **`2ag - Logotipo horizontal.svg`**
-  - **`2ag - Logotipo vertical.svg`** 
-  - **`Paleta de cores.pdf`**
-  - **`Tons e Subtons hex.pdf`**
-  - **`2AG Manual completo.pgs.pdf`**
+ - **`2ag - Logotipo apenas símbolo.svg`**: Logotipo do sistema composto apenas pelo símbolo.
+  - **`2ag - Logotipo horizontal.svg`**: Logotipo do sistema no formato horizontal.
+  - **`2ag - Logotipo vertical.svg`**: Logotipo do sistema no formato vertical.
+  - **`Paleta de cores.pdf`**: Documento contendo a paleta de cores oficial do sistema.
+  - **`Tons e Subtons hex.pdf`**: Documento contendo os tons e subtões em formato hexadecimal utilizados no design do sistema.
+  - **`2AG Manual completo.pgs.pdf`**: Manual incluindo instruções detalhadas para o uso e implementação.

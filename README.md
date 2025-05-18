@@ -1,2 +1,2 @@
 # 2ag
-sistema para acompanhamento semanal de usuários em uso de terapia canabinoide
+Este repositório contém o desenvolvimento de um sistema digital para gestão clínica de uma clínica integrativa especializada na prescrição e acompanhamento terapêutico com fitocanabinoides.

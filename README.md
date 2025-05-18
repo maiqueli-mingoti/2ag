@@ -3,7 +3,6 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
 
 ## Estrutura do Repositório
 Abaixo está a estrutura de diretórios e arquivos do projeto:
-docs/
-├── laTeX/ # Contém os arquivos de origem LaTeX e recursos (opcional)
-├── requisitos.pdf # Documento final compilado com os requisitos (PDF)
-└── README.md
+- **`docs/`**: Diretório contendo a documentação do projeto.
+  - **`laTeX/`**: Contém os arquivos de código-fonte em LaTeX e recursos utilizados para gerar a documentação final.
+  - **`requisitos.pdf`**: Documento compilado com todos os requisitos do sistema.

@@ -1,6 +1,3 @@
-# Matrícula
-20230004643
-
 # Sistema **2ag**
 Este repositório contém o desenvolvimento de um sistema digital para gestão clínica de uma clínica integrativa especializada na prescrição e acompanhamento terapêutico com fitocanabinoides.
 
@@ -16,3 +13,6 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
   - **`Paleta de cores.pdf`**: Paleta de cores do sistema.
   - **`Tons e Subtons hex.pdf`**: Tons e subtões hexadecimais usados no design.
   - **`2AG Manual completo.pgs.pdf`**: Manual com instruções para uso e implementação.
+
+### Matrícula
+20230004643

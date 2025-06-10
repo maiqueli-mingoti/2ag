@@ -15,4 +15,4 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
   - **`2AG Manual completo.pgs.pdf`**: Manual com instruções para uso e implementação.
 
 ### Matrícula
-20230004643
+maiqueli mingoti (20230004643)

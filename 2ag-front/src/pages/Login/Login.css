@@ -1,50 +1,122 @@
-.login-container{
+
+.login-container {
     display: flex;
     justify-content: center;
-    align-items: center ;
+    align-items: center;
     min-height: 100vh;
-    background-color: #006633;
+    background-color: #f7f8fc;
     font-family: sans-serif;
 }
 
-
-.login-from{
-    background-color: #006633;
-    padding: 2rem 3rem;
-    border-radius: 5px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.login-form-wrapper {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 420px;
+}
+
+.login-header {
     text-align: center;
+    margin-bottom: 2rem;
 }
 
-.form-tittle{
+.form-title {
+    font-size: 2rem;
+    color: #333;
+    margin: 0;
+}
+
+.form-subtitle {
+    font-size: 1rem;
+    color: #777;
+    margin-top: 0.5rem;
+}
+
+.login-form .input-group {
     margin-bottom: 1.5rem;
-    front-size: 2rem;
-    color: #FFEEDA;
 }
 
-.form-input{
-    width:100%;
+.login-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+    text-align: left;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
     padding: 12px 15px;
-    margin-bottom: 1rem;
-    border: 1px solid #FFEEDA;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     font-size: 1rem;
     box-sizing: border-box;
 }
 
-.form-input:focus{
-    outline: none;
-    border-color: #006633;
+.form-extra-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
 }
 
-.btn{
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #555;
+}
+
+.forgot-password-link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.btn {
     width: 100%;
     padding: 12px;
-    border: none;
     border-radius: 6px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: #2e7d32;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.separator {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #aaa;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: white;
+    color: #555;
+    border-color: #ccc;
+}
+
+.error-message {
+    color: #d32f2f;
+    text-align: center;
     margin-bottom: 1rem;
 }

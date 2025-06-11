@@ -12,11 +12,18 @@ import './Login.css';
 
         return (
             <div className="login-container">
-                <h2>Login</h2>
+                <h2>Sing up</h2>
                 <form onSubmit={handleSubmit}>
                     <input
+                        type="nome"
+                        placeholder="Nome"
+                        value={name}
+                        onChange={(e) => setName (e.target.value)}
+                        required
+                    />
+                    <input
                         type="email"
-                        placeholder="Email"
+                        placeholder="E-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -29,7 +36,12 @@ import './Login.css';
                         required
                     />
                     <button type="submit">Login</button>
+                    <button type="submit">Sing up</button>
+                    <button type="submit">Google</button>
+
+
                 </form>
+
             </div>
         );
     }

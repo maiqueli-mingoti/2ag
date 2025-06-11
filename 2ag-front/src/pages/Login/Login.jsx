@@ -4,6 +4,12 @@ import './Login.css';
     export default function Login(){
         const [email, setEmail] = useState('');
         const [password, setPassword] = useState('');
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log("Tentativa de login com:");
+            console.log({email, password});
+        };
+
         return (
             <div className="login-container">
                 <h2>Login</h2>

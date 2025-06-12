@@ -41,6 +41,7 @@ import logo from '/../assets/2ag - Logotipo horizontal.svg';
                                 <a href="#" className="forgot-password-link">Esqueceu a senha?</a>
                             </div>
 
+
                             <button type="submit" className="btn btn-primary">Login</button>
                             <button type="button" className="btn btn-secondary">Sign Up</button>
 

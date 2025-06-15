@@ -355,14 +355,6 @@ RF03 & Tela Inicial (Dashboard) & Paciente; Prescritor & Após o login, o usuár
 \hline
 RF04 & Consulta Clínica & Prescritor & Durante a consulta o prescritor deverá registrar, na ficha clínica, em uma campo de consulta observações detalhadas sobre a condição do paciente, considerando aspectos como queixa principal, histórico da doença atual, antecedentes pessoais e familiares, hábitos de vida e quaisquer outros dados clínicos relevantes. Em outro campo, o prescritor também poderá atualizar ou adicionar diagnósticos, com a descrição clínica. Haverá também em outro campo o registro de condutas e definição de novos tratamentos, informando datas, descrição do plano terapêutico e eventuais observações. Caso haja necessidade, poderá emitir prescrições, informando medicamento, dosagem, frequência, via de administração, duração e orientações específicas. A cada atendimento, também será possível registrar a evolução clínica do paciente, relatando melhoras, pioras ou manutenção do quadro, bem como quaisquer recomendações adicionais. Todos os registros inseridos na ficha clínica serão vinculados ao profissional responsável e paciente, devidamente datados, \\
 \hline
-RF05 & Prescrição & Prescritor & A prescrição será feita de forma digital, onde o prescritor poderá definir a formulação, a concentração do óleo, a dosagem, a frequência e quaisquer instruções específicas relacionadas ao tratamento. O sistema também permitirá a revisão e modificação de prescrições conforme necessário.\\
-\hline
-RF06 & Tela de Acompanhamento & Paciente & O paciente deverá acessar semanalmente a tela de acompanhamento para registrar a evolução do tratamento. Nessa tela, ele poderá responder a questionários sobre seu estado clínico, registrar sintomas, e outras informações pertinentes à sua condição de saúde.\\
-\hline
-RF07 & Tela de Acompanhamento & Prescritor & O prescritor poderá visualizar a evolução clínica do paciente através de gráficos, tabelas e comentários inseridos pelo próprio paciente, organizados por datas.\\
-\hline
-RF08 & Tela de Escalas Clínicas & Paciente & O paciente terá acesso a escalas clínicas padronizadas, onde ele poderá responder a questões que avaliam seu estado clínico atual.\\
-\hline
 \end{tabularx}
 \end{table}
 
@@ -376,6 +368,14 @@ RF08 & Tela de Escalas Clínicas & Paciente & O paciente terá acesso a escalas 
 \rowcolor{gray!20}
 \textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
 \hline
+RF05 & Prescrição & Prescritor & A prescrição será feita de forma digital, onde o prescritor poderá definir a formulação, a concentração do óleo, a dosagem, a frequência e quaisquer instruções específicas relacionadas ao tratamento. O sistema também permitirá a revisão e modificação de prescrições conforme necessário.\\
+\hline
+RF06 & Tela de Acompanhamento & Paciente & O paciente deverá acessar semanalmente a tela de acompanhamento para registrar a evolução do tratamento. Nessa tela, ele poderá responder a questionários sobre seu estado clínico, registrar sintomas, e outras informações pertinentes à sua condição de saúde.\\
+\hline
+RF07 & Tela de Acompanhamento & Prescritor & O prescritor poderá visualizar a evolução clínica do paciente através de gráficos, tabelas e comentários inseridos pelo próprio paciente, organizados por datas.\\
+\hline
+RF08 & Tela de Escalas Clínicas & Paciente & O paciente terá acesso a escalas clínicas padronizadas, onde ele poderá responder a questões que avaliam seu estado clínico atual.\\
+\hline
 RF09 & Tela de Escalas Clínicas & Prescritor & O prescritor poderá cadastrar ou atualizar escalas clínicas ou selecionar escalas padronizadas existentes para disponibilizar aos pacientes.\\
 \hline
 RF10 & Tela de Agendamento & Paciente & O paciente poderá agendar suas consultas diretamente no sistema, visualizando a disponibilidade dos prescritores e escolhendo horários adequados. O sistema enviará notificações automáticas de lembretes.\\
@@ -383,6 +383,19 @@ RF10 & Tela de Agendamento & Paciente & O paciente poderá agendar suas consulta
 RF11 & Tela de Agendamento & Prescritor & O prescritor poderá agendar consultas para seus pacientes, com visualização de sua agenda. O sistema permitirá gerenciar e editar a agenda, além de enviar notificações para o paciente sobre alterações no agendamento.\\
 \hline
 RF12 & Tela de Histórico Clínico & Paciente & O paciente poderá acessar e visualizar seu histórico clínico completo, que incluirá dados como anamnese (RF19), diagnósticos realizados, tratamentos prescritos, evoluções no quadro clínico, e quaisquer prescrições anteriores. A sistema permitirá também a exportação desses dados.\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
 \hline
 RF13 & Tela de Histórico Clínico & Prescritor & O prescritor terá acesso completo ao histórico clínico do paciente, podendo consultar todas as informações relacionadas a tratamentos passados, diagnósticos e prescrições.\\
 \hline
@@ -396,6 +409,8 @@ RF17 & Tela de Relatórios & Prescritor & O prescritor poderá gerar relatórios
 \hline
 RF18 & Tela de Configurações & Paciente; Prescritor & O usuário poderá alterar suas informações pessoais, como dados de contato, idioma e preferências de notificação.\\
 \hline
+RF19 & Tela de Anamnese & Paciente & O usuário irá preencher os seguintes campos: nome completo, profissão, data de nascimento, telefone, motivo principal da consulta, diagnóstico(s) prévio(s), tratamentos anteriores, medicações em uso, tipo de dieta, hábito de fumar, uso de álcool, uso de substâncias recreativas, prática de exercícios físicos, qualidade do sono, presença de ansiedade, presença de dor, histórico familiar de doenças, alergias, condições genéticas, expectativas com o tratamento, formas de monitoramento e observações gerais (Figura 3).\\
+\hline
 \end{tabularx}
 \end{table}
 
@@ -408,9 +423,6 @@ RF18 & Tela de Configurações & Paciente; Prescritor & O usuário poderá alter
 \hline
 \rowcolor{gray!20}
 \textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
-\hline
-RF19 & Tela de Anamnese & Paciente & O usuário irá preencher os seguintes campos: nome completo, profissão, data de nascimento, telefone, motivo principal da consulta, diagnóstico(s) prévio(s), tratamentos anteriores, medicações em uso, tipo de dieta, hábito de fumar, uso de álcool, uso de substâncias recreativas, prática de exercícios físicos, qualidade do sono, presença de ansiedade, presença de dor, histórico familiar de doenças, alergias, condições genéticas, expectativas com o tratamento, formas de monitoramento e observações gerais (Figura 3).\\
-\hline
 RF20 & Tela de Ficha de Acompanhamento & Paciente & O usuário irá registrar a data de preenchimento, a quantidade de gotas utilizada pela manhã e à tarde, e avaliar os seguintes parâmetros em escala de 0 a 10: dor (0 = sem dor, 10 = dor intensa), sono (0 = muito ruim, 10 = excelente), humor (0 = deprimido, 10 = muito positivo), tremor (0 = ausente, 10 = grave), ansiedade (0 = muito ansioso, 10 = tranquilo), disposição/energia (0 = sem energia, 10 = muito energético), função intestinal (0 = irregular, 10 = normal), apetite (0 = sem apetite, 10 = saudável), concentração (0 = muito baixa, 10 = excelente), interação social (0 = isolado, 10 = muito social), rigidez/espasticidade (0 = nenhuma, 10 = intensa), redução no uso de maconha fumada/outra substância (0 = nenhuma, 10 = completa), náusea e vômito (0 = frequente, 10 = ausente), desempenho em atividades esportivas (0 = baixo, 10 = excelente) e presença de doença dermatológica (0 a 10) (Figura 4).\\
 \hline
 RF21 & Tela de Escala de Avaliação de Ansiedade de Hamilton (HAM-A) & Paciente & O usuário irá preencher a data da avaliação e atribuir uma pontuação de 0 a 4 para cada um dos seguintes itens, sendo que valores maiores indicam sintomas mais severos: humor ansioso, tensão, medos, insônia, comprometimento intelectual (cognitivo), humor deprimido, somatizações motoras, somatizações sensoriais, sintomas cardiovasculares, sintomas respiratórios, sintomas gastrointestinais, sintomas geniturinários e sintomas autonômicos. Cada item apresentará uma descrição comportamental para auxiliar na classificação. O sistema deverá calcular e armazenar o total da soma dos escores (Figura 5).\\

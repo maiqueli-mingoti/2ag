@@ -73,7 +73,7 @@
 
 \begin{center}
   \vspace*{3cm}
-  {\fontsize{12}{12}\selectfont\bfseries\uppercase{CAROLINE DE QUADROS PIAZZA E MAIQUELI EDUARDA DAMA MINGOTI}} \\
+  {\fontsize{12}{12}\selectfont\bfseries\uppercase{CAROLINE DE QUADROS PIAZZA (20230000690) E MAIQUELI EDUARDA DAMA MINGOTI (20230004643)}} \\
   \vspace{1cm} 
   \vfill
 \end{center}
@@ -353,7 +353,7 @@ RF02 & Cadastrar usuário & Paciente; Prescritor & O usuário deverá preencher 
 \hline
 RF03 & Tela Inicial (Dashboard) & Paciente; Prescritor & Após o login, o usuário será direcionado à sua tela inicial, onde poderá visualizar informações personalizadas, como consultas futuras, status de formulários, notificações de alertas clínicos e outras atividades relevantes.\\
 \hline
-RF04 & Consulta Clínica & Prescritor & Durante a consulta, o prescritor poderá acessar a ficha clínica do paciente, onde irá registrar observações sobre a condição do paciente. A ficha clínica será atualizada e estará disponível para consultas futuras.\\
+RF04 & Consulta Clínica & Prescritor & Durante a consulta o prescritor deverá registrar, na ficha clínica, em uma campo de consulta observações detalhadas sobre a condição do paciente, considerando aspectos como queixa principal, histórico da doença atual, antecedentes pessoais e familiares, hábitos de vida e quaisquer outros dados clínicos relevantes. Em outro campo, o prescritor também poderá atualizar ou adicionar diagnósticos, com a descrição clínica. Haverá também em outro campo o registro de condutas e definição de novos tratamentos, informando datas, descrição do plano terapêutico e eventuais observações. Caso haja necessidade, poderá emitir prescrições, informando medicamento, dosagem, frequência, via de administração, duração e orientações específicas. A cada atendimento, também será possível registrar a evolução clínica do paciente, relatando melhoras, pioras ou manutenção do quadro, bem como quaisquer recomendações adicionais. Todos os registros inseridos na ficha clínica serão vinculados ao profissional responsável e paciente, devidamente datados, \\
 \hline
 RF05 & Prescrição & Prescritor & A prescrição será feita de forma digital, onde o prescritor poderá definir a formulação, a concentração do óleo, a dosagem, a frequência e quaisquer instruções específicas relacionadas ao tratamento. O sistema também permitirá a revisão e modificação de prescrições conforme necessário.\\
 \hline
@@ -382,7 +382,7 @@ RF10 & Tela de Agendamento & Paciente & O paciente poderá agendar suas consulta
 \hline
 RF11 & Tela de Agendamento & Prescritor & O prescritor poderá agendar consultas para seus pacientes, com visualização de sua agenda. O sistema permitirá gerenciar e editar a agenda, além de enviar notificações para o paciente sobre alterações no agendamento.\\
 \hline
-RF12 & Tela de Histórico Clínico & Paciente & O paciente poderá acessar e visualizar seu histórico clínico completo, que incluirá dados como anamnese, diagnósticos realizados, tratamentos prescritos, evoluções no quadro clínico, e quaisquer prescrições anteriores. A sistema permitirá também a exportação desses dados.\\
+RF12 & Tela de Histórico Clínico & Paciente & O paciente poderá acessar e visualizar seu histórico clínico completo, que incluirá dados como anamnese (RF19), diagnósticos realizados, tratamentos prescritos, evoluções no quadro clínico, e quaisquer prescrições anteriores. A sistema permitirá também a exportação desses dados.\\
 \hline
 RF13 & Tela de Histórico Clínico & Prescritor & O prescritor terá acesso completo ao histórico clínico do paciente, podendo consultar todas as informações relacionadas a tratamentos passados, diagnósticos e prescrições.\\
 \hline
@@ -394,38 +394,114 @@ RF16 & Tela de Relatórios & Paciente & O paciente poderá gerar relatórios sob
 \hline
 RF17 & Tela de Relatórios & Prescritor & O prescritor poderá gerar relatórios sobre a evolução clínica de seus pacientes, incluindo informações como diagnósticos, tratamentos anteriores e resultados obtidos.\\
 \hline
-RF18 & Tela de Configurações & Paciente; Prescritor & O usuário poderá alterar suas informações pessoais, como dados de contato e preferências de notificação.\\
+RF18 & Tela de Configurações & Paciente; Prescritor & O usuário poderá alterar suas informações pessoais, como dados de contato, idioma e preferências de notificação.\\
 \hline
 \end{tabularx}
 \end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
+\hline
+RF19 & Tela de Anamnese & Paciente & O usuário irá preencher os seguintes campos: nome completo, profissão, data de nascimento, telefone, motivo principal da consulta, diagnóstico(s) prévio(s), tratamentos anteriores, medicações em uso, tipo de dieta, hábito de fumar, uso de álcool, uso de substâncias recreativas, prática de exercícios físicos, qualidade do sono, presença de ansiedade, presença de dor, histórico familiar de doenças, alergias, condições genéticas, expectativas com o tratamento, formas de monitoramento e observações gerais (Figura 3).\\
+\hline
+RF20 & Tela de Ficha de Acompanhamento & Paciente & O usuário irá registrar a data de preenchimento, a quantidade de gotas utilizada pela manhã e à tarde, e avaliar os seguintes parâmetros em escala de 0 a 10: dor (0 = sem dor, 10 = dor intensa), sono (0 = muito ruim, 10 = excelente), humor (0 = deprimido, 10 = muito positivo), tremor (0 = ausente, 10 = grave), ansiedade (0 = muito ansioso, 10 = tranquilo), disposição/energia (0 = sem energia, 10 = muito energético), função intestinal (0 = irregular, 10 = normal), apetite (0 = sem apetite, 10 = saudável), concentração (0 = muito baixa, 10 = excelente), interação social (0 = isolado, 10 = muito social), rigidez/espasticidade (0 = nenhuma, 10 = intensa), redução no uso de maconha fumada/outra substância (0 = nenhuma, 10 = completa), náusea e vômito (0 = frequente, 10 = ausente), desempenho em atividades esportivas (0 = baixo, 10 = excelente) e presença de doença dermatológica (0 a 10) (Figura 4).\\
+\hline
+RF21 & Tela de Escala de Avaliação de Ansiedade de Hamilton (HAM-A) & Paciente & O usuário irá preencher a data da avaliação e atribuir uma pontuação de 0 a 4 para cada um dos seguintes itens, sendo que valores maiores indicam sintomas mais severos: humor ansioso, tensão, medos, insônia, comprometimento intelectual (cognitivo), humor deprimido, somatizações motoras, somatizações sensoriais, sintomas cardiovasculares, sintomas respiratórios, sintomas gastrointestinais, sintomas geniturinários e sintomas autonômicos. Cada item apresentará uma descrição comportamental para auxiliar na classificação. O sistema deverá calcular e armazenar o total da soma dos escores (Figura 5).\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
+\hline
+RF22 & Tela de Diário de Sono & Paciente & O usuário irá preencher os seguintes dados relativos à última noite de sono: horário em que foi dormir, horário em que se levantou, tempo total na cama, tempo até adormecer, número de vezes que acordou, duração total acordado durante a noite, tempo total de sono e se foi um dia comum (sim/não). Também será possível registrar, em escalas de 0 a 5: nível de cansaço, estresse, desatenção, sonolência ao longo do dia e irritabilidade. Adicionalmente, o usuário poderá registrar: tempo em atividades físicas, tempo fora de casa, uso de medicação para dormir, presença de dor, percepção geral de saúde, consumo de bebida alcoólica, cochilos ao longo do dia, consumo de café e tabagismo noturno (Figura 6).\\
+\hline
+RF23 & Tela de Índice da Qualidade do Sono de Pittsburgh (PSQI-BR) & Paciente &
+O usuário irá preencher os dados relativos à avaliação do sono do último mês, incluindo: horário usual de deitar, tempo para adormecer (em minutos), horário usual de levantar, horas de sono por noite. Também registrará a frequência de dificuldades para dormir (por motivos como acordar no meio da noite, necessidade de ir ao banheiro, dificuldade para respirar, dor, sonhos ruins, entre outros), frequência de uso de medicamentos para dormir, dificuldades para se manter acordado em atividades diurnas, qualidade geral do sono, presença de parceiro de quarto e problemas relacionados, além do grau de entusiasmo para realizar atividades diárias. Cada item é respondido com escalas de frequência (nenhuma, <1 vez por semana, 1–2 vezes por semana, ≥3 vezes por semana) ou qualidade (muito boa a muito ruim). A soma dos escores gerará um índice final da qualidade do sono (Figura 6).\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
+\hline
+RF24 & Tela de Acompanhamento Semanal de Paciente com TEA & Paciente &
+O usuário irá registrar o período avaliado (data inicial e final) e a autoavaliação da qualidade de vida durante esse período, utilizando uma escala de 0 a 10, onde 0 representa a pior e 10 a melhor qualidade de vida. Também será possível preencher a frequência com que determinados comportamentos ocorreram durante a última semana. Cada comportamento é avaliado em uma escala de frequência com quatro opções: Nenhum dia, Até 3 dias, Entre 3 e 6 dias ou Todos os dias. Os comportamentos incluem agressividade/impulsividade, agitação psicomotora/ansiedade, sono, Interação social, estereotipia e apetite. Também deverá contem um campo de observação (Figura 7).\\
+\hline
+RF25 & Tela de Acompanhamento Semanal de Paciente com Dor & Paciente & O usuário deverá preencher a data de início e data de término do período avaliado, além da intensidade da dor percebida durante esse período, registrada em uma escala visual de 0 a 10, onde 0 representa ausência de dor, valores de 1 a 3 indicam dor leve, de 4 a 6 dor moderada e de 7 a 10 dor intensa. O usuário também deverá informar com que frequência a dor interferiu em diferentes aspectos da vida do paciente, selecionando entre as opções: nenhum dia, até 3 dias, entre 3 e 6 dias e todos os dias, para os seguintes tópicos: atividades básicas (como comer, levantar, tomar banho), atividades sociais (como sair com amigos, passear ou conviver com a família), produtividade no trabalho, qualidade do sono e necessidade de uso de medicação extra para dor (Figuea 8).\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
+\hline
+RF26 & Tela de Mini-Exame do Estado Mental (MEEM) & Prescritor &
+O prescritor durante a consulta deverá preencher a escala clínica do estado mental, no qual deve constar nome completo do paciente e data da avaliação. Em seguida, deverá aplicar e registrar as respostas (pontos) do paciente nas seguintes seções: orientação temporal, composta por cinco perguntas sobre hora aproximada, dia da semana, dia do mês, mês e ano; orientação espacial, com cinco questões sobre o local, bairro ou endereço, cidade e estado onde o paciente se encontra. Na seção de registro, o paciente deverá repetir três palavras apresentadas. Em atenção e cálculo, o prescritor irá registrar o desempenho do paciente ao subtrair sucessivamente o número 7 a partir de 100 até 65. Em memória de evocação, o paciente deve lembrar os três objetos apresentados anteriormente. Em seguida, o paciente deverá nomear dois objetos comuns, repetir uma frase exata, e executar um comando de três etapas. Na sequência, o paciente deve escrever uma frase completa com sentido, ler e executar a instrução “Feche os seus olhos”, e copiar dois pentágonos com interseção apresentados na tela. Cada item possui pontuação própria, que será registrada pelo prescritor, e o sistema deverá calcular automaticamente a pontuação total ao final do preenchimento (Figura 10).\\
+\hline
+\end{tabularx}
+\end{table}
+
 
 \subsection{Requisitos não funcionais do sistema}
 \begin{table}[H]
 \centering
 \caption{Tabela de Requisitos Não Funcionais do Sistema}
 \rowcolors{2}{gray!10}{white}
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}X|}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1.5cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3.3cm}|>{\raggedright\arraybackslash}X|}
 \hline
 \rowcolor{gray!20}
 \textbf{ID} & \textbf{Requisito} & \textbf{Categoria} & \textbf{Descrição}\\
 \hline
-RNF14 & Usabilidade & Usabilidade & O sistema deve oferecer uma interface simples e de fácil navegação, adequada para usuários com diferentes níveis de familiaridade com tecnologia.\\
+RNF01 & Usabilidade & Usabilidade & O sistema deve oferecer uma interface simples e de fácil navegação, adequada para usuários com diferentes níveis de familiaridade com tecnologia.\\
 \hline
-RNF15 & Usabilidade & Usabilidade & As telas devem ser responsivas e adaptáveis a dispositivos móveis e desktop, garantindo acessibilidade em diferentes resoluções.\\
+RNF02 & Usabilidade & Usabilidade & As telas devem ser responsivas e adaptáveis a dispositivos móveis e desktop, garantindo acessibilidade em diferentes resoluções.\\
 \hline
-RNF16 & Controle de Permissões & Segurança & O sistema deve garantir controle de acesso baseado em perfis, permitindo visualização e edição apenas conforme a permissão atribuída.\\
+RNF03 & Controle de Permissões & Segurança & O sistema deve garantir controle de acesso baseado em perfis, permitindo visualização e edição apenas conforme a permissão atribuída.\\
 \hline
-RNF17 & LGPD & Segurança & Todas as ações que envolvam dados sensíveis devem estar em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD).\\
+RNF04 & LGPD & Segurança & Todas as ações que envolvam dados sensíveis devem estar em conformidade com a Lei Geral de Proteção de Dados Pessoais (LGPD).\\
 \hline
-RNF18 & Tempo de Resposta & Desempenho & As principais funcionalidades, como login, consulta, prescrição e acompanhamento, devem apresentar tempo de resposta inferior a 3 segundos em rede estável.\\
+RNF05 & Criptografia & Segurança & Todas as conexões externas deve ser criptografadas.\\
 \hline
-RNF19 & Backup & Confiabilidade & O sistema deve realizar backups automáticos diários para evitar perda de dados clínicos e administrativos.\\
+RNF06 & Tempo de Resposta & Desempenho & As principais funcionalidades, como login, consulta, prescrição e acompanhamento, devem apresentar tempo de resposta inferior a 3 segundos em rede estável.\\
 \hline
-RNF20 & Adição de Funcionalidades & Extensibilidade & Deve ser possível incluir novas escalas clínicas, campos nos formulários e ajustes no fluxo sem a necessidade de reescrever partes centrais do sistema.\\
+RNF07 & Backup & Confiabilidade & O sistema deve realizar backups automáticos diários para evitar perda de dados clínicos e administrativos.\\
 \hline
-RNF21 & Compatibilidade com Sistemas & Interoperabilidade & O sistema deve ser compatível com exportação de dados em formatos abertos como PDF e CSV, além de permitir integração futura com sistemas como o Amplimed.\\
+RNF08 & Adição de Funcionalidades & Extensibilidade & Deve ser possível incluir novas escalas clínicas, campos nos formulários e ajustes no fluxo sem a necessidade de reescrever partes centrais do sistema.\\
 \hline
-RNF22 & Integração com Comunicação & Conectividade & Deve haver suporte à integração com ferramentas externas de comunicação.\\
+RNF09 & Compatibilidade com Sistemas & Interoperabilidade & O sistema deve ser compatível com exportação de dados em formatos abertos como PDF e CSV, além de permitir integração futura com sistemas como o Amplimed.\\
+\hline
+RNF10 & Integração com Comunicação & Conectividade & Deve haver suporte à integração com ferramentas externas de comunicação.\\
+\hline
+RNF11 & Requisito de desenvolvimento & Implementabilidade & Linguagem de programação: Java, HTML e JavaScript. Banco de dados: PostgreSQL \\
 \hline
 \end{tabularx}
 \end{table}

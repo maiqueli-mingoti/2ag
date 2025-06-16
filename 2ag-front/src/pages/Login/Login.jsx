@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import './Login.css';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
-import logo from '/../assets/2ag - Logotipo horizontal.svg';
+import logo from '../../assets/logotipo-horizontal.svg';
+import logosim from '../../assets/logotipo-simbolo.svg';
+
 
     export default function Login(){
         const [email, setEmail] = useState('');
@@ -12,12 +14,31 @@ import logo from '/../assets/2ag - Logotipo horizontal.svg';
             console.log("Tentativa de login com:");
             console.log({email, password});
         };
-
             return (
-                <div className="login-container">
-                    <div className="login-form-wrapper">
+
+                    <div className="login-container">
+
+                        <div className="logo-container">
+                            <div className="logo-head">
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-left"/>
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-right"/>
+
+                            </div>
+                            <div className="logo-center">
+
+                            </div>
+                            <div className="logo-footer">
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-simbolo"/>
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-simbolo"/>
+
+
+                            </div>
+
+                        </div>
+
+                        <div className="login-form-wrapper">
                         <div className="login-header">
-                            <img src={logo} alt="Logo da empresa" className="login-logo"/>
+                            <img src={logo} alt="Logo da empresa" className="logo-int"/>
                             <h2 className="form-title">Login</h2>
                             <p className="form-subtitle">Bem-vindo(a) de volta!</p>
                         </div>

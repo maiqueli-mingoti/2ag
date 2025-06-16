@@ -6,10 +6,37 @@
     min-height: 100vh;
     width: 100vw;
     font-family: sans-serif;
+}
+
+.logo-container{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+    width: 100vh;
     background-color: #193E21;
 }
 
+.logo-head{
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo-head .logo-left{
+}
+
+.logo-center{
+    flex:1;
+}
+
+.logo-footer{
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+}
+
 .login-form-wrapper {
+    flex:1;
     background-color: #ffffff;
     padding: 2.5rem;
     border-radius: 10px;
@@ -124,7 +151,7 @@
     margin-bottom: 1rem;
 }
 
-.login-logo{
+.logo-int{
     width: 200px;
     height: auto;
     margin-bottom: 1rem;

@@ -1,0 +1,343 @@
+.acompanhamento-container {
+    display: flex;
+    justify-content: center;
+    align-items: initial;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #f8f9fa;
+    font-family: sans-serif;
+}
+
+.acompanhamento-header {
+    background-color: white;
+    padding: 2rem;
+    border-bottom: 1px solid #e9ecef;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.acompanhamento-header h1 {
+    color: #193E21;
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.acompanhamento-header p {
+    color: #666;
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.acompanhamento-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.tabs-container {
+    margin-bottom: 2rem;
+}
+
+.tabs {
+    display: flex;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-right: 1px solid #e9ecef;
+}
+
+.tab:last-child {
+    border-right: none;
+}
+
+.tab.active {
+    background-color: #193E21;
+    color: white;
+}
+
+.tab:hover:not(.active) {
+    background-color: #f8f9fa;
+}
+
+.form-section {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2 {
+    color: #193E21;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.form-section > p {
+    color: #666;
+    margin: 0 0 2rem 0;
+    font-size: 1rem;
+}
+
+.questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.question-group {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1.5rem;
+}
+
+.question-group:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.question-group h3 {
+    color: #193E21;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.radio-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.radio-option:hover {
+    background-color: #f8f9fa;
+}
+
+.radio-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #193E21;
+}
+
+.radio-option span {
+    color: #333;
+    font-size: 1rem;
+}
+
+.observations-textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    line-height: 1.5;
+}
+
+.observations-textarea:focus {
+    outline: none;
+    border-color: #193E21;
+}
+
+.file-upload-section {
+    margin-bottom: 1rem;
+}
+
+.file-input {
+    display: none;
+}
+
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 2px dashed #193E21;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #193E21;
+    transition: all 0.3s ease;
+    text-align: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.file-upload-label:hover {
+    background-color: #f8f9fa;
+}
+
+.file-upload-label span {
+    font-size: 1.2rem;
+}
+
+.uploaded-files {
+    margin-top: 1rem;
+}
+
+.uploaded-files h4 {
+    color: #193E21;
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+}
+
+.file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.file-name {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.remove-file-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.remove-file-btn:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn {
+    padding: 0.75rem 2rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #193E21;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0f2a15;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #193E21;
+    border-color: #193E21;
+}
+
+.btn-secondary:hover {
+    background-color: #f8f9fa;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .acompanhamento-content {
+        padding: 1rem;
+    }
+
+    .acompanhamento-header {
+        padding: 1.5rem 1rem;
+    }
+
+    .acompanhamento-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
+
+    .tab {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .tab:last-child {
+        border-bottom: none;
+    }
+
+    .form-section {
+        padding: 1.5rem;
+    }
+
+    .radio-options {
+        gap: 0.5rem;
+    }
+
+    .radio-option {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .acompanhamento-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .acompanhamento-header p {
+        font-size: 1rem;
+    }
+
+    .form-section {
+        padding: 1rem;
+    }
+
+    .question-group h3 {
+        font-size: 1rem;
+    }
+
+    .radio-option span {
+        font-size: 0.9rem;
+    }
+}

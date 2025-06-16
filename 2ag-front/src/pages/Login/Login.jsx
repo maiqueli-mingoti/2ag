@@ -4,6 +4,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import logo from '../../assets/logotipo-horizontal.svg';
 import logosim from '../../assets/logotipo-simbolo.svg';
+import logovertical from '../../assets/logotipo-vertical.svg';
 
 
     export default function Login(){
@@ -25,11 +26,12 @@ import logosim from '../../assets/logotipo-simbolo.svg';
 
                             </div>
                             <div className="logo-center">
+                                <img src={logovertical} alt ="Logotipo vertical"/>
 
                             </div>
                             <div className="logo-footer">
-                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-simbolo"/>
-                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-simbolo"/>
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-left"/>
+                                <img src={logosim} alt ="Logo simbolo da empresa" className="logo-right"/>
 
 
                             </div>
@@ -40,7 +42,7 @@ import logosim from '../../assets/logotipo-simbolo.svg';
                         <div className="login-header">
                             <img src={logo} alt="Logo da empresa" className="logo-int"/>
                             <h2 className="form-title">Login</h2>
-                            <p className="form-subtitle">Bem-vindo(a) de volta!</p>
+                            <p className="form-subtitle">Boas vindas!</p>
                         </div>
 
                         <form className="login-form">

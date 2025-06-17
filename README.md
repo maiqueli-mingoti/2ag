@@ -7,7 +7,7 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
   - **`requisitos.pdf`**: Documento com os requisitos do sistema.
 
 - **`database/`**: Modelagem do banco de dados.
-  - **`conceptual model/`**: Arquivos do modelo conceitual do banco de dados.
+  - **`conceptual-model/`**: Arquivos do modelo conceitual do banco de dados.
     - `2ag.brM3`: Arquivo do modelo conceitual gerado pela ferramenta brModelo.
     - `2ag.png`: Imagem do diagrama do modelo conceitual.
 

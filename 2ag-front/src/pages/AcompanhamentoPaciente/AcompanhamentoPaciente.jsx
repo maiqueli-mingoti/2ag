@@ -31,7 +31,6 @@ export default function AcompanhamentoPaciente() {
 
     const handleSalvar = () => {
         console.log("Salvando acompanhamento:", formData);
-        console.log("Arquivos:", arquivos);
     };
 
     const opcoes = {

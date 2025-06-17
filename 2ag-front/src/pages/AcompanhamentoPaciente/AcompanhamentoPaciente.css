@@ -130,10 +130,6 @@
     transition: background-color 0.3s ease;
 }
 
-.radio-option:hover {
-    background-color: #f8f9fa;
-}
-
 .radio-option input[type="radio"] {
     width: 18px;
     height: 18px;
@@ -148,19 +144,16 @@
 .observations-textarea {
     width: 100%;
     padding: 1rem;
-    border: 1px solid #e9ecef;
+    border: 1px solid;
     border-radius: 6px;
     font-size: 1rem;
     font-family: inherit;
     resize: vertical;
     box-sizing: border-box;
     line-height: 1.5;
+    background-color: #14361b;
 }
 
-.observations-textarea:focus {
-    outline: none;
-    border-color: #193E21;
-}
 
 .file-upload-section {
     margin-bottom: 1rem;

@@ -44,18 +44,16 @@ export default function AcompanhamentoPaciente() {
 
     return (
         <div className="acompanhamento-container">
-            <header className="acompanhamento-header">
-                <h1>Acompanhamento Semanal</h1>
-                <p>Registre suas informações semanais para ajudar no acompanhamento do seu tratamento.</p>
-            </header>
-
-            <div className="acompanhamento-content">
+                   <div className="acompanhamento-content">
+                <header className="acompanhamento-header">
+                    <h1>Acompanhamento Semanal</h1>
+                    <p>Registre suas informações semanais para ajudar no acompanhamento do seu tratamento.</p>
+                </header>
                 <div className="tabs-container">
                     <div className="tabs">
                         <button className="tab active">Sintomas</button>
                         <button className="tab">Questionário</button>
                         <button className="tab">Medicamentos</button>
-                        <button className="tab">Estado Clínico</button>
                     </div>
                 </div>
 
@@ -165,39 +163,6 @@ export default function AcompanhamentoPaciente() {
                             />
                         </div>
 
-                        <div className="question-group">
-                            <h3>Anexar documentos ou planilhas</h3>
-                            <div className="file-upload-section">
-                                <input
-                                    type="file"
-                                    id="file-upload"
-                                    multiple
-                                    onChange={handleFileUpload}
-                                    className="file-input"
-                                />
-                                <label htmlFor="file-upload" className="file-upload-label">
-                                    <span>📎</span>
-                                    Anexar planilhas ou documentos complementares
-                                </label>
-                            </div>
-
-                            {arquivos.length > 0 && (
-                                <div className="uploaded-files">
-                                    <h4>Arquivos anexados:</h4>
-                                    {arquivos.map((file, index) => (
-                                        <div key={index} className="file-item">
-                                            <span className="file-name">{file.name}</span>
-                                            <button
-                                                className="remove-file-btn"
-                                                onClick={() => removeFile(index)}
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
                     </div>
 
                     <div className="form-actions">

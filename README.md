@@ -8,11 +8,8 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
 
 - **`database/`**: Modelagem do banco de dados.
   - **`conceptual-model/`**: Arquivos do modelo conceitual do banco de dados.
-    - `2ag.brM3`: Arquivo do modelo conceitual gerado pela ferramenta brModelo.
-    - `2ag.png`: Imagem do diagrama do modelo conceitual.
 
 - **`2ag-front/`**: Código-fonte do front-end da aplicação.
-  - **`src/`**: Arquivos de desenvolvimento da interface, como a tela de login.
 
 - **`assets/`**: Diretório onde são guardados os assets essenciais do aplicativo (ícone, splash, etc.)
 

@@ -1,174 +1,150 @@
-
-.login-container {
+.login {
+    background-color: var(--color-primary);
     display: flex;
-    justify-content: flex-end;
-    align-items: initial;
-    min-height: 100svh;
-    width: 100%;
-}
-
-.logo-container {
-    display: flex;
-    flex-direction: column;
     flex: 1;
-    background-color: #193E21;
 }
 
-.logo-head {
-    height: 100px;
+/* -------------------------------
+    Arte lateral
+   ------------------------------- */
+
+.login__art {
+    align-items: center;
     display: flex;
-    justify-content: space-between;
+    flex: 0.65;
+    justify-content: center;
+    position: relative;
+    user-select: none;
 }
 
-.logo-head .logo-left {
-    transform: rotate(180deg);
+.login__art__center {
+    width: 45%;
+}
+
+.login__art__top-left {
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
     transform: scaleY(-1);
 }
 
-.logo-head .logo-right {
+.login__art__top-right {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
     transform: rotate(180deg);
-    transform: scaleY(-1);
-
 }
 
-.logo-footer .logo-right {
+.login__art__bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+    position: absolute;
+}
+
+.login__art__bottom-right {
+    bottom: 1rem;
+    right: 1rem;
+    position: absolute;
     transform: scaleX(-1);
-
 }
 
-.logo-center {
-    flex: 1;
-    display: grid;
-    place-items: center;
+/* -------------------------------
+    Formulário
+   ------------------------------- */
 
-}
-
-.logo-footer {
-    height: 100px;
+.login__content {
+    align-items: center;
+    background-color: var(--color-surface);
     display: flex;
-    justify-content: space-between;
+    flex: 0.35;
+    justify-content: center;
 }
 
-.login-form-wrapper {
+.login__content-wrapper {
+    display: flex;
     flex: 1;
     flex-direction: column;
-    display: flex;
-    background-color: #ffffff;
-    padding: 0 2.5rem;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    justify-content: center;
-    max-width: 40vw;
+    gap: 2rem;
+    max-width: 360px;
 }
 
-.login-header {
-    text-align: center;
-    margin-bottom: 2rem;
+.login__content__logo {
+    max-width: 200px;
 }
 
-.form-title {
+.login__content__title {
+    color: var(--color-primary);
     font-size: 2rem;
-    color: #193E21;
-    margin: 0;
+    font-weight: 600;
+    padding-top: 2rem;
 }
 
-.form-subtitle {
-    font-size: 1rem;
-    color: #193E21;
-    margin-top: 0.5rem;
-}
-
-.login-form .input-group {
-    margin-bottom: 1.5rem;
-
-}
-
-.login-form label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-    color: #555;
-    text-align: left;
-}
-
-.login-form input[type="email"],
-.login-form input[type="password"] {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #f2f5f2;
-    background-color: #f2f5f2;
-    border-radius: 6px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-.form-extra-options {
+.login__content__form {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-.remember-me {
+.login__content__form__input-group {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #193E21;
+    flex-direction: column;
 }
 
-.forgot-password-link {
-    color: #193E21;
-    text-decoration: none;
-}
-
-.btn {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
+.login__content__form__input-group > label {
     font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 1rem;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
+    font-weight: 400;
 }
 
-.btn-primary {
-    background-color: #193E21;
-    color: white;
-}
-
-.btn-secondary {
-    background-color: white;
-    color: #193E21;
-    border-color: #193E21;
-}
-
-.separator {
-    text-align: center;
-    margin-bottom: 1rem;
-    color: #aaa;
-}
-
-.btn-social {
+.login__content__form__actions {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    background-color: white;
-    color: #193E21;
-    border-color: #193E21;
+    gap: 1rem;
+    padding-top: 2rem;
 }
 
-.error-message {
-    color: #193E21;
-    text-align: center;
-    margin-bottom: 1rem;
+/* -------------------------------
+    Responsividade
+   ------------------------------- */
+
+@media screen and (max-width: 1200px) {
+    .login__art {
+        flex: 0.6;
+    }
+
+    .login__content {
+        flex: 0.4;
+    }
 }
 
-.logo-int {
-    width: 200px;
-    height: auto;
-    margin-bottom: 1rem;
+@media screen and (max-width: 1024px) {
+    .login__art {
+        flex: 0.5;
+    }
+
+    .login__content {
+        flex: 0.5;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .login__art {
+        display: none;
+    }
+
+    .login__content {
+        flex: 1;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .login__content {
+        padding: 0 1rem;
+    }
+
+    .login__content-wrapper {
+        max-width: 100%;
+    }
+
+    .login__content__form__actions {
+        flex-direction: column;
+    }
 }

@@ -1,22 +1,22 @@
-import {createBrowserRouter, RouterProvider} from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
+import AcompanhamentoSemanal from "../pages/acompanhamento-semanal/acompanhamento-semanal.jsx";
 import Login from "../pages/login/login.jsx";
-import AcompanhamentoPaciente from "../pages/acompanhamento-paciente/acompanhamento-paciente.jsx";
 
 const router = createBrowserRouter([
     {
-        path: '/login',
-        element: <Login/>,
+        path: "/login",
+        element: <Login />,
     },
     {
-        path: '/', // // Rota para a página principal (podemos mudar depois)
+        path: "/", // // Rota para a página principal (podemos mudar depois)
         element: <div> Página Principal</div>,
     },
     {
-        path: '/acompanhamento-paciente',
-        element: <AcompanhamentoPaciente/>,
-    }
+        path: "/acompanhamento-semanal",
+        element: <AcompanhamentoSemanal />,
+    },
 ]);
 
-export default () => {
-    return <RouterProvider router={router}/>;
+export default function Routes() {
+    return <RouterProvider router={router} />;
 }

@@ -114,6 +114,9 @@
     font-weight: 600;
     text-align: center;
 }
+.question-group-inline{
+    display: flex;
+}
 
 
 /* --- ESTILOS PARA A NOVA ESCALA DE OPINIÃO (CÍRCULOS) --- */

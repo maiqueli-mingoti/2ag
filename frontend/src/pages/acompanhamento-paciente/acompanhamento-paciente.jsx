@@ -80,7 +80,7 @@ export default function AcompanhamentoPaciente() {
                     <div className="questions-container">
 
                         {/* --- Inputs Numéricos --- */}
-                        <div className="question-group question-group-inline">
+                        <div className="question-group-inline">
                             <div className="numeric-input-group">
                                 <label htmlFor="gotasManha">N.º gotas manhã</label>
                                 <input

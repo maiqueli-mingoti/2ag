@@ -3,6 +3,7 @@ import AcompanhamentoSemanal from "../pages/acompanhamento-semanal/acompanhament
 import Login from "../pages/login/login.jsx";
 import AcompanhamentoPaciente from "../pages/acompanhamento-paciente/acompanhamento-paciente.jsx";
 import DadosConsultorio from "../pages/dados-consultorio/dados-consultorio.jsx";
+import Dashboard from "../pages/dashboard/dashboard.jsx";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
     {
         path: "/dados-consultorio",
         element: <DadosConsultorio/>,
+    },
+    {
+        path:"/dashboard",
+        element: <Dashboard/>,
     }
 ]);
 

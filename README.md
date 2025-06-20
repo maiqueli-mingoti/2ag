@@ -11,7 +11,7 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
 - **`docs/`**: Documentação do projeto.
   - **`requisitos.pdf`**: Documento com os requisitos do sistema.
 
-- **`front/`**: Código-fonte do front-end da aplicação.
+- **`frontend/`**: Código-fonte do front-end da aplicação.
 
 ### Nomenclatura:
 Este projeto adota diferentes padrões de nomenclatura para arquivos, pastas, funções, variáveis, componentes, tipos e constantes, visando garantir organização, legibilidade e consistência em todo o código.

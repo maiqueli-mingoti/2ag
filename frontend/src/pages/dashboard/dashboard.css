@@ -243,7 +243,6 @@
     font-size: 0.8rem;
 }
 
-/* Toggle para demonstração - remover em produção */
 .user-type-toggle {
     position: fixed;
     bottom: 20px;

@@ -4,6 +4,8 @@ import Login from "../pages/login/login.jsx";
 import AcompanhamentoPaciente from "../pages/acompanhamento-paciente/acompanhamento-paciente.jsx";
 import DadosConsultorio from "../pages/dados-consultorio/dados-consultorio.jsx";
 import Dashboard from "../pages/dashboard/dashboard.jsx";
+import Prescricao from "../pages/prescricao/prescricao.jsx";
+import {Navigate} from "react-router";
 
 const router = createBrowserRouter([
     {
@@ -11,8 +13,9 @@ const router = createBrowserRouter([
         element: <Login />,
     },
     {
-        path: "/", // // Rota para a página principal (podemos mudar depois)
-        element: <div> Página Principal</div>,
+        path: "/", //direciona para o login
+        element: <Navigate to="/login" replace />,
+
     },
     {
         path: "/acompanhamento-semanal",
@@ -29,6 +32,10 @@ const router = createBrowserRouter([
     {
         path:"/dashboard",
         element: <Dashboard/>,
+    },
+    {
+        path:"/prescricao",
+        element:<Prescricao/>
     }
 ]);
 

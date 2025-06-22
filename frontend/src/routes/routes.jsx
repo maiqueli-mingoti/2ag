@@ -3,7 +3,7 @@ import AcompanhamentoSemanal from "../pages/acompanhamento-semanal/acompanhament
 import Login from "../pages/login/login.jsx";
 import AcompanhamentoPaciente from "../pages/acompanhamento-paciente/acompanhamento-paciente.jsx";
 import DadosConsultorio from "../pages/dados-consultorio/dados-consultorio.jsx";
-import Dashboard from "../pages/dashboard/dashboard.jsx";
+import DashboardPaciente from "../pages/dashboard-paciente/dashboard-paciente.jsx";
 import Prescricao from "../pages/prescricao/prescricao.jsx";
 import {Navigate} from "react-router";
 
@@ -30,8 +30,8 @@ const router = createBrowserRouter([
         element: <DadosConsultorio/>,
     },
     {
-        path:"/dashboard",
-        element: <Dashboard/>,
+        path:"/dashboard-paciente",
+        element: <DashboardPaciente/>,
     },
     {
         path:"/prescricao",

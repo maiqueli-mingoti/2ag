@@ -6,7 +6,9 @@ import DadosConsultorio from "../pages/dados-consultorio/dados-consultorio.jsx";
 import DashboardPaciente from "../pages/dashboard-paciente/dashboard-paciente.jsx";
 import DashboardPrescritor from "../pages/dashboard-prescritor/dashboard-prescritor.jsx";
 import Prescricao from "../pages/prescricao/prescricao.jsx";
+import ConsultaClinica from "../pages/consulta-clinica/consulta-clinica.jsx";
 import {Navigate} from "react-router";
+import SignUp from "../pages/sign-up/sign-up.jsx";
 
 const router = createBrowserRouter([
     {
@@ -41,7 +43,15 @@ const router = createBrowserRouter([
     {
         path:"/prescricao",
         element:<Prescricao/>
-    }
+    },
+    {
+        path:"/consulta",
+        element:<ConsultaClinica/>
+    },
+    {
+        path:"/sign-up",
+        element: <SignUp/>
+    },
 ]);
 
 export default function Routes() {

@@ -1,0 +1,152 @@
+.sign-up {
+    background-color: var(--color-primary);
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+.sign__art {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 65%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sign__art__center {
+    width: 45%;
+}
+
+.sign__art__top-left {
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+    transform: scaleY(-1);
+}
+
+.sign__art__top-right {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    transform: rotate(180deg);
+}
+
+.sign__art__bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+    position: absolute;
+}
+
+.sign__art__bottom-right {
+    bottom: 1rem;
+    right: 1rem;
+    position: absolute;
+    transform: scaleX(-1);
+}
+
+
+.form__content {
+    align-items: center;
+    background-color: var(--color-surface);
+    display: flex;
+    flex: 0.35;
+    justify-content: center;
+}
+
+.form__content-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 360px;
+}
+
+.form__content__logo {
+    max-width: 200px;
+    margin-top: 2rem;
+}
+
+.lform__content__logo {
+    max-width: 200px;
+}
+
+.form__content__title {
+    color: var(--color-primary);
+    font-size: 2rem;
+    font-weight: 600;
+    padding-top: 2rem;
+}
+
+.form__content__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form__content__form__input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form__content__form__input-group > label {
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.form__content__form__actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 2rem;
+}
+
+
+@media screen and (max-width: 1200px) {
+    .sign__art {
+        flex: 0.6;
+        width: 60%;
+    }
+
+    .form__content {
+        flex: 0.4;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .sign__art {
+        flex: 0.5;
+        width: 50%;
+    }
+
+    .form__content {
+        flex: 0.5;
+    }
+}
+
+@media screen and (max-width: 769px) {
+    .sign__art {
+        display: none;
+    }
+
+    .form__content {
+        flex: 1;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .form__content {
+        padding: 0 1rem;
+    }
+
+    .form__content-wrapper {
+        max-width: 100%;
+    }
+
+    .form__content__form__actions {
+        flex-direction: column;
+    }
+}

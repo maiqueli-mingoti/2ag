@@ -9,7 +9,6 @@ export default function DashboardPrescritor() {
         <div className="dashboard-prescritor">
             <header className="dashboard-header">
                 <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                <span>Prescritor</span>
                 <div className="dashboard-header__user">
                     <span>Dr. Maria Santos - CRM 12345</span>
                     <button className="button-secondary">Sair</button>
@@ -18,7 +17,7 @@ export default function DashboardPrescritor() {
 
             <main className="dashboard-main">
                 <div className="dashboard-welcome">
-                    <h1>Painel do Prescritor</h1>
+                    <h1>Painel do Prescritor!</h1>
                     <p>Gerencie seus pacientes, consultas e acompanhe a evolução dos tratamentos.</p>
                 </div>
 
@@ -42,6 +41,33 @@ export default function DashboardPrescritor() {
                     </div>
                 </div>
 
+                {/* Ações Rápidas */}
+                <section className="dashboard-actions">
+                    <h2>Ações Rápidas</h2>
+                    <div className="actions-grid">
+                        <button className="action-button">
+                            <span className="action-icon">👥</span>
+                            <span>Novo Paciente</span>
+                        </button>
+                        <button className="action-button">
+                            <span className="action-icon">📋</span>
+                            <span>Nova Consulta</span>
+                        </button>
+                        <button className="action-button">
+                            <span className="action-icon">💊</span>
+                            <span>Nova Prescrição</span>
+                        </button>
+                        <button className="action-button">
+                            <span className="action-icon">📅</span>
+                            <span>Agenda</span>
+                        </button>
+                        <button className="action-button">
+                            <span className="action-icon">⚙️</span>
+                            <span>Configurações</span>
+                        </button>
+                    </div>
+                </section>
+
                 <div className="dashboard-grid">
                     {/* Agendamentos do Dia */}
                     <section className="dashboard-card">
@@ -57,8 +83,8 @@ export default function DashboardPrescritor() {
                                     <p>Consulta de acompanhamento</p>
                                     <span className="agendamento-tipo">Presencial</span>
                                 </div>
-                                <button className="button-secondary">Iniciar</button>
                             </div>
+                            <button className="button-secondary">Iniciar</button>
                             <div className="agendamento-item">
                                 <div className="agendamento-time">10:30</div>
                                 <div className="agendamento-info">
@@ -66,17 +92,8 @@ export default function DashboardPrescritor() {
                                     <p>Primeira consulta</p>
                                     <span className="agendamento-tipo">Telemedicina</span>
                                 </div>
-                                <button className="button-secondary">Iniciar</button>
                             </div>
-                            <div className="agendamento-item">
-                                <div className="agendamento-time">14:00</div>
-                                <div className="agendamento-info">
-                                    <h3>Carlos Oliveira</h3>
-                                    <p>Revisão de prescrição</p>
-                                    <span className="agendamento-tipo">Presencial</span>
-                                </div>
-                                <button className="button-secondary">Iniciar</button>
-                            </div>
+                            <button className="button-secondary">Iniciar</button>
                         </div>
                         <div className="card-footer">
                             <button className="button">Ver todos os agendamentos</button>
@@ -97,8 +114,8 @@ export default function DashboardPrescritor() {
                                     <span className="ficha-data">Enviado há 2 dias</span>
                                 </div>
                                 <div className="ficha-priority high">Alta</div>
-                                <button className="button-secondary">Analisar</button>
                             </div>
+                            <button className="button-secondary">Analisar</button>
                             <div className="ficha-item">
                                 <div className="ficha-info">
                                     <h3>Pedro Lima</h3>
@@ -106,17 +123,8 @@ export default function DashboardPrescritor() {
                                     <span className="ficha-data">Enviado há 1 dia</span>
                                 </div>
                                 <div className="ficha-priority medium">Média</div>
-                                <button className="button-secondary">Analisar</button>
                             </div>
-                            <div className="ficha-item">
-                                <div className="ficha-info">
-                                    <h3>Lucia Ferreira</h3>
-                                    <p>Relatório de efeitos</p>
-                                    <span className="ficha-data">Enviado há 3 horas</span>
-                                </div>
-                                <div className="ficha-priority low">Baixa</div>
-                                <button className="button-secondary">Analisar</button>
-                            </div>
+                            <button className="button-secondary">Analisar</button>
                         </div>
                         <div className="card-footer">
                             <button className="button">Ver todas as fichas</button>
@@ -137,8 +145,8 @@ export default function DashboardPrescritor() {
                                     <p>Relatou efeitos adversos graves</p>
                                     <span className="alert-time">Há 30 minutos</span>
                                 </div>
-                                <button className="button">Verificar</button>
                             </div>
+                            <button className="button">Verificar</button>
                             <div className="alert-item warning">
                                 <div className="alert-icon">⚡</div>
                                 <div className="alert-info">
@@ -146,16 +154,10 @@ export default function DashboardPrescritor() {
                                     <p>Não preencheu acompanhamento há 2 semanas</p>
                                     <span className="alert-time">Há 2 horas</span>
                                 </div>
-                                <button className="button-secondary">Contatar</button>
                             </div>
-                            <div className="alert-item info">
-                                <div className="alert-icon">📊</div>
-                                <div className="alert-info">
-                                    <h3>Marcos Pereira</h3>
-                                    <p>Melhora significativa nas escalas</p>
-                                    <span className="alert-time">Há 4 horas</span>
-                                </div>
-                                <button className="button-secondary">Ver dados</button>
+                            <button className="button-secondary">Contatar</button>
+                            <div className="alert-footer">
+                                <button className="button">Ver todos os alertas</button>
                             </div>
                         </div>
                     </section>
@@ -174,8 +176,8 @@ export default function DashboardPrescritor() {
                                     <p>Última consulta: 10/01/2025</p>
                                     <span className="paciente-status ativo">Tratamento ativo</span>
                                 </div>
-                                <button className="button-secondary">Ver prontuário</button>
                             </div>
+                            <button className="button-secondary">Ver prontuário</button>
                             <div className="paciente-item">
                                 <div className="paciente-avatar">AC</div>
                                 <div className="paciente-info">
@@ -183,8 +185,8 @@ export default function DashboardPrescritor() {
                                     <p>Última consulta: 08/01/2025</p>
                                     <span className="paciente-status acompanhamento">Em acompanhamento</span>
                                 </div>
-                                <button className="button-secondary">Ver prontuário</button>
                             </div>
+                            <button className="button-secondary">Ver prontuário</button>
                         </div>
                         <div className="card-footer">
                             <button className="button">Ver todos os pacientes</button>
@@ -192,36 +194,7 @@ export default function DashboardPrescritor() {
                     </section>
                 </div>
 
-                {/* Ações Rápidas */}
-                <section className="dashboard-actions">
-                    <h2>Ações Rápidas</h2>
-                    <div className="actions-grid">
-                        <button className="action-button">
-                            <span className="action-icon">👥</span>
-                            <span>Novo Paciente</span>
-                        </button>
-                        <button className="action-button">
-                            <span className="action-icon">📋</span>
-                            <span>Nova Consulta</span>
-                        </button>
-                        <button className="action-button">
-                            <span className="action-icon">💊</span>
-                            <span>Nova Prescrição</span>
-                        </button>
-                        <button className="action-button">
-                            <span className="action-icon">📊</span>
-                            <span>Relatórios</span>
-                        </button>
-                        <button className="action-button">
-                            <span className="action-icon">📅</span>
-                            <span>Agenda</span>
-                        </button>
-                        <button className="action-button">
-                            <span className="action-icon">⚙️</span>
-                            <span>Configurações</span>
-                        </button>
-                    </div>
-                </section>
+
             </main>
         </div>
     );

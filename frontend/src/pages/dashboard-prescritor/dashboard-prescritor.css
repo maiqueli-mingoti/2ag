@@ -14,18 +14,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .dashboard-header .button-secondary {
     order: 2;
     padding: 8px 10px !important;
     font-size: 14px !important;
     min-width: 100px !important;
-}
-
-.dashboard-header__logo{
-    color: var( --color-text-on-primary);
-    font-size: 1.5rem;
-    max-width: 500px;
 }
 
 .dashboard-header__user {
@@ -64,6 +57,12 @@
     margin: 0 auto;
 }
 
+/* Ações */
+
+.dashboard-actions{
+    margin-bottom: 2rem;
+}
+
 /* Estatísticas */
 .stats-grid {
     display: grid;
@@ -84,4 +83,91 @@
 
 .stat-card:hover {
     transform: translateY(-2px);
+}
+
+/* Geral */
+
+.agendamento-item h3,
+.ficha-item h3,
+.alert-info h3,
+.paciente-info h3 {
+    color: var(--color-text-headings);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.agendamento-item p,
+.ficha-item p,
+.alert-info p,
+.paciente-info p {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.agendamento-item,
+.ficha-item,
+.alert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border-light);
+}
+
+.paciente-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border-light);
+}
+
+/* Agendamentos */
+
+.agendamento-item{
+    display: grid;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
+}
+
+.card-footer{
+    display: grid;
+}
+
+.card-footer .button{
+    margin-top: 1rem;
+}
+
+/* Fichas */
+
+.ficha-item{
+    display: grid;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
+}
+
+/* Alertas */
+
+.alert-item{
+    display: grid;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
+}
+
+.alert-footer{
+    display: grid;
+}
+
+/* Pacientes */
+
+.paciente-item{
+    display: grid;
+    background-color: var(--color-surface-alt);
+    border-radius: 0.5rem;
 }

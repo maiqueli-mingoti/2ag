@@ -13,18 +13,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .dashboard-header .button-secondary {
     order: 2;
     padding: 8px 10px !important;
     font-size: 14px !important;
     min-width: 100px !important;
-}
-
-.dashboard-header__logo{
-    color: var( --color-text-on-primary);
-    font-size: 1.5rem;
-    max-width: 500px;
 }
 
 .dashboard-header__user {
@@ -147,7 +140,8 @@
 
 .consulta-data,
 .escala-frequencia,
-.prescricao-numero {
+.prescricao-numero,
+.formulario-atraso {
     color: var(--color-text-primary);
     font-size: 0.8rem;
     font-weight: 500;

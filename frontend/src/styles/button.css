@@ -3,7 +3,6 @@
 */
 button,
 .button {
-    margin-left: 1rem;
     align-items: center;
     background-color: var(--color-primary);
     border: 1px solid var(--color-primary);
@@ -25,7 +24,6 @@ button:hover,
 }
 
 .button-secondary {
-    margin-left: 1rem;
     background-color: var(--color-surface);
     color: var(--color-primary);
 }

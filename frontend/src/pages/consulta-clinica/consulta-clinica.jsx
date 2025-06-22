@@ -4,9 +4,24 @@ import "../../styles/button.css";
 import "../../styles/input.css";
 import "./consulta-clinica.css";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 export default function ConsultaClinica() {
     const [abaAtiva, setAbaAtiva] = useState('observacoes');
+
+    const navigate = useNavigate();
+
+    const handleReturnDash = (e) => {
+        e.preventDefault();
+
+        navigate("/dashboard-prescritor");
+    };
+
+    const handleNewPrescription = (e) => {
+        e.preventDefault();
+
+        navigate("/prescricao");
+    }
     return (
         <div className="consulta-clinica">
             <header className="consulta-header">
@@ -14,7 +29,7 @@ export default function ConsultaClinica() {
                     <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                 </div>
                 <nav className="header-nav">
-                    <button className="button-secondary">Voltar</button>
+                    <button className="button-secondary" onClick={handleReturnDash}>Voltar</button>
                 </nav>
             </header>
 
@@ -164,38 +179,38 @@ export default function ConsultaClinica() {
 
                         {/* Aba de Objetivos */}
                         <div className={`tab-content ${abaAtiva === 'objetivos' ? 'active' : ''}`}>
-                        <div className="tab-content">
-                            <div className="objetivos-section">
-                                <h3>Objetivos Terapêuticos</h3>
-                                <div className="objetivo-item">
-                                    <div className="form-group">
-                                        <label htmlFor="objetivo-1">Objetivo Principal</label>
-                                        <input
-                                            id="objetivo-1"
-                                            type="text"
-                                            placeholder="Ex: Reduzir ansiedade em 50%"
-                                        />
+                            <div className="tab-content">
+                                <div className="objetivos-section">
+                                    <h3>Objetivos Terapêuticos</h3>
+                                    <div className="objetivo-item">
+                                        <div className="form-group">
+                                            <label htmlFor="objetivo-1">Objetivo Principal</label>
+                                            <input
+                                                id="objetivo-1"
+                                                type="text"
+                                                placeholder="Ex: Reduzir ansiedade em 50%"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="prazo-1">Prazo</label>
+                                            <input
+                                                id="prazo-1"
+                                                type="date"
+                                            />
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="metrica-1">Métrica de Avaliação</label>
+                                            <select id="metrica-1">
+                                                <option>Escala de Hamilton</option>
+                                                <option>Escala de Beck</option>
+                                                <option>Qualidade do Sono</option>
+                                                <option>Autorrelato</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="prazo-1">Prazo</label>
-                                        <input
-                                            id="prazo-1"
-                                            type="date"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="metrica-1">Métrica de Avaliação</label>
-                                        <select id="metrica-1">
-                                            <option>Escala de Hamilton</option>
-                                            <option>Escala de Beck</option>
-                                            <option>Qualidade do Sono</option>
-                                            <option>Autorrelato</option>
-                                        </select>
-                                    </div>
+                                    <button className="button-secondary">+ Adicionar Objetivo</button>
                                 </div>
-                                <button className="button-secondary">+ Adicionar Objetivo</button>
                             </div>
-                        </div>
                         </div>
 
                         {/* Aba de Arquivos */}
@@ -215,7 +230,7 @@ export default function ConsultaClinica() {
 
                         {/* Aba de Escalas */}
                         <div className={`tab-content ${abaAtiva === 'escalas' ? 'active' : ''}`}>
-                        <div className="escalas-section">
+                            <div className="escalas-section">
                                 <h3>Escalas Clínicas</h3>
                                 <div className="escala-item">
                                     <div className="escala-info">
@@ -249,8 +264,8 @@ export default function ConsultaClinica() {
                                 <span className="auto-save">Salvo automaticamente às 14:35</span>
                             </div>
                             <div className="actions-right">
-                                <button className="button-secondary">Nova Prescrição</button>
-                                <button className="button">Finalizar Consulta</button>
+                                <button className="button-secondary" onClick={handleNewPrescription}>Nova Prescrição</button>
+                                <button className="button" onClick={handleReturnDash}>Finalizar Consulta</button>
                             </div>
                         </div>
                     </div>
@@ -259,4 +274,3 @@ export default function ConsultaClinica() {
         </div>
     );
 }
-

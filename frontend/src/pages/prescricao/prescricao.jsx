@@ -3,8 +3,16 @@ import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./prescricao.css";
+import { useNavigate } from "react-router";
 
 export default function Prescricao() {
+    const navigate = useNavigate();
+
+    const handleReturnMenu = (e) => {
+        e.preventDefault();
+
+        navigate("/dashboard-prescritor");
+    };
     return (
         <div className="prescricao">
             <header className="prescricao-header">
@@ -13,7 +21,7 @@ export default function Prescricao() {
 
                 </div>
                 <nav className="header-nav">
-                    <button className="button-secondary">Voltar</button>
+                    <button className="button-secondary" onClick={handleReturnMenu}>Voltar</button>
                 </nav>
             </header>
             <main className="prescricao-main">
@@ -276,7 +284,7 @@ export default function Prescricao() {
                                 </div>
                                 <div className="actions-right">
                                     <button type="button" className="button-secondary">Cancelar</button>
-                                    <button type="submit" className="button">Emitir Prescrição</button>
+                                    <button type="submit" className="button" onClick={handleReturnMenu}>Emitir Prescrição</button>
                                 </div>
                             </div>
                         </form>

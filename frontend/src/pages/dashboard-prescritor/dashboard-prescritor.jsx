@@ -3,15 +3,37 @@ import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./dashboard-prescritor.css";
+import { useNavigate } from "react-router";
 
 export default function DashboardPrescritor() {
+    const navigate = useNavigate();
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+
+        navigate("/login");
+    };
+
+    const handleNewConsult = (e) => {
+        e.preventDefault();
+
+        navigate("/consulta");
+    }
+
+    const handleNewPrescription = (e) => {
+        e.preventDefault();
+
+        navigate("/prescricao");
+    }
+
+
     return (
         <div className="dashboard-prescritor">
             <header className="dashboard-header">
                 <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                 <div className="dashboard-header__user">
                     <span>Dr. Maria Santos - CRM 12345</span>
-                    <button className="button-secondary">Sair</button>
+                    <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
             </header>
 
@@ -49,11 +71,11 @@ export default function DashboardPrescritor() {
                             <span className="action-icon">👥</span>
                             <span>Novo Paciente</span>
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleNewConsult}>
                             <span className="action-icon">📋</span>
                             <span>Nova Consulta</span>
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleNewPrescription}>
                             <span className="action-icon">💊</span>
                             <span>Nova Prescrição</span>
                         </button>

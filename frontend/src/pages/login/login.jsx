@@ -1,6 +1,27 @@
+import { useNavigate } from "react-router";
 import "./login.css";
 
 export default function Login() {
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const email = e.target.email.value;
+        /** validação provisória até ser criado a validação também de usuário no backend */
+        if (email.includes("paciente")) {
+            navigate("/dashboard-paciente");
+        } else {
+            navigate("/dashboard-prescritor");
+        }
+    };
+
+    const handleSignUp = (e) => {
+        e.preventDefault();
+
+        navigate("/sign-up")
+    }
+
     return (
         <div className="login">
             <section className="login__art">
@@ -38,7 +59,7 @@ export default function Login() {
                         src="/images/logotipo-horizontal.svg"
                     />
                     <h2 className="login__content__title">Login</h2>
-                    <form className="login__content__form">
+                    <form className="login__content__form" onSubmit={handleSubmit}>
                         <div className="login__content__form__input-group">
                             <label htmlFor="email">Email</label>
                             <input
@@ -59,7 +80,7 @@ export default function Login() {
                         </div>
                         <div className="login__content__form__actions">
                             <button type="submit">Entrar</button>
-                            <button className="button-secondary" type="button">
+                            <button className="button-secondary" type="button" onClick={handleSignUp}>
                                 Criar conta
                             </button>
                         </div>

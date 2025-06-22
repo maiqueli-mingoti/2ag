@@ -3,17 +3,32 @@ import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./dashboard-paciente.css";
+import { useNavigate } from "react-router";
 
 export default function DashboardPaciente() {
+    const navigate = useNavigate();
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+
+        navigate("/login");
+    };
+
+    const handleWeeklyMonitoring = (e) => {
+        e.preventDefault();
+
+        navigate("/acompanhamento-paciente");
+    }
+
     return (
         <div className="dashboard-paciente">
             <header className="dashboard-header">
                 <div className="dashboard-header__logo">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                    </div>
+                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
+                </div>
                 <div className="dashboard-header__user">
                     <span>Olá, João Silva</span>
-                    <button className="button-secondary">Sair</button>
+                    <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
             </header>
 
@@ -27,7 +42,7 @@ export default function DashboardPaciente() {
                 <section className="dashboard-actions">
                     <h2>Ações Rápidas</h2>
                     <div className="actions-grid">
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleWeeklyMonitoring}>
                             <span className="action-icon">📋</span>
                             <span>Acompanhamento Semanal</span>
                         </button>
@@ -79,7 +94,7 @@ export default function DashboardPaciente() {
                                     <span className="formulario-atraso">Atraso de: 1 dia</span>
                                 </div>
                             </div>
-                            <button className="button">Preencher</button>
+                            <button className="button" onClick={handleWeeklyMonitoring}>Preencher</button>
                         </div>
                     </section>
 
@@ -141,4 +156,3 @@ export default function DashboardPaciente() {
         </div>
     );
 }
-

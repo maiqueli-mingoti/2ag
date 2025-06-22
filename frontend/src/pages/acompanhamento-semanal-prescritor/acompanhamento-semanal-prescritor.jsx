@@ -1,6 +1,6 @@
-import "./acompanhamento-semanal.css";
+import "./acompanhamento-semanal-prescritor.css";
 
-export default function AcompanhamentoSemanal() {
+export default function AcompanhamentoSemanalPrescritor() {
     return (
         <div className="acompanhamento-semanal">
             <div></div>

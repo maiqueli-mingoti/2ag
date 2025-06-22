@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import './acompanhamento-paciente.css';
+import './acompanhamento-semanal-paciente.css';
 
 // O componente da escala de círculos que já criamos. Nenhuma alteração necessária aqui.
 function EscalaDeOpiniao({labelEsquerda, labelDireita, selectedValue, onChange}) {
@@ -33,7 +33,7 @@ function EscalaDeOpiniao({labelEsquerda, labelDireita, selectedValue, onChange})
 }
 
 // Componente principal do formulário, agora com todas as perguntas do PDF.
-export default function AcompanhamentoPaciente() {
+export default function AcompanhamentoSemanalPaciente() {
     // Estado do formulário atualizado com todos os parâmetros do PDF.
     const [formData, setFormData] = useState({
         gotasManha: '',

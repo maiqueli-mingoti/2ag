@@ -1,0 +1,87 @@
+.dashboard-prescritor {
+    min-height: 100vh;
+    background-color: var(--color-background);
+    font-family: "Yaldevi Colombo", sans-serif;
+}
+
+.dashboard-header {
+    background-color: #193E21;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.dashboard-header .button-secondary {
+    order: 2;
+    padding: 8px 10px !important;
+    font-size: 14px !important;
+    min-width: 100px !important;
+}
+
+.dashboard-header__logo{
+    color: var( --color-text-on-primary);
+    font-size: 1.5rem;
+    max-width: 500px;
+}
+
+.dashboard-header__user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.dashboard-header__user span {
+    color: var( --color-text-on-primary);
+    font-weight: 500;
+}
+
+.dashboard-main {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-welcome {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-welcome h1 {
+    color: var(--color-text-headings);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-welcome p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Estatísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.stat-card {
+    background-color: var(--color-surface);
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--color-border-light);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}

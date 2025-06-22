@@ -8,21 +8,19 @@ export default function Prescricao() {
     return (
         <div className="prescricao">
             <header className="prescricao-header">
-                <div className="prescricao-header__nav">
-                    <button className="button-secondary">← Voltar</button>
-                    <img
-                        alt="Logotipo 2AG"
-                        className="prescricao-header__logo"
-                        src="/images/logotipo-horizontal.svg"
-                    />
+                <div className="header-left">
+                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
+
                 </div>
-                <div className="prescricao-header__info">
+                <nav className="header-nav">
+                    <button className="button-secondary">Voltar</button>
+                </nav>
+            </header>
+            <main className="prescricao-main">
+                <div className="precricao-title">
                     <h1>Nova Prescrição</h1>
                     <p>João Silva - Consulta: 15/01/2025</p>
                 </div>
-            </header>
-
-            <main className="prescricao-main">
                 <div className="prescricao-layout"> {/* Dados do paciente*/}
                     <aside className="prescricao-sidebar">
                         <div className="paciente-card">

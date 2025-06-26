@@ -7,7 +7,6 @@
 }
 
 .diario-sono-header {
-    width: 100%;
     background-color: var(--color-primary);
     color: var(--color-text-on-primary);
     padding: 1rem 2rem;
@@ -17,24 +16,24 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.diario-sono__logo {
-    height: 35px;
-    order: 1;
-}
-
-.diario-sono__nav {
+.diario-sono-header .header-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
 }
+
+.diario-sono-header .logo {
+    height: 35px;
+    order: 1;
+}
+
 .diario-sono-header .button-secondary {
     order: 2;
     padding: 8px 10px !important;
     font-size: 14px !important;
     min-width: 100px !important;
 }
-
 .diario-sono__main-content {
     width: 100%;
     max-width: 1200px;

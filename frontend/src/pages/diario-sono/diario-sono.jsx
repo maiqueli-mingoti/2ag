@@ -223,10 +223,8 @@ export default function DiarioSono() {
     return (
         <div className="diario-sono">
             <header className="diario-sono-header">
-                <div className="diario-sono__header-left">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="diario-sono__logo" />
-                </div>
-                <nav className="diario-sono__nav">
+                <nav className="header-nav">
+                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                     <button className="button-secondary" onClick={handleReturnMenu}>Voltar</button>
                 </nav>
             </header>

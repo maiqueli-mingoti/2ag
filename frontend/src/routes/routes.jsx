@@ -10,6 +10,8 @@ import Prescricao from "../pages/prescricao/prescricao.jsx";
 import SignUp from "../pages/sign-up/sign-up.jsx";
 import AgendamentoPaciente from "../pages/agendamento-paciente/agendamento-paciente.jsx";
 import DiarioSono from "../pages/diario-sono/diario-sono.jsx";
+import MiniExame from "../pages/mini-exame/mini-exame-estado-mental.jsx"
+
 const router = createBrowserRouter([
     {
         path: "/login",
@@ -59,6 +61,10 @@ const router = createBrowserRouter([
         path: "/diario-sono",
         element: <DiarioSono />,
     },
+    {
+        path: "/mini-exame",
+        element: <MiniExame />
+    }
 ]);
 
 export default function Routes() {

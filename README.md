@@ -51,6 +51,6 @@ Após a instalação das dependências, você pode iniciar o servidor de desenvo
 
 ### npm run dev
 
-O frontend estará disponível em http://localhost:5173 (ou outra porta disponível, caso a 5173 esteja em uso).
+O frontend estará disponível em http://localhost:5173, ou outra porta disponível, caso a 5173 esteja em uso.
 
 

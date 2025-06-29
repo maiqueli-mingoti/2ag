@@ -376,9 +376,22 @@ RF06 & Tela de Acompanhamento & Paciente & O paciente deverá acessar semanalmen
 \hline
 RF07 & Tela de Acompanhamento & Prescritor & O prescritor poderá visualizar a evolução clínica do paciente através de gráficos, tabelas e comentários inseridos pelo próprio paciente, organizados por datas.\\
 \hline
-RF08 & Tela de Escalas Clínicas & Paciente & O paciente terá acesso a escalas clínicas padronizadas, onde ele poderá responder a questões que avaliam seu estado clínico atual.\\
+RF08 & Tela de Escalas Clínicas & Paciente & O paciente terá acesso a uma tela central de escalas clínicas, onde serão listadas todas as escalas de avaliação pendentes ou já preenchidas. As escalas são organizadas em duas seções distintas, uma de pendentes e outra de histórico. Na seção de pendentes, cada avaliação é apresentada em um card individual com um indicador visual de status, mostrando o nome da escala e um botão de ação para preencher que redirecionará para a tela daquela escala. A seção de histórico exibirá os itens em formato de tabela com colunas para nome da escala, data de conclusão, resultado e ações. As ações disponíveis para cada item do histórico são os botões de ver respostas e de ver progresso. Ver resposta redirecionará para a tela daquela escala preenchida. Ver progresso redirecionará para a tela de progresso\\
 \hline
-RF09 & Tela de Escalas Clínicas & Prescritor & O prescritor poderá cadastrar ou atualizar escalas clínicas ou selecionar escalas padronizadas existentes para disponibilizar aos pacientes.\\
+RF09 & Tela de Escalas Clínicas & Prescritor & O prescritor poderá selecionar escalas padronizadas existentes para disponibilizar aos pacientes.\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
 \hline
 RF10 & Tela de Agendamento & Paciente & O paciente poderá agendar suas consultas diretamente no sistema, visualizando a disponibilidade dos prescritores e escolhendo horários adequados. O sistema enviará notificações automáticas de lembretes.\\
 \hline
@@ -480,6 +493,23 @@ RF25 & Tela de Acompanhamento Semanal de Paciente com Dor & Paciente & O usuári
 \hline
 RF26 & Tela de Mini-Exame do Estado Mental (MEEM) & Prescritor &
 O prescritor durante a consulta deverá preencher a escala clínica do estado mental, no qual deve constar nome completo do paciente e data da avaliação. Em seguida, deverá aplicar e registrar as respostas (pontos) do paciente nas seguintes seções: orientação temporal, composta por cinco perguntas sobre hora aproximada, dia da semana, dia do mês, mês e ano; orientação espacial, com cinco questões sobre o local, bairro ou endereço, cidade e estado onde o paciente se encontra. Na seção de registro, o paciente deverá repetir três palavras apresentadas. Em atenção e cálculo, o prescritor irá registrar o desempenho do paciente ao subtrair sucessivamente o número 7 a partir de 100 até 65. Em memória de evocação, o paciente deve lembrar os três objetos apresentados anteriormente. Em seguida, o paciente deverá nomear dois objetos comuns, repetir uma frase exata, e executar um comando de três etapas. Na sequência, o paciente deve escrever uma frase completa com sentido, ler e executar a instrução “Feche os seus olhos”, e copiar dois pentágonos com interseção apresentados na tela. Cada item possui pontuação própria, que será registrada pelo prescritor, e o sistema deverá calcular automaticamente a pontuação total ao final do preenchimento (Figura 10).\\
+\hline
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\begin{table}[H]
+\centering
+\rowcolors{2}{gray!10}{white}
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{1cm}|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{gray!20}
+\textbf{ID} & \textbf{Requisito} & \textbf{Usuário} & \textbf{Descrição}\\
+\hline
+RF27 & Tela de progresso & Paciente & A tela de progresso do paciente deve exibir a evolução de seus dados clínicos através de um seletor de período no topo da tela, que permite ao usuário definir o intervalo de tempo para a análise (últimos 15 dias, 30 dias, 60 dias, 90 dias...). Também será possível selecionar a escala desejada para visualização e filtrar o atributo que deseja visualizar o progresso. A visualização principal é composta por um gráfico de evolução do atributo selecionado e monitorado da escala selecionada (eixo Y) ao longo das datas de preenchimento (eixo X).\\
+\hline
+RF28 & Tela de progresso & Pescritor & A tela de progresso do prescritor deve exibir a evolução dos dados clínicos do paciente selecionado através de um seletor de período no topo da tela, que permite ao prescritor definir o intervalo de tempo para a análise (todo o tempo, últimos 15 dias, 30 dias...). Também será possível selecionar a escala desejada para visualização e filtrar o atributo que deseja visualizar o progresso. A visualização principal é composta por um gráfico de evolução do atributo selecionado e monitorado da escala selecionada (eixo Y) ao longo das datas de preenchimento (eixo X).\\
 \hline
 \end{tabularx}
 \end{table}

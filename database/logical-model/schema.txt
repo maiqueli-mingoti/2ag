@@ -1,0 +1,221 @@
+Usuario
+-
+id_user PK bigserial
+nome varchar(100)
+cpf varchar(11) UNIQUE
+email varchar(255) UNIQUE
+senha varchar(255)
+dt_nasc date
+tel_main varchar(15)
+tel_sec varchar(15)
+lograd varchar(255)
+num_ender varchar(10)
+cidade varchar(100)
+uf varchar(2)
+pais varchar(50)
+
+Prescritor
+-
+id_prct PK bigint FK - Usuario.id_user
+profiss varchar(100)
+reg_profiss_prct varchar(30) UNIQUE
+cod_prct varchar(20) UNIQUE
+
+Paciente
+-
+id_pcte PK bigint FK - Usuario.id_user
+id_prct_resp bigint FK >- Prescritor.id_prct
+
+Anamnese
+-
+id_anam PK bigserial
+id_pcte_anam bigint FK >- Paciente.id_pcte
+dt_registro date
+ocupacao_pct NULL varchar(100)
+motiv_cons NULL varchar(255)
+diag_prev NULL varchar(255)
+tratam_prev NULL varchar(255)
+medic_at NULL varchar(255)
+dieta NULL varchar(255)
+is_tabg NULL boolean
+is_etil NULL boolean
+peso NULL varchar(5)
+altura NULL varchar(4)
+subst_rec NULL varchar(255)
+ativ_fisic NULL varchar(255)
+qld_sono NULL varchar(255)
+ansiedade NULL varchar(255)
+dor NULL varchar(255)
+hist_famil NULL varchar(255) #fiquei em dúvida se os 255 caracteres de string não seria suficiente 
+reacao_adv NULL varchar(255)
+cond_genet NULL varchar(255)
+expect_trat NULL varchar(255)
+obs_anam NULL varchar(255)
+is_cient boolean
+
+Consulta
+-
+id_cons PK bigserial
+id_pcte_cons bigint FK >- Paciente.id_pcte
+id_prct_cons bigint FK >- Prescritor.id_prct
+dthr_cons timestamp
+modal varchar(10)
+status varchar(15)
+ds_clinic NULL varchar(4000)
+diagnostico NULL varchar(255)
+plan_terap NULL varchar(4000)
+evol_clinic NULL varchar(4000)
+
+Prescricao
+-
+id_prescr PK bigserial
+id_consp bigint FK >- Consulta.id_cons
+dt_emisp timestamp
+ds_prdt varchar(255)
+marca varchar(255)
+concentracao varchar(255)
+espectro varchar(255)
+posologia varchar(255)
+ds_presc varchar(4000)
+
+Acompanhamento
+----
+id_acomp PK bigserial
+id_pcte_acomp bigint FK >- Paciente.id_pcte
+dt_registro date
+gts_mat integer
+gts_vesp integer
+dor integer
+sono integer
+humor integer
+tremor integer
+ansiedade integer
+disp_energ integer
+func_intes integer
+apetite integer
+concent integer
+inter_social integer
+rigid_espast integer
+red_subst integer
+naus_vomit integer
+desemp_esport integer
+dermat integer
+obs_acomp NULL varchar(255)
+
+MEEM
+----
+id_meem PK bigserial
+id_cons_meem bigint FK >- Consulta.id_cons
+orient_temp integer
+orient_espac integer
+reg_palavras integer
+atencao_calc integer
+memoria_evoc integer
+nome_objt integer
+repet_frase integer
+comand_verb integer
+comand_escrt integer
+escrit integer
+cop_desenho integer
+escore_meem integer
+
+Hamilton
+----
+id_ham PK bigserial
+id_pcte_ham bigint FK >- Paciente.id_pcte
+dt_registro date
+humor_ans integer
+tensao integer
+medo integer
+insonia integer
+comp_intelec integer
+humor_dep integer
+somat_motor integer
+somat_sensor integer
+sint_cv integer
+sint_resp integer
+sint_gi integer
+sint_gu integer
+sint_aut integer
+score_ham integer
+
+Sono
+----
+id_sono PK bigserial
+id_pcte_sono bigint FK >- Paciente.id_pcte
+dt_registro date
+hr_dorm time
+hr_levant time
+temp_tot integer
+temp_adormec integer
+num_despert integer
+durac_acord integer
+temp_tot_sono integer
+cansaco integer
+estresse integer
+desaten integer
+sonolen integer
+irritab integer
+temp_ativfis integer
+temp_fcasa integer
+med_dorm integer
+dor integer
+alcool integer
+cochil integer
+cafe integer
+tabag_not integer
+dia_comum boolean
+percep_ger varchar(255)
+
+Pittsburgh
+----
+id_pitt PK bigserial
+id_pcte_pitt bigint FK >- Paciente.id_pcte
+dt_preench date
+hr_usual_deit time
+temp_adormecer integer
+hr_usual_levant time
+hr_sono decimal
+acord_not integer
+banheiro integer
+dific_resp integer
+tos_ronc integer
+frio integer
+calor integer
+pesadelo integer
+dor integer
+outros_mot integer
+qld_sono integer
+score_final integer
+med_dormir integer
+dif_acord integer
+entus_ativ integer
+parceiro boolean
+ds_motiv NULL varchar(30)
+
+TEA
+----
+id_tea PK bigserial
+id_pcte_tea bigint FK >- Paciente.id_pcte
+dt_registro date
+qld_vida integer
+agressiv integer
+agit_ansied integer
+sono integer
+inter_soc integer
+estereotipia integer
+apetite integer
+obs_tea NULL varchar(30)
+
+Dor
+----
+id_dor PK bigserial
+id_pcte_dor bigint FK >- Paciente.id_pcte
+dt_reg date
+nivel_dor integer
+ativ_basic integer
+ativ_social integer
+sono integer
+produtiv integer
+med_extra integer
+obs_dor NULL varchar(30)

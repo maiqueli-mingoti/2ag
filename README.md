@@ -9,7 +9,8 @@ maiqueli mingoti (20230004643) e caroline de quadros (20230000690)
   - **`doisag/`**: Estrutura inicial do backend com pacotes e classes.
 
 - **`database/`**: Modelagem do banco de dados.
-  - **`conceptual-model/`**: Arquivos do modelo conceitual do banco de dados.
+  - **`conceptual-model/`**: Arquivos do modelo conceitual.
+  - **`logical-model/`**: Arquivos do modelo logico.
 
 - **`docs/`**: Documentação do projeto.
   - **`requisitos.pdf`**: Documento com os requisitos do sistema.

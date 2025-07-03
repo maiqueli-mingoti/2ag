@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class HamiltonScaleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface HamiltonScaleRepository extends JpaRepository {
 }

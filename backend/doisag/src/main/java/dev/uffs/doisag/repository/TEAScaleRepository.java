@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class TEAScaleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TEAScaleRepository extends JpaRepository {
 }

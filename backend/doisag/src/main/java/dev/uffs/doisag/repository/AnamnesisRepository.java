@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class AnamnesisRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AnamnesisRepository extends JpaRepository {
 }

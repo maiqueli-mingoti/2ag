@@ -20,14 +20,31 @@ export default function AcompanhamentoSemanalPaciente() {
         substance: 0,
         sport: 0,
         vomit: 0,
+        dermat:0,
+
     });
 
+    const handleReturnDash = (e) => {
+        e.preventDefault();
+
+        navigate("/dashboard-paciente");
+    };
     return (
+        <div className="consulta-clinica">
+        <header className="consulta-header">
+            <div className="header-left">
+                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
+            </div>
+            <nav className="header-nav">
+                <button className="button-secondary" onClick={handleReturnDash}>Voltar</button>
+            </nav>
+        </header>
+
         <div className="acompanhamento-paciente">
             <div className="acompanhamento-paciente__content">
                 <div className="acompanhamento-paciente__header">
-                    <h2>Acompanhamento Semanal</h2>
-                    <span>Terapia Canabinoide</span>
+                    <h1>Acompanhamento Semanal</h1>
+                    <h2>Terapia Canabinoide</h2>
                 </div>
                 <div className="acompanhamento-paciente__form">
                     <div className="acompanhamento-paciente__form__row">
@@ -235,18 +252,29 @@ export default function AcompanhamentoSemanalPaciente() {
                         <ScaleSelector
                             leftLabel="Leve"
                             rightLabel="Intensa"
-                            value={data.sport}
+                            value={data.dermat}
                             onChangeValue={(value) =>
-                                setData((prev) => ({ ...prev, sport: value }))
+                                setData((prev) => ({ ...prev, dermat: value }))
                             }
                         />
                         <input placeholder="Especifique a doença..." />
                     </div>
-                    <div className="acompanhamento-paceinte__form__details">
-                        <p></p>
+                    <div className= "acompanhamento-paciente__form__group">
+                        <h3>Anotações</h3>
+                        <textarea
+                            id="anotacao"
+                            placeholder="Escreva aqui qualquer ponto que julgar relevante"
+                            rows="4"
+                        ></textarea>
+                    </div>
+                    <div className= "acompanhamento-paciente_end">
+                        <button className="button" onClick={handleReturnDash}>Salvar</button>
+                        <button className="button-secondary" onClick={handleReturnDash}>Cancelar</button>
                     </div>
                 </div>
             </div>
+        </div>
+
         </div>
     );
 }

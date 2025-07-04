@@ -51,3 +51,20 @@
     gap: 0.5rem;
     padding: 1rem;
 }
+
+.acompanhamento-paciente__form__group textarea {
+    width: 100%;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    background-color: var(--color-surface);
+    transition: border-color 0.2s;
+}
+
+.acompanhamento-paciente_end{
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}

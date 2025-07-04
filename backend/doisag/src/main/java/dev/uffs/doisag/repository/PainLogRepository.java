@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class PainLogRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PainLogRepository extends JpaRepository {
 }

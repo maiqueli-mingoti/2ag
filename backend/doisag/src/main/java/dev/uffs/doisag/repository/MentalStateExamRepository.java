@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class MentalStateExamRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MentalStateExamRepository extends JpaRepository {
 }

@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class PrescriberRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PrescriberRepository extends JpaRepository {
 }

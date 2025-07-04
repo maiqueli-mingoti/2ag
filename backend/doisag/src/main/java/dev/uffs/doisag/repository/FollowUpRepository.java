@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class FollowUpRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface FollowUpRepository extends JpaRepository {
 }

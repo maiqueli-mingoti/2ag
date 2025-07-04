@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class AppointmentRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AppointmentRepository extends JpaRepository {
 }

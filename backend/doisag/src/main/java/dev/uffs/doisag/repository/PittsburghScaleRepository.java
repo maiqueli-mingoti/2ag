@@ -1,4 +1,6 @@
 package dev.uffs.doisag.repository;
 
-public class PittsburghScaleRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PittsburghScaleRepository extends JpaRepository {
 }

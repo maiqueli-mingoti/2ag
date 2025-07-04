@@ -53,10 +53,10 @@ const router = createBrowserRouter([
         path: "/sign-up",
         element: <SignUp />,
     },
-    {
+   /* {
         path: "/agendamento-paciente",
         element: <AgendamentoPaciente />,
-    },
+    }, */
     {
         path: "/diario-sono",
         element: <DiarioSono />,

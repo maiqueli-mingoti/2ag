@@ -26,6 +26,11 @@ export default function DashboardPrescritor() {
         navigate("/prescricao");
     }
 
+    const handleAgenda = (e) => {
+        e.preventDefault();
+
+        navigate("/agendamento-prescritor");
+    }
 
     return (
         <div className="dashboard-prescritor">
@@ -79,7 +84,7 @@ export default function DashboardPrescritor() {
                             <span className="action-icon">💊</span>
                             <span>Nova Prescrição</span>
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleAgenda}>
                             <span className="action-icon">📅</span>
                             <span>Agenda</span>
                         </button>

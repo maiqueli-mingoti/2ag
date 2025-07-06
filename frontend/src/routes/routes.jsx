@@ -10,6 +10,8 @@ import Prescricao from "../pages/prescricao/prescricao.jsx";
 import SignUp from "../pages/sign-up/sign-up.jsx";
 import DiarioSono from "../pages/diario-sono/diario-sono.jsx";
 import MiniExame from "../pages/mini-exame/mini-exame-estado-mental.jsx"
+import AgendamentoConsultaPaciente from "../pages/agendamento-consulta-paciente/agendamento-consulta-paciente.jsx";
+import AgendamentoPrescritor from "../pages/agendamento-consulta-prescritor/agendamento-consulta-prescritor.jsx";
 
 const router = createBrowserRouter([
     {
@@ -52,6 +54,10 @@ const router = createBrowserRouter([
         path: "/sign-up",
         element: <SignUp />,
     },
+   /* {
+        path: "/agendamento-paciente",
+        element: <AgendamentoPaciente />,
+    }, */
     {
         path: "/diario-sono",
         element: <DiarioSono />,
@@ -59,6 +65,14 @@ const router = createBrowserRouter([
     {
         path: "/mini-exame",
         element: <MiniExame />
+    },
+    {
+        path: "/agendamento-consulta",
+        element: <AgendamentoConsultaPaciente />
+    },
+    {
+        path: "/agendamento-prescritor",
+        element: <AgendamentoPrescritor />
     }
 ]);
 

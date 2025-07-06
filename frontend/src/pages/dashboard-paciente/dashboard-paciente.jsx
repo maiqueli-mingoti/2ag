@@ -20,6 +20,12 @@ export default function DashboardPaciente() {
         navigate("/acompanhamento-paciente");
     }
 
+    const handleAgendarConsulta = (e) => {
+        e.preventDefault();
+
+        navigate("/agendamento-consulta");
+    }
+
     return (
         <div className="dashboard-paciente">
             <header className="dashboard-header">
@@ -54,7 +60,7 @@ export default function DashboardPaciente() {
                             <span className="action-icon">💊</span>
                             <span>Minhas Prescrições</span>
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleAgendarConsulta}>
                             <span className="action-icon">📅</span>
                             <span>Agendar Consulta</span>
                         </button>

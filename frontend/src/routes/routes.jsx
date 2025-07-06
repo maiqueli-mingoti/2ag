@@ -17,7 +17,8 @@ import SelecaoEscalas from "../pages/selecao-escalas/selecao-escalas.jsx";
 import HistoricoPaciente from "../pages/historico-clinico-paciente/historico-clinico-paciente.jsx";
 import HamAScale from "../pages/escala-hamilton/escala-hamilton.jsx";
 import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor /historico-clinico-prescritor.jsx";
-import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx"
+import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx";
+import Anamnese from "../pages/anamnese/anamnese.jsx";
 
 const router = createBrowserRouter([
     {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
     {
         path: "/lista-paciente",
         element: <ListaPaciente />
+    },
+    {
+        path: "/anamnese",
+        element: <Anamnese />
     }
 ]);
 

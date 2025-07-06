@@ -7,7 +7,7 @@ import '../../styles/button.css';
 export default function ListaPacientes() {
     const navigate = useNavigate();
 
-    // Dados de exemplo para simulação. Em um app real, viria de uma API.
+    // Dados de exemplo para simulação
     const todosPacientes = [
         { id: '1', nome: 'João da Silva', idade: 45, status: 'Ativo' },
         { id: '2', nome: 'Maria Oliveira', idade: 62, status: 'Inativo' },

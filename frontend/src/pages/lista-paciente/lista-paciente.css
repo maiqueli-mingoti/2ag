@@ -98,14 +98,12 @@
     align-items: center;
     gap: 0.5rem;
     font-weight: 500;
-    color: var(--color-success);
 }
 
 .lp-status-dot {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: var(--color-success);
 }
 
 .lp-paciente-actions {

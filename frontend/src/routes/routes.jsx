@@ -14,8 +14,9 @@ import AgendamentoConsultaPaciente from "../pages/agendamento-consulta-paciente/
 import AgendamentoPrescritor from "../pages/agendamento-consulta-prescritor/agendamento-consulta-prescritor.jsx";
 import EscalaPaciente from "../pages/escala-clinica-paciente/escala-clinica-paciente.jsx"
 import SelecaoEscalas from "../pages/selecao-escalas/selecao-escalas.jsx";
-import HistoricoPaciente from "../pages/historico-clinico-paciente/historico-clinico-paciente.jsx"
+import HistoricoPaciente from "../pages/historico-clinico-paciente/historico-clinico-paciente.jsx";
 import HamAScale from "../pages/escala-hamilton/escala-hamilton.jsx";
+import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor /historico-clinico-prescritor.jsx";
 
 const router = createBrowserRouter([
     {
@@ -89,9 +90,14 @@ const router = createBrowserRouter([
     {
         path: "/escala-hamilton",
         element: <HamAScale />
+    },
+    {
+        path:"/paciente/:pacienteId/historico",
+        element: <HistoricoClinicoPrescritor />
     }
 ]);
 
 export default function Routes() {
     return <RouterProvider router={router} />;
+
 }

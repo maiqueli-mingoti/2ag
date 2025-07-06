@@ -26,7 +26,6 @@ export default function AcompanhamentoSemanalPaciente() {
 
     const handleReturnDash = (e) => {
         e.preventDefault();
-
         navigate("/dashboard-paciente");
     };
     return (

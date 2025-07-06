@@ -26,6 +26,11 @@ export default function DashboardPaciente() {
         navigate("/agendamento-consulta");
     }
 
+    const handleOpenHamAScale = (e) => {
+        e.preventDefault();
+        navigate("/escala-hamilton");
+    }
+
     return (
         <div className="dashboard-paciente">
             <header className="dashboard-header">
@@ -118,7 +123,9 @@ export default function DashboardPaciente() {
                                     <span className="escala-frequencia">Semanal - Próxima: 20/01</span>
                                 </div>
                             </div>
-                            <button className="button-secondary">Preencher</button>
+                            <button className="button-secondary" onClick={handleOpenHamAScale}>
+                                Preencher
+                            </button>
                             <div className="escala-item">
                                 <div className="escala-info">
                                     <h3>Índice de Qualidade do Sono</h3>

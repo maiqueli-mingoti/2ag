@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import ScaleSelector from "../../components/scale-selector/scale-selector";
 import './escala-hamilton.css';
+import Header from "../../components/header/header.jsx";
 
 const hamAItems = [
     {
@@ -153,16 +154,12 @@ export default function HamAScale() {
 
     return (
         <div className="consulta-clinica">
-            <header className="consulta-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturnDash}>
-                        Voltar
-                    </button>
-                </nav>
-            </header>
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturnDash}
+            />
 
             <div className="acompanhamento-paciente">
                 <div className="acompanhamento-paciente__content">

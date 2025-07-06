@@ -31,6 +31,13 @@ export default function DashboardPaciente() {
         navigate("/escala-hamilton");
     }
 
+
+    const handleNotificacoes = (e) => {
+        e.preventDefault();
+
+        navigate("/notificacoes-paciente");
+    }
+
     return (
         <div className="dashboard-paciente">
             <header className="dashboard-header">
@@ -39,6 +46,7 @@ export default function DashboardPaciente() {
                 </div>
                 <div className="dashboard-header__user">
                     <span>Olá, João Silva</span>
+                    <button className="button-secondary" onClick={handleNotificacoes}>Notificações</button>
                     <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
             </header>

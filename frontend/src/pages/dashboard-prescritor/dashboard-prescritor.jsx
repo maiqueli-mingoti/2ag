@@ -32,12 +32,19 @@ export default function DashboardPrescritor() {
         navigate("/agendamento-prescritor");
     }
 
+    const handleNotificacoes = (e) => {
+        e.preventDefault();
+
+        navigate("/notificacoes-prescritor");
+    }
+
     return (
         <div className="dashboard-prescritor">
             <header className="dashboard-header">
                 <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                 <div className="dashboard-header__user">
                     <span>Dr. Maria Santos - CRM 12345</span>
+                    <button className="button-secondary" onClick={handleNotificacoes}>Notificações</button>
                     <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
             </header>
@@ -51,7 +58,7 @@ export default function DashboardPrescritor() {
                 {/* Estatísticas Rápidas */}
                 <div className="stats-grid">
                     <div className="stat-card">
-                        <div className="stat-number">1</div>
+                        <div className="stat-number">24</div>
                         <div className="stat-label">Pacientes Ativos</div>
                     </div>
                     <div className="stat-card">

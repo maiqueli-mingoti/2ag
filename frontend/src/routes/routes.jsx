@@ -17,6 +17,7 @@ import SelecaoEscalas from "../pages/selecao-escalas/selecao-escalas.jsx";
 import HistoricoPaciente from "../pages/historico-clinico-paciente/historico-clinico-paciente.jsx";
 import HamAScale from "../pages/escala-hamilton/escala-hamilton.jsx";
 import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor /historico-clinico-prescritor.jsx";
+import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx"
 
 const router = createBrowserRouter([
     {
@@ -92,8 +93,12 @@ const router = createBrowserRouter([
         element: <HamAScale />
     },
     {
-        path:"/paciente/:pacienteId/historico",
+        path: "/paciente/:pacienteId/historico",
         element: <HistoricoClinicoPrescritor />
+    },
+    {
+        path: "/lista-paciente",
+        element: <ListaPaciente />
     }
 ]);
 

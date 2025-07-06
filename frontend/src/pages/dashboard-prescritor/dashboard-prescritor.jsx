@@ -51,7 +51,7 @@ export default function DashboardPrescritor() {
                 {/* Estatísticas Rápidas */}
                 <div className="stats-grid">
                     <div className="stat-card">
-                        <div className="stat-number">24</div>
+                        <div className="stat-number">1</div>
                         <div className="stat-label">Pacientes Ativos</div>
                     </div>
                     <div className="stat-card">

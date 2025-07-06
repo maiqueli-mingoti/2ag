@@ -16,7 +16,6 @@ const escalasDisponiveis = [
 const listaPacientes = {
     '1': { nome: 'João da Silva' },
     '2': { nome: 'Maria Oliveira' },
-    '3': { nome: 'Carlos Pereira' },
 };
 
 export default function SelecaoEscalas() {

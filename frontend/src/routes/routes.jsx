@@ -13,6 +13,7 @@ import MiniExame from "../pages/mini-exame/mini-exame-estado-mental.jsx"
 import AgendamentoConsultaPaciente from "../pages/agendamento-consulta-paciente/agendamento-consulta-paciente.jsx";
 import AgendamentoPrescritor from "../pages/agendamento-consulta-prescritor/agendamento-consulta-prescritor.jsx";
 import EscalaPaciente from "../pages/escala-clinica-paciente/escala-clinica-paciente.jsx"
+import SelecaoEscalas from "../pages/selecao-escalas/selecao-escalas.jsx";
 
 const router = createBrowserRouter([
     {
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
     {
         path: "/escala-clinica",
         element: <EscalaPaciente />
+    },
+    {
+        path: "/selecao-escalas",
+        element: <SelecaoEscalas />
     }
 ]);
 

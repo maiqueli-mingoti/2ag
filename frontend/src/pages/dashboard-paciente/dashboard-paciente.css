@@ -4,8 +4,8 @@
     font-family: "Yaldevi Colombo", sans-serif;
 }
 .dashboard-header {
-    background-color: #193E21;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;

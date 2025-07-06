@@ -32,7 +32,6 @@ export default function CentralEscalas() {
                         <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                     </div>
                     <div className="header-nav">
-                        <span>Olá, João Silva</span>
                         <button className="button-secondary" onClick={() => handleNavigate('/dashboard-paciente')}>Voltar</button>
                     </div>
                 </header>

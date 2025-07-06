@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import './dados-consultorio.css';
+import Header from "../../components/header/header.jsx";
+import {useNavigate} from "react-router";
 
 export default function DadosConsultorio() {
+    const navigate = useNavigate();
+
     const [dadosConsultorio, setDadosConsultorio] = useState({
         nomeFantasia: 'Clinica Teste',
         fusoHorario: 'GMT - 03:00',
@@ -16,12 +20,17 @@ export default function DadosConsultorio() {
         }));
     };
 
-
+    const handleBack = () => {
+        navigate(-1);
+    };
     return (
         <div className="dados-consultorio-container">
-            <header className="dados-header">
-                <h1>Configurações do Consultório</h1>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBack}
+            />
 
             <div className="dados-content">
                 <div className="tabs-container">

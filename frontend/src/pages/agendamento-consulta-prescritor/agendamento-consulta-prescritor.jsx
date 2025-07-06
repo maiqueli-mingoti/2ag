@@ -5,6 +5,7 @@ import "../../styles/button.css";
 import "../../styles/input.css";
 import "./agendamento-consulta-prescritor.css";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/header/header.jsx";
 
 export default function AgendamentoPrescritor() {
     const navigate = useNavigate();
@@ -246,19 +247,15 @@ export default function AgendamentoPrescritor() {
 
     return (
         <div className="agendamento-prescritor">
-            <header className="dashboard-header">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                <div className="dashboard-header__user">
-                    <span>Dr. Maria Santos - CRM 12345</span>
-                    <button className="button-secondary" onClick={handleLogout}>Sair</button>
-                </div>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBackToDashboard}
+            />
 
             <main className="dashboard-main">
                 <div className="agendamento-header">
-                    <button className="back-button" onClick={handleBackToDashboard}>
-                        Voltar ao Painel
-                    </button>
                     <div className="dashboard-welcome">
                         <h1>Gerenciar Agenda</h1>
                         <p>Agende consultas para seus pacientes e gerencie sua agenda de forma eficiente.</p>

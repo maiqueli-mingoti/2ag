@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router';
 import './anamnese.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
 import '../../styles/input.css';
+import Header from "../../components/header/header.jsx";
 
 export default function Anamnese() {
     const navigate = useNavigate();
@@ -45,11 +46,18 @@ export default function Anamnese() {
         navigate('/dashboard-paciente');
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="anamnese-page">
-            <header className="anamnese-header">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-            </header>
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBack}
+            />
 
             <main className="anamnese-main">
                 <form className="anamnese-form" onSubmit={handleSubmit}>

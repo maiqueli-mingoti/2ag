@@ -3,8 +3,9 @@ import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./consulta-clinica.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import Header from "../../components/header/header.jsx";
 
 export default function ConsultaClinica() {
     const [abaAtiva, setAbaAtiva] = useState('observacoes');
@@ -24,14 +25,12 @@ export default function ConsultaClinica() {
     }
     return (
         <div className="consulta-clinica">
-            <header className="consulta-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturnDash}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturnDash}
+            />
 
             <main className="consulta-main">
                 <div className="consulta-title">

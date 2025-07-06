@@ -1,8 +1,10 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import './historico-clinico-prescritor.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
+import Header from "../../components/header/header.jsx";
+import React from "react";
 
 
 // Os dados seriam buscados de uma API usando o pacienteId
@@ -39,14 +41,12 @@ export default function HistoricoClinicoPrescritor() {
 
     return (
         <div className="historico-prescritor-page">
-            <header className="historico-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturn}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturn}
+            />
 
             <main className="historico-main">
                 <div className="historico-title">

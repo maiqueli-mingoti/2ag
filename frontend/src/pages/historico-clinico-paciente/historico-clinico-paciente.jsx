@@ -3,6 +3,8 @@ import './historico-clinico-paciente.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
+import Header from "../../components/header/header.jsx";
+import React from "react";
 
 // Dados de exemplo para simular o histórico do paciente
 const dadosHistorico = {
@@ -40,14 +42,12 @@ export default function HistoricoClinico() {
 
     return (
         <div className="historico-clinico-page">
-            <header className="historico-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturn}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturn}
+            />
 
             <main className="historico-main">
                 <div className="historico-title">

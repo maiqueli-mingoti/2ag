@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import './selecao-escalas.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
+import Header from "../../components/header/header.jsx";
 
 const escalasDisponiveis = [
     { id: 'escala_sono', nome: 'Diário de Sono', descricao: 'Avalia a qualidade e a duração do sono do paciente.' },
@@ -52,14 +53,12 @@ export default function SelecaoEscalas() {
 
     return (
         <div className="selecao-escalas">
-            <header className="selecao-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturn}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturn}
+            />
 
             <main className="selecao-main">
                 <div className="selecao-title">

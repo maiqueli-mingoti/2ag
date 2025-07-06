@@ -1,7 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./mini-exame-estado-mental.css";
+import Header from "../../components/header/header.jsx";
+import {useNavigate} from "react-router";
 
 export default function MiniExameEstadoMental() {
+    const navigate = useNavigate();
+
     const [data, setData] = useState({
         nomePaciente: "",
         dataAvaliacao: "",
@@ -139,13 +143,20 @@ export default function MiniExameEstadoMental() {
         // Aqui você pode implementar a lógica para salvar os dados
     };
 
+    const handleReturnDash = (e) => {
+        e.preventDefault();
+        navigate("/dashboard-paciente");
+    };
+
     return (
         <div className="meem">
             <div className="meem__content">
-                <div className="meem__header">
-                    <h2>Mini-Exame do Estado Mental (MEEM)</h2>
-                    <span>Avaliação Cognitiva</span>
-                </div>
+                <Header
+                    title="João Silva"
+                    showBackButton={true}
+                    backButtonText="Voltar"
+                    onBackClick={handleReturnDash}
+                />
 
                 <form onSubmit={handleSubmit} className="meem__form">
                     {/* Informações do Paciente */}

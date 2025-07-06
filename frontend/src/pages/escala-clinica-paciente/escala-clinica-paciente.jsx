@@ -3,6 +3,8 @@ import './escala-clinica-paciente.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
+import Header from "../../components/header/header.jsx";
+import React from "react";
 
 export default function CentralEscalas() {
     const navigate = useNavigate();
@@ -25,16 +27,19 @@ export default function CentralEscalas() {
         navigate(path);
     };
 
+    const handleReturnDash = (e) => {
+        e.preventDefault();
+        navigate("/dashboard-paciente");
+    };
+
     return (
             <div className="central-escalas-page">
-                <header className="escalas-header">
-                    <div className="header-left">
-                        <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                    </div>
-                    <div className="header-nav">
-                        <button className="button-secondary" onClick={() => handleNavigate('/dashboard-paciente')}>Voltar</button>
-                    </div>
-                </header>
+                <Header
+                    title="João Silva"
+                    showBackButton={true}
+                    backButtonText="Voltar"
+                    onBackClick={handleReturnDash}
+                />
 
             <main className="escalas-main">
                 <div className="escalas-title">

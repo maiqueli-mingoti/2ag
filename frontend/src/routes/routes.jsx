@@ -16,7 +16,7 @@ import EscalaPaciente from "../pages/escala-clinica-paciente/escala-clinica-paci
 import SelecaoEscalas from "../pages/selecao-escalas/selecao-escalas.jsx";
 import HistoricoPaciente from "../pages/historico-clinico-paciente/historico-clinico-paciente.jsx";
 import HamAScale from "../pages/escala-hamilton/escala-hamilton.jsx";
-import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor /historico-clinico-prescritor.jsx";
+import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor/historico-clinico-prescritor.jsx";
 import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx";
 import Anamnese from "../pages/anamnese/anamnese.jsx";
 import NotificacoesPrescritor from "../pages/notificacoes-prescritor/notificacoes-prescritor.jsx";

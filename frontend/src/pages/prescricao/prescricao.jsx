@@ -4,6 +4,8 @@ import "../../styles/button.css";
 import "../../styles/input.css";
 import "./prescricao.css";
 import { useNavigate } from "react-router";
+import Header from "../../components/header/header.jsx";
+import React from "react";
 
 export default function Prescricao() {
     const navigate = useNavigate();
@@ -15,15 +17,12 @@ export default function Prescricao() {
     };
     return (
         <div className="prescricao">
-            <header className="prescricao-header">
-                <div className="header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-
-                </div>
-                <nav className="header-nav">
-                    <button className="button-secondary" onClick={handleReturnMenu}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturnMenu}
+            />
             <main className="prescricao-main">
                 <div className="precricao-title">
                     <h1>Nova Prescrição</h1>

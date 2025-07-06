@@ -34,8 +34,12 @@ export default function DashboardPaciente() {
 
     const handleNotificacoes = (e) => {
         e.preventDefault();
-
         navigate("/notificacoes-paciente");
+    }
+
+    const handleSleep = (e) =>{
+        e.preventDefault();
+        navigate("/diario-sono");
     }
 
     return (
@@ -134,6 +138,7 @@ export default function DashboardPaciente() {
                             <button className="button-secondary" onClick={handleOpenHamAScale}>
                                 Preencher
                             </button>
+
                             <div className="escala-item">
                                 <div className="escala-info">
                                     <h3>Índice de Qualidade do Sono</h3>
@@ -141,7 +146,9 @@ export default function DashboardPaciente() {
                                     <span className="escala-frequencia">Mensal - Próxima: 01/02</span>
                                 </div>
                             </div>
-                            <button className="button-secondary">Preencher</button>
+                            <button className="button-secondary" onClick={handleSleep}>
+                              Preencher
+                            </button>
                         </div>
                     </section>
 

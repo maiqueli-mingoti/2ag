@@ -3,6 +3,8 @@ import './lista-paciente.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
 import '../../styles/button.css';
+import Header from "../../components/header/header.jsx";
+import React from "react";
 
 export default function ListaPacientes() {
     const navigate = useNavigate();
@@ -30,14 +32,12 @@ export default function ListaPacientes() {
 
     return (
         <div className="lista-pacientes-page">
-            <header className="lp-header">
-                <div className="lp-header-left">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="lp-logo" />
-                </div>
-                <nav className="lp-header-nav">
-                    <button className="button-secondary" onClick={handleReturn}>Voltar</button>
-                </nav>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturn}
+            />
 
             <main className="lp-main">
                 <div className="lp-pacientes-header">

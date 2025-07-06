@@ -38,6 +38,19 @@ export default function DashboardPrescritor() {
         navigate("/notificacoes-prescritor");
     }
 
+    const handleSignup = (e) =>{
+        e.preventDefault();
+
+        navigate("/sign-up");
+    }
+
+    const handlePaciente = (e) =>{
+        e.preventDefault();
+
+        navigate("/lista-paciente");
+    }
+
+
     return (
         <div className="dashboard-prescritor">
             <header className="dashboard-header">
@@ -79,7 +92,7 @@ export default function DashboardPrescritor() {
                 <section className="dashboard-actions">
                     <h2>Ações Rápidas</h2>
                     <div className="actions-grid">
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleSignup}>
                             <span className="action-icon">👥</span>
                             <span>Novo Paciente</span>
                         </button>

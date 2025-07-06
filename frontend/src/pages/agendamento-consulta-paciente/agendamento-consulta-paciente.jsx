@@ -4,7 +4,8 @@ import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./agendamento-consulta-paciente.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
+import Header from "../../components/header/header.jsx";
 
 export default function AgendamentoConsultaPaciente() {
     const navigate = useNavigate();
@@ -64,12 +65,8 @@ export default function AgendamentoConsultaPaciente() {
         [getFutureDate(6)]: ["08:30", "10:00", "13:30", "15:30"]
     };
 
-    const handleLogout = (e) => {
+    const handleReturnDash = (e) => {
         e.preventDefault();
-        navigate("/login");
-    };
-
-    const handleBackToDashboard = () => {
         navigate("/dashboard-paciente");
     };
 
@@ -136,21 +133,15 @@ export default function AgendamentoConsultaPaciente() {
 
     return (
         <div className="agendamento-consulta">
-            <header className="dashboard-header">
-                <div className="dashboard-header__logo">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                </div>
-                <div className="dashboard-header__user">
-                    <span>Olá, João Silva</span>
-                    <button className="button-secondary" onClick={handleLogout}>Sair</button>
-                </div>
-            </header>
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleReturnDash}
+            />
 
             <main className="dashboard-main">
                 <div className="agendamento-header">
-                    <button className="back-button" onClick={handleBackToDashboard}>
-                        Voltar ao Painel
-                    </button>
                     <div className="dashboard-welcome">
                         <h1>Agendar Nova Consulta</h1>
                         <p>Escolha o prescritor, data e horário que melhor se adequam à sua agenda.</p>

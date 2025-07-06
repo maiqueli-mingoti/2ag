@@ -19,6 +19,8 @@ import HamAScale from "../pages/escala-hamilton/escala-hamilton.jsx";
 import HistoricoClinicoPrescritor from "../pages/historico-clinico-prescritor /historico-clinico-prescritor.jsx";
 import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx";
 import Anamnese from "../pages/anamnese/anamnese.jsx";
+import NotificacoesPrescritor from "../pages/notificacoes-prescritor/notificacoes-prescritor.jsx";
+import NotificacoesPaciente from "../pages/notificacoes-paciente/notificacoes-paciente.jsx";
 
 const router = createBrowserRouter([
     {
@@ -104,7 +106,16 @@ const router = createBrowserRouter([
     {
         path: "/anamnese",
         element: <Anamnese />
+    },
+    {
+        path: "/notificacoes-prescritor",
+        element: <NotificacoesPrescritor />
+    },
+    {
+        path: "/notificacoes-paciente",
+        element: <NotificacoesPaciente />
     }
+
 ]);
 
 export default function Routes() {

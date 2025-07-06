@@ -15,13 +15,18 @@ export default function Prescricao() {
 
         navigate("/dashboard-prescritor");
     };
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="prescricao">
             <Header
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturnMenu}
+                onBackClick={handleBack}
             />
             <main className="prescricao-main">
                 <div className="precricao-title">

@@ -5,9 +5,8 @@ import {useNavigate} from "react-router";
 
 export default function AcompanhamentoSemanalPrescritor() {
     const navigate = useNavigate();
-    const handleReturnDash = (e) => {
-        e.preventDefault();
-        navigate("/dashboard-paciente");
+    const handleBack = () => {
+        navigate(-1);
     };
     return (
         <div className="acompanhamento-semanal">
@@ -15,7 +14,7 @@ export default function AcompanhamentoSemanalPrescritor() {
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturnDash}
+                onBackClick={handleBack}
             />
         </div>
     );

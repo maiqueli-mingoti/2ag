@@ -27,8 +27,8 @@ export default function SelecaoEscalas() {
     const [termoBusca, setTermoBusca] = useState('');
     const [escalasSelecionadas, setEscalasSelecionadas] = useState({});
 
-    const handleReturn = () => {
-        navigate('/dashboard-prescritor');
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const handleSelecaoChange = (escalaId) => {
@@ -57,7 +57,7 @@ export default function SelecaoEscalas() {
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturn}
+                onBackClick={handleBack}
             />
 
             <main className="selecao-main">

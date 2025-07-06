@@ -27,18 +27,16 @@ export default function CentralEscalas() {
         navigate(path);
     };
 
-    const handleReturnDash = (e) => {
-        e.preventDefault();
-        navigate("/dashboard-paciente");
+    const handleBack = () => {
+        navigate(-1);
     };
-
     return (
             <div className="central-escalas-page">
                 <Header
                     title="João Silva"
                     showBackButton={true}
                     backButtonText="Voltar"
-                    onBackClick={handleReturnDash}
+                    onBackClick={handleBack}
                 />
 
             <main className="escalas-main">

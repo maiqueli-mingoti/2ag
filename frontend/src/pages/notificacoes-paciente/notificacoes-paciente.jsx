@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import './notiicacoes-paciente.css';
+import Header from "../../components/header/header.jsx";
 
 export default function NotificacoesPaciente() {
     const [notifications, setNotifications] = useState([]);
@@ -150,13 +151,12 @@ export default function NotificacoesPaciente() {
 
     return (
         <div className="notifications-page">
-            <header className="dashboard-header">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                <div className="dashboard-header__user">
-                    <span>Olá, João Silva</span>
-                    <button className="button-secondary" onClick={handleBack}>Voltar</button>
-                </div>
-            </header>
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBack}
+            />
 
             <main className="notifications-main-content">
                 <div className="notifications-controls">

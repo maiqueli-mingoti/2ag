@@ -31,13 +31,18 @@ export default function AcompanhamentoSemanalPaciente() {
         e.preventDefault();
         navigate("/dashboard-paciente");
     };
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <div className="consulta-clinica">
         <Header
             title="João Silva"
             showBackButton={true}
             backButtonText="Voltar"
-            onBackClick={handleReturnDash}
+            onBackClick={handleBack}
         />
 
         <div className="acompanhamento-paciente">

@@ -65,9 +65,8 @@ export default function AgendamentoConsultaPaciente() {
         [getFutureDate(6)]: ["08:30", "10:00", "13:30", "15:30"]
     };
 
-    const handleReturnDash = (e) => {
-        e.preventDefault();
-        navigate("/dashboard-paciente");
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const handlePrescritorSelect = (prescritor) => {
@@ -137,7 +136,7 @@ export default function AgendamentoConsultaPaciente() {
                 title="João Silva"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturnDash}
+                onBackClick={handleBack}
             />
 
             <main className="dashboard-main">

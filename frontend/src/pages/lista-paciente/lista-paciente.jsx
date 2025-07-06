@@ -26,17 +26,16 @@ export default function ListaPacientes() {
         navigate(`/paciente/${pacienteId}/historico`);
     };
 
-    const handleReturn = () => {
-        navigate('/dashboard-prescritor');
+    const handleBack = () => {
+        navigate(-1);
     };
-
     return (
         <div className="lista-pacientes-page">
             <Header
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturn}
+                onBackClick={handleBack}
             />
 
             <main className="lp-main">

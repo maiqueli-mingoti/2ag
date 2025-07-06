@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import './notificacoes-precritor.css'; // Make sure this path is correct
+import './notificacoes-precritor.css';
+import Header from "../../components/header/header.jsx"; // Make sure this path is correct
 
 export default function NotificacoesPrescritor() {
     const [notifications, setNotifications] = useState([]);
@@ -171,13 +172,12 @@ export default function NotificacoesPrescritor() {
 
     return (
         <div className="notifications-page">
-            <header className="dashboard-header">
-                <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                <div className="dashboard-header__user">
-                    <span>Dr. Maria Santos - CRM 12345</span>
-                    <button className="button-secondary" onClick={handleBack}>Voltar</button>
-                </div>
-            </header>
+            <Header
+                title="Dr. Maria Santos - CRM 12345"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBack}
+            />
 
             <main className="notifications-main-content">
                 <div className="notifications-controls">

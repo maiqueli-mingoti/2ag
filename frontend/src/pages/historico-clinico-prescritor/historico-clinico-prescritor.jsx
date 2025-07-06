@@ -35,8 +35,8 @@ export default function HistoricoClinicoPrescritor() {
     const dadosPaciente = dadosHistoricoPacientes[pacienteId] || {};
     const nomePaciente = dadosPaciente.nome || 'Paciente não encontrado';
 
-    const handleReturn = () => {
-        navigate('/dashboard-prescritor');
+    const handleBack = () => {
+        navigate(-1);
     };
 
     return (
@@ -45,7 +45,7 @@ export default function HistoricoClinicoPrescritor() {
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturn}
+                onBackClick={handleBack}
             />
 
             <main className="historico-main">

@@ -30,8 +30,8 @@ const dadosHistorico = {
 export default function HistoricoClinico() {
     const navigate = useNavigate();
 
-    const handleReturn = () => {
-        navigate('/dashboard-paciente');
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const handleExport = () => {
@@ -46,7 +46,7 @@ export default function HistoricoClinico() {
                 title="João Silva"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturn}
+                onBackClick={handleBack}
             />
 
             <main className="historico-main">

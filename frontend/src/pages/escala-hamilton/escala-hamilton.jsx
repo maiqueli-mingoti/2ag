@@ -145,8 +145,8 @@ export default function HamAScale() {
         }
     };
 
-    const handleReturnDash = () => {
-        navigate('/dashboard-paciente');
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const total = calculateTotal();
@@ -158,7 +158,7 @@ export default function HamAScale() {
                 title="João Silva"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturnDash}
+                onBackClick={handleBack}
             />
 
             <div className="acompanhamento-paciente">

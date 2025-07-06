@@ -18,6 +18,10 @@ export default function ConsultaClinica() {
         navigate("/dashboard-prescritor");
     };
 
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     const handleNewPrescription = (e) => {
         e.preventDefault();
 
@@ -29,7 +33,7 @@ export default function ConsultaClinica() {
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleReturnDash}
+                onBackClick={handleBack}
             />
 
             <main className="consulta-main">

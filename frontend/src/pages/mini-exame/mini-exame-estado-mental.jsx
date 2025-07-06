@@ -143,11 +143,9 @@ export default function MiniExameEstadoMental() {
         // Aqui você pode implementar a lógica para salvar os dados
     };
 
-    const handleReturnDash = (e) => {
-        e.preventDefault();
-        navigate("/dashboard-paciente");
+    const handleBack = () => {
+        navigate(-1);
     };
-
     return (
         <div className="meem">
             <div className="meem__content">
@@ -155,7 +153,7 @@ export default function MiniExameEstadoMental() {
                     title="João Silva"
                     showBackButton={true}
                     backButtonText="Voltar"
-                    onBackClick={handleReturnDash}
+                    onBackClick={handleBack}
                 />
 
                 <form onSubmit={handleSubmit} className="meem__form">

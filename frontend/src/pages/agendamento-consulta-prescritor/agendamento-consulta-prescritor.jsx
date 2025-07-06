@@ -100,12 +100,8 @@ export default function AgendamentoPrescritor() {
         interval: 30 // minutos
     };
 
-    const handleLogout = () => {
-        navigate("/login");
-    };
-
-    const handleBackToDashboard = () => {
-        navigate("/dashboard-prescritor");
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const getWeekDays = (date) => {
@@ -251,7 +247,7 @@ export default function AgendamentoPrescritor() {
                 title="Dr. Maria Santos - CRM 12345"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleBackToDashboard}
+                onBackClick={handleBack}
             />
 
             <main className="dashboard-main">

@@ -1,6 +1,7 @@
 package dev.uffs.doisag.repository;
 
+import dev.uffs.doisag.model.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AppointmentRepository extends JpaRepository {
+public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 }

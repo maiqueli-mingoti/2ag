@@ -1,17 +1,60 @@
 package dev.uffs.doisag.controller;
 
+import dev.uffs.doisag.model.Appointment;
 import dev.uffs.doisag.service.AppointmentService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/Consulta")
-
 public class AppointmentsController {
 
     private final AppointmentService appointmentService;
 
     public AppointmentsController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
+    }
+
+    // create
+    @PostMapping
+    public Appointment create(@RequestBody Appointment appointment){
+        return appointmentService.create(appointment);
+    }
+    // read all
+    @GetMapping
+    public List<Appointment> getAll(){
+        return appointmentService.getAll();
+    }
+
+    // read by id
+    @GetMapping("/{id}")
+    public ResponseEntity<Appointment> getById(@PathVariable Long id){
+        return appointmentService.getById(id)
+                .map(ResponseEntity:: ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // update
+    @PutMapping("/{id}")
+    public  ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody Appointment appointmentDetails) {
+        try {
+            Appointment updatedAppointment = appointmentService.update(id, appointmentDetails);
+            return ResponseEntity.ok(updatedAppointment);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> delete(@PathVariable Long id){
+        try {
+            appointmentService.delete(id);
+            return ResponseEntity.noContent().build();
+        }
+        catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

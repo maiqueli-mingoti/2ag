@@ -1,5 +1,9 @@
 package dev.uffs.doisag.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
+
 public class Address {
     private String street;
     private String number;
@@ -13,6 +17,9 @@ public class Address {
         this.city = city;
         this.state = state;
         this.country = country;
+    }
+
+    public Address() {
     }
 
     public String getStreet() {

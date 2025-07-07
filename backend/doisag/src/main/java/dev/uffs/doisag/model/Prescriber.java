@@ -1,22 +1,21 @@
 package dev.uffs.doisag.model;
 
 import jakarta.persistence.Entity;
-import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Entity
-public class Prescriber extends User {
+public class Prescriber extends Users {
     private String professionalCode;
     private String profession;
 
-    public Prescriber(String name, String cpf, String email, String password, LocalDate birthDate, String phone, Address address, String professionalCode, String profession) {
-        super(name, cpf, email, password, birthDate, phone, address);
-        this.professionalCode = professionalCode;
-        this.profession = profession;
+    public Prescriber() {
     }
 
-    public Prescriber() {
+    public Prescriber(Address address, LocalDate birthDate, String cpf, String email, Long id, String name, String password, String phone, String profession, String professionalCode) {
+        super(address, birthDate, cpf, email, id, name, password, phone);
+        this.profession = profession;
+        this.professionalCode = professionalCode;
     }
 
     public String getProfessionalCode() {

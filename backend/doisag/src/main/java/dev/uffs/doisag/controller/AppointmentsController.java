@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("/Consulta")
+@RequestMapping("/consulta")
 public class AppointmentsController {
 
     private final AppointmentService appointmentService;
@@ -19,26 +20,27 @@ public class AppointmentsController {
 
     // create
     @PostMapping
-    public Appointment create(@RequestBody Appointment appointment){
+    public Appointment create(@RequestBody Appointment appointment) {
         return appointmentService.create(appointment);
     }
+
     // read all
     @GetMapping
-    public List<Appointment> getAll(){
+    public List<Appointment> getAll() {
         return appointmentService.getAll();
     }
 
     // read by id
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> getById(@PathVariable Long id){
+    public ResponseEntity<Appointment> getById(@PathVariable Long id) {
         return appointmentService.getById(id)
-                .map(ResponseEntity:: ok)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     // update
     @PutMapping("/{id}")
-    public  ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody Appointment appointmentDetails) {
+    public ResponseEntity<Appointment> update(@PathVariable Long id, @RequestBody Appointment appointmentDetails) {
         try {
             Appointment updatedAppointment = appointmentService.update(id, appointmentDetails);
             return ResponseEntity.ok(updatedAppointment);
@@ -48,12 +50,11 @@ public class AppointmentsController {
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {
             appointmentService.delete(id);
             return ResponseEntity.noContent().build();
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }

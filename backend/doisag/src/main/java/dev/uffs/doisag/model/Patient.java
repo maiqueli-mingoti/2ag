@@ -5,12 +5,12 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity
-public class Patient extends User {
-
-    public Patient(String name, String cpf, String email, String password, LocalDate birthDate, String phone, Address address) {
-        super(name, cpf, email, password, birthDate, phone, address);
-    }
+public class Patient extends Users {
 
     public Patient() {
+    }
+
+    public Patient(Address address, LocalDate birthDate, String cpf, String email, Long id, String name, String password, String phone) {
+        super(address, birthDate, cpf, email, id, name, password, phone);
     }
 }

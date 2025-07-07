@@ -38,6 +38,9 @@ public class Appointment {
         this.id = id;
     }
 
+    public Appointment() {
+    }
+
     public Long getId() {
         return id;
     }

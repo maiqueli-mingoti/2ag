@@ -34,6 +34,9 @@ public class PainLog extends BaseAssessment {
         this.socialActivityInterference = socialActivityInterference;
     }
 
+    public PainLog() {
+    }
+
     public int getSocialActivityInterference() {
         return socialActivityInterference;
     }

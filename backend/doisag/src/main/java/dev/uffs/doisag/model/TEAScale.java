@@ -40,6 +40,9 @@ public class TEAScale extends BaseAssessment {
         this.freqAgitation = freqAgitation;
     }
 
+    public TEAScale() {
+    }
+
     public int getFreqAggressiveness() {
         return freqAggressiveness;
     }

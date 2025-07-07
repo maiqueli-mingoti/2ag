@@ -30,7 +30,6 @@ public class PittsburghScale extends BaseAssessment {
     private int troubleWithEnthusiasm;
     private int roomPartner;
     private int psqiScore;
-    @Id
 
     public PittsburghScale(Long id, LocalDate assessmentDate, Patient patient, LocalTime usualBedTime, int minutesToFallAsleep, LocalTime usualWakeUpTime, float actualSleepHours, int freqWakesUpMiddleNight, int freqCannotFallAsleep, int freqWakeUpForBathroom, int freqCannotBreathe, int freqCoughOrSnore, int freqFeelCold, int freqFeelHot, int freqHaveBadDreams, int freqHavePain, String otherReasonToTroubleSleep, int sleepQualityRating, int freqUseSleepMedication, int troubleWithEnthusiasm, int freqTroubleStayingAwake, int roomPartner, int psqiScore) {
         super(id, assessmentDate, patient);
@@ -54,6 +53,9 @@ public class PittsburghScale extends BaseAssessment {
         this.freqTroubleStayingAwake = freqTroubleStayingAwake;
         this.roomPartner = roomPartner;
         this.psqiScore = psqiScore;
+    }
+
+    public PittsburghScale() {
     }
 
     public LocalTime getUsualBedTime() {
@@ -216,11 +218,4 @@ public class PittsburghScale extends BaseAssessment {
         this.psqiScore = psqiScore;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
 }

@@ -1,12 +1,12 @@
 package dev.uffs.doisag.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class MentalStateExam {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "appointment_id", nullable = false) // fk para a consulta
     private Appointment appointment;
@@ -31,6 +31,8 @@ public class MentalStateExam {
         this.repetition = repetition;
         this.command = command;
         this.score = score;
+    }
+    public MentalStateExam() {
     }
 
     public Appointment getAppointment() {

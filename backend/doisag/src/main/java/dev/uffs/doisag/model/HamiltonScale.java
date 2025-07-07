@@ -38,6 +38,8 @@ public class HamiltonScale extends BaseAssessment {
         this.autonomicSymptoms = autonomicSymptoms;
         this.hamScore = hamScore;
     }
+    public HamiltonScale() {
+    }
 
     public int getAnxiousMood() {
         return anxiousMood;

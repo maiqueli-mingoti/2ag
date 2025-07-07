@@ -11,4 +11,6 @@ public class Patient extends User {
         super(name, cpf, email, password, birthDate, phone, address);
     }
 
+    public Patient() {
+    }
 }

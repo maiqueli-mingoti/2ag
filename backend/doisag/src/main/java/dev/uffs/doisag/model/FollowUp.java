@@ -66,6 +66,8 @@ public class FollowUp extends BaseAssessment {
         this.dermatologicalDisease = dermatologicalDisease;
         this.mood = mood;
     }
+    public FollowUp() {
+    }
 
     public int getMorningDrops() {
         return morningDrops;

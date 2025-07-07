@@ -1,6 +1,7 @@
 package dev.uffs.doisag.model;
 
 import jakarta.persistence.Entity;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,9 @@ public class Prescriber extends User {
         super(name, cpf, email, password, birthDate, phone, address);
         this.professionalCode = professionalCode;
         this.profession = profession;
+    }
+
+    public Prescriber() {
     }
 
     public String getProfessionalCode() {

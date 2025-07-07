@@ -55,6 +55,9 @@ public class SleepLog extends BaseAssessment {
         this.pain = pain;
     }
 
+    public SleepLog() {
+    }
+
     public int getTotalTimeAwake() {
         return totalTimeAwake;
     }

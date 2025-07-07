@@ -64,6 +64,8 @@ public class Anamnesis extends BaseAssessment {
         this.sleepHabits = sleepHabits;
         this.physicalActivity = physicalActivity;
     }
+    public Anamnesis() {
+    }
 
     public String getReasonForVisit() {
         return reasonForVisit;

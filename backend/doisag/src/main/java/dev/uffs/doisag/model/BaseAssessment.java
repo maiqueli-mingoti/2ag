@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@MappedSuperclass
 // dados que se repetem em todos os formulários
 public abstract class BaseAssessment {
     @Id
@@ -22,6 +23,9 @@ public abstract class BaseAssessment {
         this.id = id;
         this.assessmentDate = assessmentDate;
         this.patient = patient;
+    }
+
+    public BaseAssessment() {
     }
 
     public Long getId() {

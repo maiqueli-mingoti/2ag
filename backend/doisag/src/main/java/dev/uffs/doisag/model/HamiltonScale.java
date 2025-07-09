@@ -152,4 +152,4 @@ public class HamiltonScale extends BaseAssessment {
     public void setHamScore(int hamScore) {
         this.hamScore = hamScore;
     }
-};
+}

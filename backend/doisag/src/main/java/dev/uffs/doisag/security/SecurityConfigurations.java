@@ -1,0 +1,61 @@
+package dev.uffs.doisag.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity // marco a classe como uma configuração de segurança do spring
+public class SecurityConfigurations {
+
+    // o nosso filtro de segurança personalizado
+    private final SecurityFilter securityFilter;
+
+    // injeção de dependência via construtor
+    public SecurityConfigurations(SecurityFilter securityFilter) {
+        this.securityFilter = securityFilter;
+    }
+
+    // este bean define a cadeia de filtros de segurança da aplicação
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                // desabilita a proteção csrf, porque a autenticação será via token
+                .csrf(AbstractHttpConfigurer::disable)
+                // garante que o backend não vai criar sessões de usuário
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // define as regras de acesso
+                .authorizeHttpRequests(req -> {
+                    // permite o acesso público ao endpoint de login e register
+                    req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
+                    // qualquer outra requisição exige autenticação
+                    req.anyRequest().authenticated();
+                })
+                // adiciona nosso filtro para rodar antes do filtro padrão
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
+    }
+
+    // este bean é o nosso "porteiro" para o processo de autenticação
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    // este bean define o algoritmo para criptografar as senhas
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}

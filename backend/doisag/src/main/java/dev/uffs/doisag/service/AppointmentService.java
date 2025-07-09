@@ -3,6 +3,7 @@ package dev.uffs.doisag.service;
 import dev.uffs.doisag.model.Appointment;
 import dev.uffs.doisag.repository.AppointmentRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 

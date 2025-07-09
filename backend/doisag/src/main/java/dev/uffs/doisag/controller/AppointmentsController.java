@@ -10,6 +10,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/consulta")
+
 public class AppointmentsController {
 
     private final AppointmentService appointmentService;
@@ -48,7 +49,7 @@ public class AppointmentsController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    // delete appointment
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         try {

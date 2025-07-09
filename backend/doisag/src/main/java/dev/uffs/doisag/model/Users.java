@@ -1,16 +1,22 @@
 package dev.uffs.doisag.model;
-import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 @Entity
-
-abstract public class Users {
+@Inheritance(strategy = InheritanceType.JOINED) // respeitar minha definição de especialização total em BD
+public abstract class Users implements UserDetails { // implementa a interface do spring security
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String cpf;
+    @Column(unique = true) // garantir email único no banco
     private String email;
     private String password;
     private LocalDate birthDate;
@@ -81,10 +87,6 @@ abstract public class Users {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -95,5 +97,49 @@ abstract public class Users {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    // a partir daqui vou trabalhar os metodos de permissão do usuário a partir do userdetails implemnetado
+
+    // prescritores papel de admin e pacientes papel de user
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this instanceof Prescriber) {
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
+    // retorna a senha criptografada do banco
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    // username vai ser o e-mail
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    // vamos dizer q as contas nunca expiram
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

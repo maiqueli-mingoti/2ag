@@ -6,7 +6,6 @@ maiqueli mingoti (20230004643) e caroline de quadros (20230000690)
 
 ### Estrutura do Repositório
 - **`backend/`**: Código-fonte do back-end (Veja o [`README.md`](./backend/README.md))
-  - **`doisag/`**: 
 
 - **`database/`**: Modelagem do banco de dados
   - **`conceptual-model/`**: Arquivos do modelo conceitual

@@ -5,17 +5,17 @@ Este repositório contém o desenvolvimento de um sistema digital para gestão c
 maiqueli mingoti (20230004643) e caroline de quadros (20230000690)
 
 ### Estrutura do Repositório
-- **`backend/`**: Código-fonte do back-end da aplicação.
-  - **`doisag/`**: Estrutura inicial do backend com pacotes e classes.
+- **`backend/`**: Código-fonte do back-end (Veja o [`README.md`](./backend/README.md))
+  - **`doisag/`**: 
 
-- **`database/`**: Modelagem do banco de dados.
-  - **`conceptual-model/`**: Arquivos do modelo conceitual.
-  - **`logical-model/`**: Arquivos do modelo logico.
+- **`database/`**: Modelagem do banco de dados
+  - **`conceptual-model/`**: Arquivos do modelo conceitual
+  - **`logical-model/`**: Arquivos do modelo logico
 
-- **`docs/`**: Documentação do projeto.
-  - **`requisitos.pdf`**: Documento com os requisitos do sistema.
+- **`docs/`**: Documentação do projeto
+  - **`requisitos.pdf`**: Documento com os requisitos do sistema
 
-- **`frontend/`**: Contém o código-fonte da aplicação frontend (React com Vite).
+- **`frontend/`**: Código-fonte da aplicação frontend (Veja o [`README.md`](./frontend/README.md))
 
 ### Nomenclatura:
 Este projeto adota diferentes padrões de nomenclatura para arquivos, pastas, funções, variáveis, componentes, tipos e constantes, visando garantir organização, legibilidade e consistência em todo o código.
@@ -28,30 +28,35 @@ Considerando esses princípios, adotamos os seguintes padrões:
 - Todas as **constantes** devem ser nomeadas utilizando o padrão **SCREAMING_SNAKE_CASE**
   - Obs.: Apenas as constantes globais (salvas no diretório **constants**) ou constantes declaradas no início de um arquivo, fora de componentes/hooks/etc.
 
-### Como Acessar o Frontend:
+### Tecnologias
 
-Para acessar e executar o frontend da aplicação, siga os passos abaixo:
+Este projeto utiliza uma arquitetura cliente-servidor com as seguintes tecnologias principais:
 
-Pré-requisitos
+* **Backend**: Java 17, Spring Boot, Spring Data JPA, e PostgreSQL
+* **Frontend**: React, Vite
+* **Gerenciamento**: Maven (backend) e npm (frontend)
+  
+### Como Executar o Projeto Localmente
 
-Certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
+Para rodar a aplicação completa, você precisará subir tanto o backend quanto o frontend.
 
-• Node.js (versão 18 ou superior)
+#### **Backend (Servidor)**
 
-• npm (gerenciador de pacotes do Node.js)
+1.  **Pré-requisitos**: JDK 17, Maven e PostgreSQL instalados
+2.  **Instruções**: As instruções detalhadas de setup do banco e execução estão no `README` específico do backend
+    * **Acesse o [`backend/README.md`](./backend/README.md) para o guia completo**
+3.  **Acesso**: O servidor rodará em `http://localhost:8080`
 
-Instalação das Dependências
+#### **Frontend (Cliente)**
 
-1. Navegue até o diretório do frontend:
-
-2. Instale as dependências do projeto utilizando o npm install:
-
-Executando a Aplicação
-
-Após a instalação das dependências, você pode iniciar o servidor de desenvolvimento do frontend:
-
-### npm run dev
-
-O frontend estará disponível em http://localhost:5173, ou outra porta disponível, caso a 5173 esteja em uso.
-
-
+1.  **Pré-requisitos**: Node.js (versão 18+) e npm
+2.  **Instalação**:
+    ```bash
+    cd frontend
+    npm install
+    ```
+3.  **Execução**:
+    ```bash
+    npm run dev
+    ```
+4.  **Acesso**: A aplicação estará disponível em `http://localhost:5173`

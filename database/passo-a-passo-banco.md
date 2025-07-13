@@ -1,6 +1,6 @@
 ## configuração do PostgreSQL para o projeto doisag**
 
-**usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado ainda**.
+**usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado**
 
 
 ### **instalar o PostgreSQL**
@@ -45,7 +45,7 @@ postgres=#
 
 ### **criar o usuário da aplicação**
 
-Ainda dentro do psql, crie o usuário `admindoisag` com a senha que a aplicação espera.
+Ainda dentro do psql, crie o usuário `admindoisag` com a senha que a aplicação espera
 No nosso caso, vamos usar `123456`:
 
 ```sql
@@ -112,8 +112,6 @@ Se tudo der certo, a API vai subir em:
 ```
 http://localhost:8080
 ```
-
----
 
 ### **usuário de teste já cadastrado**
 

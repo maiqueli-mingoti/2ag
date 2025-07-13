@@ -2,6 +2,7 @@ package dev.uffs.doisag.service;
 
 import dev.uffs.doisag.model.HamiltonScale;
 import dev.uffs.doisag.repository.HamiltonScaleRepository;
+import dev.uffs.doisag.enums.ScaleType;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -11,12 +12,15 @@ import java.util.Optional;
 @Service
 public class HamiltonScaleService {
     private final HamiltonScaleRepository hamiltonScaleRepository;
+    // aqui vo injetar o serviço que controla as tarefas
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public HamiltonScaleService(HamiltonScaleRepository hamiltonScaleRepository) {
+    public HamiltonScaleService(HamiltonScaleRepository hamiltonScaleRepository, ScaleAssignmentService scaleAssignmentService) {
         this.hamiltonScaleRepository = hamiltonScaleRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
-    // método privado para calcular a pontuação total
+    // método para calcular a pontuação total
     private int calculateTotalScore(HamiltonScale scale) {
         return scale.getAnxiousMood() +
                 scale.getTension() +
@@ -38,7 +42,19 @@ public class HamiltonScaleService {
         // calcula e define a pontuação total antes de salvar
         int totalScore = calculateTotalScore(hamiltonScale);
         hamiltonScale.setHamScore(totalScore);
-        return hamiltonScaleRepository.save(hamiltonScale);
+
+        // salva a escala preenchida no banco
+        HamiltonScale savedScale = hamiltonScaleRepository.save(hamiltonScale);
+
+        // a gente avisa o outro service pra marcar a tarefa como concluida
+        if (savedScale.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedScale.getPatient().getId(),
+                    ScaleType.ESCALA_HAMILTON // aqui coloco o tipo de escala
+            );
+        }
+        // retorna a escala salva
+        return savedScale;
     }
 
     // READ ALL

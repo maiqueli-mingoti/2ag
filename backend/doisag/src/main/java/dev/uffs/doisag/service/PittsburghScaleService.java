@@ -4,6 +4,7 @@ import dev.uffs.doisag.model.PittsburghScale;
 import dev.uffs.doisag.repository.PittsburghScaleRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.uffs.doisag.enums.ScaleType;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,12 @@ import java.util.Optional;
 @Service
 public class PittsburghScaleService {
     private final PittsburghScaleRepository pittsburghScaleRepository;
+    // aqui eh a injeçao do service q controla o status
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public PittsburghScaleService(PittsburghScaleRepository pittsburghScaleRepository) {
+    public PittsburghScaleService(PittsburghScaleRepository pittsburghScaleRepository, ScaleAssignmentService scaleAssignmentService) {
         this.pittsburghScaleRepository = pittsburghScaleRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
     // método privado para calcular o score final do psqi
@@ -38,9 +42,21 @@ public class PittsburghScaleService {
 
     // CREATE
     public PittsburghScale create(PittsburghScale pittsburghScale) {
+        // calcular o score
         int totalScore = calculateTotalScore(pittsburghScale);
         pittsburghScale.setPsqiScore(totalScore);
-        return pittsburghScaleRepository.save(pittsburghScale);
+        // salva a escala preenchida no banco
+        PittsburghScale savedScale = pittsburghScaleRepository.save(pittsburghScale);
+
+        // avisar service para marcar como concluido
+        if (savedScale.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedScale.getPatient().getId(),
+                    ScaleType.ESCALA_PITTSBURGH
+            );
+        }
+        // retornamos a scala salva
+        return savedScale;
     }
 
     // READ ALL

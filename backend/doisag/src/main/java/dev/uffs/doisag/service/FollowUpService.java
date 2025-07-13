@@ -4,21 +4,38 @@ import dev.uffs.doisag.model.FollowUp;
 import dev.uffs.doisag.repository.FollowUpRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.uffs.doisag.enums.ScaleType;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class FollowUpService {
+    // injeções
     private final FollowUpRepository followUpRepository;
+    // aqui eh a injeçao do service q controla o status
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public FollowUpService(FollowUpRepository followUpRepository) {
+    public FollowUpService(FollowUpRepository followUpRepository, ScaleAssignmentService scaleAssignmentService) {
         this.followUpRepository = followUpRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
     // CREATE
     public FollowUp create(FollowUp followUp) {
-        return followUpRepository.save(followUp);
+        // salva o acompanhamento preenchido no banco
+        FollowUp savedFollowUp = followUpRepository.save(followUp);
+
+        // ai avisa o outro service pra marcar a tarefa como concluída
+        if (savedFollowUp.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedFollowUp.getPatient().getId(),
+                    ScaleType.ACOMPANHAMENTO_SEMANAL // o tipo
+            );
+        }
+
+        // retorna o objeto salvo
+        return savedFollowUp;
     }
 
     // READ ALL

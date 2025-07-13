@@ -4,6 +4,7 @@ import dev.uffs.doisag.model.TEALog;
 import dev.uffs.doisag.repository.TEALogRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.uffs.doisag.enums.ScaleType;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,12 @@ import java.util.Optional;
 @Service
 public class TEALogService {
     private final TEALogRepository teaLogRepository;
+    // aqui eh a injeçao do service q controla o status
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public TEALogService(TEALogRepository teaLogRepository) {
+    public TEALogService(TEALogRepository teaLogRepository, ScaleAssignmentService scaleAssignmentService) {
         this.teaLogRepository = teaLogRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
     // método privado para calcular o score total
@@ -28,9 +32,22 @@ public class TEALogService {
 
     // CREATE
     public TEALog create(TEALog teaLog) {
+        // calcula o score
         int totalScore = calculateTotalScore(teaLog);
         teaLog.setTeaScore(totalScore);
-        return teaLogRepository.save(teaLog);
+
+        // salva no banco
+        TEALog savedScale = teaLogRepository.save(teaLog);
+
+        // usar o service para marcar como concluido
+        if (savedScale.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedScale.getPatient().getId(),
+                    ScaleType.REGISTRO_TEA
+            );
+        }
+        // retorna a escala salva
+        return savedScale;
     }
 
     // READ ALL

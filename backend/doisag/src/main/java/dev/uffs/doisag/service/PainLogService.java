@@ -4,6 +4,7 @@ import dev.uffs.doisag.model.PainLog;
 import dev.uffs.doisag.repository.PainLogRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.uffs.doisag.enums.ScaleType;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,14 +12,28 @@ import java.util.Optional;
 @Service
 public class PainLogService {
     private final PainLogRepository painLogRepository;
+    // aqui eh a injeçao do service q controla o status
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public PainLogService(PainLogRepository painLogRepository) {
+    public PainLogService(PainLogRepository painLogRepository, ScaleAssignmentService scaleAssignmentService) {
         this.painLogRepository = painLogRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
     // CREATE
     public PainLog create(PainLog painLog) {
-        return painLogRepository.save(painLog);
+        // primeiro salva o registro de dor no banco
+        PainLog savedLog = painLogRepository.save(painLog);
+
+        // depois de salvar avisa o sistema pra dar baixa na tarefa
+        if (savedLog.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedLog.getPatient().getId(),
+                    ScaleType.REGISTRO_DOR
+            );
+        }
+        // retorna a scala salva
+        return savedLog;
     }
 
     // READ ALL

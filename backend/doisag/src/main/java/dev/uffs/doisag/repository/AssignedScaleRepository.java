@@ -1,7 +1,7 @@
 package dev.uffs.doisag.repository;
 
 import dev.uffs.doisag.model.AssignedScale;
-import dev.uffs.doisag.enums.AssignmentStatus; // <-- importe o enum do pacote correto
+import dev.uffs.doisag.enums.AssignmentStatus;
 import dev.uffs.doisag.enums.ScaleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

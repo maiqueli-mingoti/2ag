@@ -97,8 +97,8 @@ export default function SignUp() {
                 phone: form.telefone.value.replace(/\D/g, ""),
                 address: addressObject,
                 profession: form.profissao.value,
-                professionalRegistry: form.tipoRegistro.value.toUpperCase() + " " + form.numeroRegistro.value
-
+                registryType: form.tipoRegistro.value.toUpperCase(),
+                registryNumber: form.numeroRegistro.value
             };
             try {
                 const response = await fetch("http://localhost:8080/prescritor", {

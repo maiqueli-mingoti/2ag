@@ -24,11 +24,14 @@ public class PrescriberService {
     public Prescriber create(Prescriber prescriber) {
 
         // checamos se o registro profissional n eh repetido
-        if (prescriberRepository.existsByProfessionalRegistry(prescriber.getProfessionalRegistry())) {
-            // se já existir a gente lança um erro claro antes de continuar
-            // o nosso ErrorHandler vai pegar essa exceção e retornar um 400 Bad Request
-            throw new ValidationException("Este registro profissional já está cadastrado no sistema!");
+        if (prescriberRepository.existsByRegistryTypeAndRegistryNumber(
+                prescriber.getRegistryType(),
+                prescriber.getRegistryNumber()
+        )) {
+            // a mensagem de erro
+            throw new ValidationException("Este registro profissional já está cadastrado no sistema");
         }
+
         // pegamos a senha que veio do cadastro e criptografa ela
         String encryptedPassword = passwordEncoder.encode(prescriber.getPassword());
         // define a senha criptografada no objeto antes de salvar
@@ -74,7 +77,8 @@ public class PrescriberService {
         prescriber.setBirthDate(prescriberDetails.getBirthDate());
         prescriber.setAddress(prescriberDetails.getAddress());
         prescriber.setProfession(prescriberDetails.getProfession());
-        prescriber.setProfessionalRegistry(prescriberDetails.getProfessionalRegistry());
+        prescriber.setRegistryType(prescriberDetails.getRegistryType());
+        prescriber.setRegistryNumber(prescriberDetails.getRegistryNumber());
         prescriber.setProfessionalCode(prescriberDetails.getProfessionalCode());
 
         return prescriberRepository.save(prescriber);

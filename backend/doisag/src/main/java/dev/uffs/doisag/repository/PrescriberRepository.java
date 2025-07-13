@@ -14,6 +14,6 @@ public interface PrescriberRepository extends JpaRepository<Prescriber, Long> {
     // método pra checar se um código já está em uso
     boolean existsByProfessionalCode(String professionalCode);
 
-    // checa se um registro profissional já existe no banco
-    boolean existsByProfessionalRegistry(String professionalRegistry);
+    // checa se a combinação de tipo e número de registro já existe no banco
+    boolean existsByRegistryTypeAndRegistryNumber(String registryType, String registryNumber);
 }

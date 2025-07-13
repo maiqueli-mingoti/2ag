@@ -5,15 +5,23 @@ import jakarta.persistence.Column;
 import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
+// adiconei esse para evitar regsitro profsisonais iguais do mesmo órgão
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"registry_type", "registry_number"})
+})
 public class Prescriber extends Users {
     private String profession;
-    // numero unico oficial do conselho daprofissão
-    @Column(unique = true)
-    private String professionalRegistry;
+
+    // conselho profisisnal e numero unico da profissão
+    private String registryType;
+    private String registryNumber;
+
+
     // codigo unico de vinculo para a api
     @Column(unique = true)
     private String professionalCode;
@@ -24,27 +32,12 @@ public class Prescriber extends Users {
     public Prescriber() {
     }
 
-    public Prescriber(Address address, LocalDate birthDate, String cpf, String email, Long id, String name, String password, String phone, List<Patient> patients, String profession, String professionalCode, String professionalRegistry) {
-        super(address, birthDate, cpf, email, id, name, password, phone);
+    public List<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(List<Patient> patients) {
         this.patients = patients;
-        this.profession = profession;
-        this.professionalCode = professionalCode;
-        this.professionalRegistry = professionalRegistry;
-    }
-
-    public Prescriber(List<Patient> patients, String profession, String professionalCode, String professionalRegistry) {
-        this.patients = patients;
-        this.profession = profession;
-        this.professionalCode = professionalCode;
-        this.professionalRegistry = professionalRegistry;
-    }
-
-    public String getProfessionalCode() {
-        return professionalCode;
-    }
-
-    public void setProfessionalCode(String professionalCode) {
-        this.professionalCode = professionalCode;
     }
 
     public String getProfession() {
@@ -55,19 +48,27 @@ public class Prescriber extends Users {
         this.profession = profession;
     }
 
-    public List<Patient> getPatients() {
-        return patients;
+    public String getProfessionalCode() {
+        return professionalCode;
     }
 
-    public void setPatients(List<Patient> patients) {
-        this.patients = patients;
+    public void setProfessionalCode(String professionalCode) {
+        this.professionalCode = professionalCode;
     }
 
-    public String getProfessionalRegistry() {
-        return professionalRegistry;
+    public String getRegistryNumber() {
+        return registryNumber;
     }
 
-    public void setProfessionalRegistry(String professionalRegistry) {
-        this.professionalRegistry = professionalRegistry;
+    public void setRegistryNumber(String registryNumber) {
+        this.registryNumber = registryNumber;
+    }
+
+    public String getRegistryType() {
+        return registryType;
+    }
+
+    public void setRegistryType(String registryType) {
+        this.registryType = registryType;
     }
 }

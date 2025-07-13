@@ -39,7 +39,8 @@ public class DoisagApplication {
 				newPrescriber.setEmail(prescriberEmail);
 				newPrescriber.setPassword("123456");
 				newPrescriber.setProfession("biomedica");
-				newPrescriber.setProfessionalRegistry("9876");
+				newPrescriber.setRegistryNumber("1111");
+				newPrescriber.setRegistryType("CRM");
 				testPrescriber = prescriberService.create(newPrescriber);
 
 			} else {

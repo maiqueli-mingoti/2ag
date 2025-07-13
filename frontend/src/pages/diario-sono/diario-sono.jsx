@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import Header from "../../components/header/header.jsx";
 import "./diario-sono.css";
-import "../../styles/colors.css";
-import "../../styles/fonts.css";
-import "../../styles/button.css";
-import "../../styles/input.css";
 
 // Componente para o seletor de escala, seguindo o padrão visual do projeto.
 const ScaleSelector = ({ value, onChange, leftLabel, rightLabel }) => {
@@ -50,9 +47,8 @@ export default function DiarioSono() {
         levantarAs: ""
     });
 
-    const handleReturnMenu = (e) => {
-        e.preventDefault();
-        navigate("/dashboard-paciente");
+    const handleBack = () => {
+        navigate(-1);
     };
 
     const handleGeneralInfoChange = (field, value) => {
@@ -73,7 +69,13 @@ export default function DiarioSono() {
         e.preventDefault();
         const fullData = { ...generalInfo, week: sleepLog };
         console.log('Dados do diário de sono:', fullData);
-        // Lógica para enviar os dados para o backend
+        alert('Diário de sono salvo com sucesso!');
+    };
+
+    const handleCancel = () => {
+        if (confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos.')) {
+            navigate('/dashboard-paciente');
+        }
     };
 
     const weekDays = [
@@ -90,47 +92,91 @@ export default function DiarioSono() {
         const dayData = sleepLog[dayKey];
 
         return (
-            <div className="diario-sono__day-content">
-                <div className="diario-sono__subsection">
-                    <h4>Horários de Sono</h4>
-                    <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>1. Horário em que foi dormir</label>
-                            <input type="time" value={dayData.bedTime} onChange={(e) => handleDailyLogChange(dayKey, 'bedTime', e.target.value)} />
+            <div className="acompanhamento-paciente__form">
+                <div className="acompanhamento-paciente__form__group">
+                    <h3>Horários de Sono</h3>
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`bedTime-${dayKey}`}>Horário em que foi dormir</label>
+                            <input
+                                id={`bedTime-${dayKey}`}
+                                type="time"
+                                value={dayData.bedTime}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'bedTime', e.target.value)}
+                            />
                         </div>
-                        <div className="diario-sono__field">
-                            <label>2. Horário em que se levantou</label>
-                            <input type="time" value={dayData.wakeUpTime} onChange={(e) => handleDailyLogChange(dayKey, 'wakeUpTime', e.target.value)} />
-                        </div>
-                    </div>
-                     <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>3. Tempo total na cama (minutos)</label>
-                            <input type="number" value={dayData.timeInBed} onChange={(e) => handleDailyLogChange(dayKey, 'timeInBed', e.target.value)} placeholder="Tempo em minutos" />
-                        </div>
-                        <div className="diario-sono__field">
-                            <label>4. Tempo até adormecer (minutos)</label>
-                            <input type="number" value={dayData.timeToFallAsleep} onChange={(e) => handleDailyLogChange(dayKey, 'timeToFallAsleep', e.target.value)} placeholder="Tempo em minutos" />
-                        </div>
-                    </div>
-                    <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>5. Número de vezes que acordou</label>
-                            <input type="number" value={dayData.timesWokenUp} onChange={(e) => handleDailyLogChange(dayKey, 'timesWokenUp', e.target.value)} placeholder="Número de vezes" />
-                        </div>
-                         <div className="diario-sono__field">
-                            <label>6. Duração total acordado durante a noite (minutos)</label>
-                            <input type="number" value={dayData.totalTimeAwake} onChange={(e) => handleDailyLogChange(dayKey, 'totalTimeAwake', e.target.value)} placeholder="Tempo em minutos" />
+                        <div>
+                            <label htmlFor={`wakeUpTime-${dayKey}`}>Horário em que se levantou</label>
+                            <input
+                                id={`wakeUpTime-${dayKey}`}
+                                type="time"
+                                value={dayData.wakeUpTime}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'wakeUpTime', e.target.value)}
+                            />
                         </div>
                     </div>
-                    <div className="diario-sono__row">
-                       <div className="diario-sono__field">
-                            <label>7. Tempo total de sono (minutos)</label>
-                            <input type="number" value={dayData.totalSleepTime} onChange={(e) => handleDailyLogChange(dayKey, 'totalSleepTime', e.target.value)} placeholder="Tempo em minutos" />
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`timeInBed-${dayKey}`}>Tempo total na cama (minutos)</label>
+                            <input
+                                id={`timeInBed-${dayKey}`}
+                                type="number"
+                                value={dayData.timeInBed}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'timeInBed', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
                         </div>
-                        <div className="diario-sono__field">
-                            <label>8. Foi um dia comum?</label>
-                            <select value={dayData.isCommonDay} onChange={(e) => handleDailyLogChange(dayKey, 'isCommonDay', e.target.value)}>
+                        <div>
+                            <label htmlFor={`timeToFallAsleep-${dayKey}`}>Tempo até adormecer (minutos)</label>
+                            <input
+                                id={`timeToFallAsleep-${dayKey}`}
+                                type="number"
+                                value={dayData.timeToFallAsleep}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'timeToFallAsleep', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
+                        </div>
+                    </div>
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`timesWokenUp-${dayKey}`}>Número de vezes que acordou</label>
+                            <input
+                                id={`timesWokenUp-${dayKey}`}
+                                type="number"
+                                value={dayData.timesWokenUp}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'timesWokenUp', e.target.value)}
+                                placeholder="Número de vezes"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor={`totalTimeAwake-${dayKey}`}>Duração total acordado durante a noite (minutos)</label>
+                            <input
+                                id={`totalTimeAwake-${dayKey}`}
+                                type="number"
+                                value={dayData.totalTimeAwake}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'totalTimeAwake', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
+                        </div>
+                    </div>
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`totalSleepTime-${dayKey}`}>Tempo total de sono (minutos)</label>
+                            <input
+                                id={`totalSleepTime-${dayKey}`}
+                                type="number"
+                                value={dayData.totalSleepTime}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'totalSleepTime', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
+                        </div>
+                        <div>
+                            <label htmlFor={`isCommonDay-${dayKey}`}>Foi um dia comum?</label>
+                            <select
+                                id={`isCommonDay-${dayKey}`}
+                                value={dayData.isCommonDay}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'isCommonDay', e.target.value)}
+                            >
                                 <option value="">Selecione</option>
                                 <option value="true">Sim</option>
                                 <option value="false">Não</option>
@@ -139,80 +185,157 @@ export default function DiarioSono() {
                     </div>
                 </div>
 
-                <div className="diario-sono__subsection">
-                    <h4>Avaliações do Dia (Escala de 0 a 5)</h4>
-                    <div className="diario-sono__scale-grid">
-                        <div className="diario-sono__scale-group">
-                            <label>Cansaço</label>
-                            <ScaleSelector value={dayData.fatigue} onChange={(value) => handleDailyLogChange(dayKey, 'fatigue', value)} leftLabel="Nenhum" rightLabel="Muito" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Estresse</label>
-                            <ScaleSelector value={dayData.stress} onChange={(value) => handleDailyLogChange(dayKey, 'stress', value)} leftLabel="Nenhum" rightLabel="Muito" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Sonolência durante o dia</label>
-                            <ScaleSelector value={dayData.daytimeSleepiness} onChange={(value) => handleDailyLogChange(dayKey, 'daytimeSleepiness', value)} leftLabel="Nenhuma" rightLabel="Muita" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Desatenção / Falta de concentração</label>
-                            <ScaleSelector value={dayData.inattention} onChange={(value) => handleDailyLogChange(dayKey, 'inattention', value)} leftLabel="Nenhuma" rightLabel="Muita" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Irritabilidade</label>
-                            <ScaleSelector value={dayData.irritability} onChange={(value) => handleDailyLogChange(dayKey, 'irritability', value)} leftLabel="Nenhuma" rightLabel="Muita" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Dor</label>
-                            <ScaleSelector value={dayData.pain} onChange={(value) => handleDailyLogChange(dayKey, 'pain', value)} leftLabel="Nenhuma" rightLabel="Muita" />
-                        </div>
-                        <div className="diario-sono__scale-group">
-                            <label>Percepção geral de saúde</label>
-                            <ScaleSelector value={dayData.healthPerception} onChange={(value) => handleDailyLogChange(dayKey, 'healthPerception', value)} leftLabel="Sinto-me bem" rightLabel="Sinto-me mal" />
-                        </div>
-                    </div>
+                <div className="acompanhamento-paciente__form__group">
+                    <h3>Avaliações do Dia (Escala de 0 a 5)</h3>
+                    <ScaleSelector
+                        value={dayData.fatigue}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'fatigue', value)}
+                        leftLabel="Nenhum cansaço"
+                        rightLabel="Muito cansaço"
+                    />
+                    <p className="sleep-diary-description">Cansaço</p>
                 </div>
 
-                <div className="diario-sono__subsection">
-                    <h4>Outros Dados</h4>
-                     <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>Tempo em atividades físicas (minutos)</label>
-                            <input type="number" value={dayData.physicalActivityTime} onChange={(e) => handleDailyLogChange(dayKey, 'physicalActivityTime', e.target.value)} placeholder="Tempo em minutos" />
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.stress}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'stress', value)}
+                        leftLabel="Nenhum estresse"
+                        rightLabel="Muito estresse"
+                    />
+                    <p className="sleep-diary-description">Estresse</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.daytimeSleepiness}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'daytimeSleepiness', value)}
+                        leftLabel="Nenhuma sonolência"
+                        rightLabel="Muita sonolência"
+                    />
+                    <p className="sleep-diary-description">Sonolência durante o dia</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.inattention}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'inattention', value)}
+                        leftLabel="Nenhuma desatenção"
+                        rightLabel="Muita desatenção"
+                    />
+                    <p className="sleep-diary-description">Desatenção / Falta de concentração</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.irritability}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'irritability', value)}
+                        leftLabel="Nenhuma irritabilidade"
+                        rightLabel="Muita irritabilidade"
+                    />
+                    <p className="sleep-diary-description">Irritabilidade</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.pain}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'pain', value)}
+                        leftLabel="Nenhuma dor"
+                        rightLabel="Muita dor"
+                    />
+                    <p className="sleep-diary-description">Dor</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <ScaleSelector
+                        value={dayData.healthPerception}
+                        onChange={(value) => handleDailyLogChange(dayKey, 'healthPerception', value)}
+                        leftLabel="Sinto-me bem"
+                        rightLabel="Sinto-me mal"
+                    />
+                    <p className="sleep-diary-description">Percepção geral de saúde</p>
+                </div>
+
+                <div className="acompanhamento-paciente__form__group">
+                    <h3>Outros Dados</h3>
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`physicalActivityTime-${dayKey}`}>Tempo em atividades físicas (minutos)</label>
+                            <input
+                                id={`physicalActivityTime-${dayKey}`}
+                                type="number"
+                                value={dayData.physicalActivityTime}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'physicalActivityTime', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
                         </div>
-                        <div className="diario-sono__field">
-                            <label>Tempo fora de casa (horas)</label>
-                            <input type="number" value={dayData.timeAwayFromHome} onChange={(e) => handleDailyLogChange(dayKey, 'timeAwayFromHome', e.target.value)} placeholder="Tempo em horas" />
+                        <div>
+                            <label htmlFor={`timeAwayFromHome-${dayKey}`}>Tempo fora de casa (horas)</label>
+                            <input
+                                id={`timeAwayFromHome-${dayKey}`}
+                                type="number"
+                                value={dayData.timeAwayFromHome}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'timeAwayFromHome', e.target.value)}
+                                placeholder="Tempo em horas"
+                            />
                         </div>
                     </div>
-                     <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>Uso de medicação para dormir?</label>
-                             <select value={dayData.usedSleepMedication} onChange={(e) => handleDailyLogChange(dayKey, 'usedSleepMedication', e.target.value)}>
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`usedSleepMedication-${dayKey}`}>Uso de medicação para dormir?</label>
+                            <select
+                                id={`usedSleepMedication-${dayKey}`}
+                                value={dayData.usedSleepMedication}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'usedSleepMedication', e.target.value)}
+                            >
                                 <option value="">Selecione</option>
                                 <option value="true">Sim</option>
                                 <option value="false">Não</option>
                             </select>
                         </div>
-                        <div className="diario-sono__field">
-                            <label>Consumo de bebida alcóolica (doses)</label>
-                            <input type="number" value={dayData.alcoholConsumption} onChange={(e) => handleDailyLogChange(dayKey, 'alcoholConsumption', e.target.value)} placeholder="Número de doses" />
+                        <div>
+                            <label htmlFor={`alcoholConsumption-${dayKey}`}>Consumo de bebida alcóolica (doses)</label>
+                            <input
+                                id={`alcoholConsumption-${dayKey}`}
+                                type="number"
+                                value={dayData.alcoholConsumption}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'alcoholConsumption', e.target.value)}
+                                placeholder="Número de doses"
+                            />
                         </div>
                     </div>
-                     <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>Cochilos durante o dia (minutos)</label>
-                            <input type="number" value={dayData.napsTime} onChange={(e) => handleDailyLogChange(dayKey, 'napsTime', e.target.value)} placeholder="Tempo em minutos" />
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`napsTime-${dayKey}`}>Cochilos durante o dia (minutos)</label>
+                            <input
+                                id={`napsTime-${dayKey}`}
+                                type="number"
+                                value={dayData.napsTime}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'napsTime', e.target.value)}
+                                placeholder="Tempo em minutos"
+                            />
                         </div>
-                        <div className="diario-sono__field">
-                            <label>Consumo de café (xícaras)</label>
-                            <input type="number" value={dayData.coffeeConsumption} onChange={(e) => handleDailyLogChange(dayKey, 'coffeeConsumption', e.target.value)} placeholder="Número de xícaras" />
+                        <div>
+                            <label htmlFor={`coffeeConsumption-${dayKey}`}>Consumo de café (xícaras)</label>
+                            <input
+                                id={`coffeeConsumption-${dayKey}`}
+                                type="number"
+                                value={dayData.coffeeConsumption}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'coffeeConsumption', e.target.value)}
+                                placeholder="Número de xícaras"
+                            />
                         </div>
                     </div>
-                    <div className="diario-sono__row">
-                        <div className="diario-sono__field">
-                            <label>Consumo de tabaco à noite (cigarros)</label>
-                            <input type="number" value={dayData.nighttimeSmoking} onChange={(e) => handleDailyLogChange(dayKey, 'nighttimeSmoking', e.target.value)} placeholder="Número de cigarros" />
+                    <div className="acompanhamento-paciente__form__row">
+                        <div>
+                            <label htmlFor={`nighttimeSmoking-${dayKey}`}>Consumo de tabaco à noite (cigarros)</label>
+                            <input
+                                id={`nighttimeSmoking-${dayKey}`}
+                                type="number"
+                                value={dayData.nighttimeSmoking}
+                                onChange={(e) => handleDailyLogChange(dayKey, 'nighttimeSmoking', e.target.value)}
+                                placeholder="Número de cigarros"
+                            />
                         </div>
                     </div>
                 </div>
@@ -221,75 +344,100 @@ export default function DiarioSono() {
     };
 
     return (
-        <div className="diario-sono">
-            <header className="diario-sono-header">
-                <nav className="header-nav">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
-                    <button className="button-secondary" onClick={handleReturnMenu}>Voltar</button>
-                </nav>
-            </header>
+        <div className="consulta-clinica">
+            <Header
+                title="João Silva"
+                showBackButton={true}
+                backButtonText="Voltar"
+                onBackClick={handleBack}
+            />
 
-            <main className="diario-sono__main-content">
-                <div className="diario-sono__title-section">
-                    <h1>Diário de Sono</h1>
-                    <p>Registro Semanal de Padrões de Sono</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="diario-sono__form">
-                    <section className="diario-sono__section">
-                        <h3>Informações Gerais</h3>
-                        <div className="diario-sono__row">
-                            <div className="diario-sono__field">
-                                <label htmlFor="nome-paciente">Nome do Paciente (Social)</label>
-                                <input id="nome-paciente" type="text" value={generalInfo.nomePaciente} onChange={(e) => handleGeneralInfoChange('nomePaciente', e.target.value)} placeholder="Digite o nome do paciente" />
-                            </div>
-                            <div className="diario-sono__field">
-                                <label htmlFor="mes">Mês</label>
-                                <input id="mes" type="text" value={generalInfo.mes} onChange={(e) => handleGeneralInfoChange('mes', e.target.value)} placeholder="Ex: Janeiro 2024" />
-                            </div>
-                        </div>
-                        <div className="diario-sono__row">
-                            <div className="diario-sono__field">
-                                <label htmlFor="ir-dormir-as">Programação - Ir Dormir às</label>
-                                <input id="ir-dormir-as" type="time" value={generalInfo.irDormirAs} onChange={(e) => handleGeneralInfoChange('irDormirAs', e.target.value)} />
-                            </div>
-                            <div className="diario-sono__field">
-                                <label htmlFor="levantar-as">Programação - Levantar às</label>
-                                <input id="levantar-as" type="time" value={generalInfo.levantarAs} onChange={(e) => handleGeneralInfoChange('levantarAs', e.target.value)} />
-                            </div>
-                        </div>
-                    </section>
-
-                    <section className="diario-sono__tabs-section">
-                        <div className="diario-sono__tabs-header">
-                            {weekDays.map(({ key, label, shortLabel }) => (
-                                <button
-                                    key={key}
-                                    type="button"
-                                    className={`diario-sono__tab ${activeTab === key ? 'active' : ''}`}
-                                    onClick={() => setActiveTab(key)}
-                                >
-                                    <span className="tab-full">{label}</span>
-                                    <span className="tab-short">{shortLabel}</span>
-                                </button>
-                            ))}
-                        </div>
-                        
-                        <div className="diario-sono__tab-content">
-                             <div className="diario-sono__tab-title">
-                                <h3>{weekDays.find(d => d.key === activeTab)?.label}</h3>
-                            </div>
-                            {renderDayContent(activeTab)}
-                        </div>
-                    </section>
-
-                    <div className="diario-sono__actions">
-                        <button type="submit" className="button">
-                            Salvar
-                        </button>
+            <div className="acompanhamento-paciente">
+                <div className="acompanhamento-paciente__content">
+                    <div className="acompanhamento-paciente__header">
+                        <h1>Diário de Sono</h1>
+                        <h2>Registro Semanal de Padrões de Sono</h2>
                     </div>
-                </form>
-            </main>
+
+                    <form onSubmit={handleSubmit} className="acompanhamento-paciente__form">
+                        <div className="acompanhamento-paciente__form__row">
+                            <div>
+                                <label htmlFor="nome-paciente">Nome do Paciente (Social)</label>
+                                <input
+                                    id="nome-paciente"
+                                    type="text"
+                                    value={generalInfo.nomePaciente}
+                                    onChange={(e) => handleGeneralInfoChange('nomePaciente', e.target.value)}
+                                    placeholder="Digite o nome do paciente"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="mes">Mês</label>
+                                <input
+                                    id="mes"
+                                    type="text"
+                                    value={generalInfo.mes}
+                                    onChange={(e) => handleGeneralInfoChange('mes', e.target.value)}
+                                    placeholder="Ex: Janeiro 2024"
+                                />
+                            </div>
+                        </div>
+                        <div className="acompanhamento-paciente__form__row">
+                            <div>
+                                <label htmlFor="ir-dormir-as">Programação - Ir Dormir às</label>
+                                <input
+                                    id="ir-dormir-as"
+                                    type="time"
+                                    value={generalInfo.irDormirAs}
+                                    onChange={(e) => handleGeneralInfoChange('irDormirAs', e.target.value)}
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="levantar-as">Programação - Levantar às</label>
+                                <input
+                                    id="levantar-as"
+                                    type="time"
+                                    value={generalInfo.levantarAs}
+                                    onChange={(e) => handleGeneralInfoChange('levantarAs', e.target.value)}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="sleep-diary-tabs">
+                            <div className="sleep-diary-tabs-header">
+                                {weekDays.map(({ key, label, shortLabel }) => (
+                                    <button
+                                        key={key}
+                                        type="button"
+                                        className={`sleep-diary-tab ${activeTab === key ? 'active' : ''}`}
+                                        onClick={() => setActiveTab(key)}
+                                    >
+                                        <span className="tab-full">{label}</span>
+                                        <span className="tab-short">{shortLabel}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="sleep-diary-tab-content">
+                                <div className="sleep-diary-tab-title">
+                                    <h3>{weekDays.find(d => d.key === activeTab)?.label}</h3>
+                                </div>
+                                {renderDayContent(activeTab)}
+                            </div>
+                        </div>
+
+                        {/* Botões de Ação */}
+                        <div className="acompanhamento-paciente_end">
+                            <button type="submit" className="button">
+                                Salvar Diário
+                            </button>
+                            <button type="button" className="button-secondary" onClick={handleCancel}>
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }

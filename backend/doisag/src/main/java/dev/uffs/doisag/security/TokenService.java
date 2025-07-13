@@ -36,6 +36,7 @@ public class TokenService {
                 .setSubject(user.getEmail()) // quem é o dono do token (o email do usuario)
                 .claim("authorities", authorities) // adicionando a claim com os perfis
                 .claim("id", user.getId()) // adicionei o id
+                .claim("name", user.getName()) // adicionei nome
                 .setIssuedAt(new Date(System.currentTimeMillis())) // quando foi emitido
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // data de expiração
                 .signWith(getSigningKey()) // assina com a nossa chave secreta

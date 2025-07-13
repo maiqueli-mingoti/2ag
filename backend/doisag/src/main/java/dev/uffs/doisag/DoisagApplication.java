@@ -2,6 +2,7 @@ package dev.uffs.doisag;
 
 import dev.uffs.doisag.model.Patient;
 import dev.uffs.doisag.model.Prescriber;
+import dev.uffs.doisag.service.PrescriberService;
 import dev.uffs.doisag.repository.UsersRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,7 +22,7 @@ public class DoisagApplication {
 
 	// este bean agora cria um prescritor e um paciente de teste se eles não existirem
 	@Bean
-	public CommandLineRunner initDatabase(UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
+	public CommandLineRunner initDatabase(UsersRepository usersRepository, PasswordEncoder passwordEncoder, PrescriberService prescriberService) {
 		return args -> {
 			// garantimos q o prescriber de teste exista
 			String prescriberEmail = "prescritor@email.com";
@@ -34,14 +35,13 @@ public class DoisagApplication {
 				System.out.println("CRIANDO USUARIO DE TESTE (PRESCRITOR): " + prescriberEmail);
 
 				var newPrescriber = new Prescriber();
-				newPrescriber.setName("Dr(a). Teste");
+				newPrescriber.setName("Teste");
 				newPrescriber.setEmail(prescriberEmail);
-				newPrescriber.setPassword(passwordEncoder.encode("123456"));
-				newPrescriber.setProfession("Médico(a)");
-				newPrescriber.setProfessionalCode("TESTE123");
+				newPrescriber.setPassword("123456");
+				newPrescriber.setProfession("biomedica");
+				newPrescriber.setProfessionalRegistry("9876");
+				testPrescriber = prescriberService.create(newPrescriber);
 
-				// salva e guarda o objeto pra usar depois
-				testPrescriber = usersRepository.save(newPrescriber);
 			} else {
 				// se já existia, a gente só pega ele pra usar no vínculo
 				testPrescriber = (Prescriber) prescriberDetails;

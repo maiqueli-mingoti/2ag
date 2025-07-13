@@ -3,7 +3,9 @@ package dev.uffs.doisag.service;
 import dev.uffs.doisag.model.Prescriber;
 import dev.uffs.doisag.repository.PrescriberRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,12 +14,41 @@ import java.util.Optional;
 
 public class PrescriberService {
     private final PrescriberRepository prescriberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public PrescriberService(PrescriberRepository prescriberRepository) {
+    public PrescriberService(PrescriberRepository prescriberRepository, PasswordEncoder passwordEncoder) {
         this.prescriberRepository = prescriberRepository;
+        this.passwordEncoder = passwordEncoder;
     }
     // create prescriber
     public Prescriber create(Prescriber prescriber) {
+
+        // checamos se o registro profissional n eh repetido
+        if (prescriberRepository.existsByProfessionalRegistry(prescriber.getProfessionalRegistry())) {
+            // se já existir a gente lança um erro claro antes de continuar
+            // o nosso ErrorHandler vai pegar essa exceção e retornar um 400 Bad Request
+            throw new ValidationException("Este registro profissional já está cadastrado no sistema!");
+        }
+        // pegamos a senha que veio do cadastro e criptografa ela
+        String encryptedPassword = passwordEncoder.encode(prescriber.getPassword());
+        // define a senha criptografada no objeto antes de salvar
+        prescriber.setPassword(encryptedPassword);
+
+        // aqui vou criar a logica para gerar o cod do prescritor para vincular com pacientes:
+        // pega as 3 primeiras letras do nome e bota em maiúsculo
+        String namePart = prescriber.getName().substring(0, Math.min(prescriber.getName().length(), 3)).toUpperCase();
+        String finalCode;   // variavel pra armazenar provissoriamnete o cod
+        // a gente entra num loop pra garantir que o código gerado seja único
+        do {
+            // gera um número aleatório entre 10 e 99
+            int numberPart = new java.util.Random().nextInt(90) + 10;
+            finalCode = namePart + numberPart;
+        } while (prescriberRepository.existsByProfessionalCode(finalCode)); // continua no loop se o código já existir
+
+        // quando achar um código único a gente atribui ele ao prescritor
+        prescriber.setProfessionalCode(finalCode);
+
+        // salva o prescritor com o código gerado
         return prescriberRepository.save(prescriber);
     }
 
@@ -43,6 +74,7 @@ public class PrescriberService {
         prescriber.setBirthDate(prescriberDetails.getBirthDate());
         prescriber.setAddress(prescriberDetails.getAddress());
         prescriber.setProfession(prescriberDetails.getProfession());
+        prescriber.setProfessionalRegistry(prescriberDetails.getProfessionalRegistry());
         prescriber.setProfessionalCode(prescriberDetails.getProfessionalCode());
 
         return prescriberRepository.save(prescriber);

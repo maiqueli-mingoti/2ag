@@ -1,23 +1,122 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 import "./sign-up.css";
 
 export default function SignUp() {
     const navigate = useNavigate();
     const [userType, setUserType] = useState("");
     const [cpf, setCpf] = useState("");
+    // estados para controlar o carregamento e os erros (resp: maiqueli)
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
 
+    // adicionei um novo estado para controlar o feedback da troca, um loading para o usuário ver a troca de forms
+    // (maiqueli)
+    const [isSwitchingType, setIsSwitchingType] = useState(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        navigate("/login");
-    };
+    // função para formatar o cpf
     const handleCpf = (e) => {
         let value = e.target.value.replace(/\D/g, "");
         value = value.replace(/(\d{3})(\d)/, "$1.$2");
         value = value.replace(/(\d{3})(\d)/, "$1.$2");
         value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
         setCpf(value);
+    };
+
+    // função para lidar com a troca de tipo de usuário (maiqueli)
+    const handleUserTypeChange = (newType) => {
+        setIsSwitchingType(true); // ativa o loading
+        // a gente usa um timeout só pra dar tempo do usuário ver a animação
+        // 500ms é bem rápido mas o suficiente
+        setTimeout(() => {
+            setUserType(newType); // muda o tipo de usuário de fato
+            setIsSwitchingType(false); // desativa o loading
+        }, 500);
+    };
+
+    // modifiquei função handleSubmit para integrar (resp: maiqueli)
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError(null);
+
+        const form = e.target;
+        const password = form.senha.value;
+        const confirmPassword = form.confirmarSenha.value;
+
+        // validação simples pra ver se as senhas batem
+        if (password !== confirmPassword) {
+            setError("as senhas não conferem!");
+            setIsLoading(false);
+            return;
+        }
+
+        // ajustei para a gente pegar os valores dos novos campos separados, igual deixei no banco e no back (maiqueli)
+        const addressObject = {
+            street: form.street.value,
+            number: form.number.value,
+            city: form.city.value,
+            state: form.state.value,
+            country: form.country.value
+        };
+
+        // a estrutura de if/else foi corrigida para não ficar uma dentro da outra
+        if (userType === "paciente") {
+            const patientData = {
+                name: form.nomeCompleto.value,
+                email: form.email.value,
+                senha: password,
+                cpf: cpf.replace(/\D/g, ""),
+                birthDate: form.dataNascimento.value,
+                phone: form.telefone.value.replace(/\D/g, ""),
+                address: addressObject,
+                professionalCode: form.codigoProfissional.value
+            };
+            try {
+                const response = await fetch("http://localhost:8080/auth/register", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(patientData),
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || "falha ao cadastrar paciente :c");
+                }
+                alert("paciente cadastrado com sucesso!");
+                navigate("/login");
+            } catch (err) {
+                setError(err.message);
+            }
+        } else if (userType === "prescritor") {
+            const prescriberData = {
+                name: form.nomeCompleto.value,
+                email: form.email.value,
+                password: password,
+                cpf: cpf.replace(/\D/g, ""),
+                birthDate: form.dataNascimento.value,
+                phone: form.telefone.value.replace(/\D/g, ""),
+                address: addressObject,
+                profession: form.profissao.value,
+                professionalRegistry: form.tipoRegistro.value.toUpperCase() + " " + form.numeroRegistro.value
+
+            };
+            try {
+                const response = await fetch("http://localhost:8080/prescritor", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(prescriberData),
+                });
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || "falha ao cadastrar prescritor :c");
+                }
+                alert("prescritor cadastrado com sucesso!");
+                navigate("/login");
+            } catch (err) {
+                setError(err.message);
+            }
+        }
+        setIsLoading(false);
     };
 
     return (
@@ -30,6 +129,8 @@ export default function SignUp() {
                         src="/images/logotipo-horizontal.svg"
                     />
                     <h2 className="form__content__title">Cadastro de Usuário</h2>
+                    {/* exibe a mensagem de erro, se houver (maiqueli) */}
+                    {error && <p className="sign-up__error-message">{error}</p>}
                     <form className="form__content__form" onSubmit={handleSubmit}>
                         <div className="form__content__form__input-group">
                             <label>Tipo de Usuário *</label>
@@ -40,7 +141,8 @@ export default function SignUp() {
                                     name="userType"
                                     value="paciente"
                                     checked={userType === "paciente"}
-                                    onChange={() => setUserType("paciente")}
+                                    /* chama a função q exibe o loading (maiqueli) */
+                                    onChange={() => handleUserTypeChange("paciente")}
                                 />
                                 <label htmlFor="paciente">Paciente</label>
                             </div>
@@ -51,164 +153,128 @@ export default function SignUp() {
                                     name="userType"
                                     value="prescritor"
                                     checked={userType === "prescritor"}
-                                    onChange={() => setUserType("prescritor")}
+                                    /* chama a função q exibe o loading (maiqueli) */
+                                    onChange={() => handleUserTypeChange("prescritor")}
                                 />
                                 <label htmlFor="prescritor">Prescritor</label>
                             </div>
                         </div>
-                        {userType && (
+                        {/* exibe o aviso de carregamento se estiver trocando de tipo */}
+                        {isSwitchingType && <div className="loading-indicator">Carregando formulário...</div>}
+
+                        {/* a gente só mostra o resto do formulário se não estiver trocando */}
+                        {!isSwitchingType && userType && (
                             <>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="nomeCompleto">Nome Completo *</label>
-                                    <input
-                                        id="nomeCompleto"
-                                        name="nomeCompleto"
-                                        type="text"
-                                        required={true}
-                                        placeholder="Digite seu nome completo" />
+                                    <input id="nomeCompleto" name="nomeCompleto" type="text" required={true}
+                                           placeholder="Digite seu nome completo"/>
                                 </div>
                                 <div className="form__content__form__input-group">
-                                    <label htmlFor="cpf">CPF:</label>
-                                    <input
-                                        type="text"
-                                        id="cpf"
-                                        name="cpf"
-                                        value={cpf}
-                                        onChange={handleCpf}
-                                        placeholder="000.000.000-00"
-                                        maxLength="14"
-                                    />
+                                    <label htmlFor="cpf">CPF *</label>
+                                    <input type="text" id="cpf" name="cpf" value={cpf} onChange={handleCpf}
+                                           placeholder="000.000.000-00" maxLength="14"/>
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="email">E-mail *</label>
-                                    <input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        required={true}
-                                        placeholder="seu@email.com"
-                                    />
+                                    <input id="email" name="email" type="email" required={true}
+                                           placeholder="seu@email.com"/>
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="dataNascimento">Data de Nascimento *</label>
-                                    <input
-                                        id="dataNascimento"
-                                        name="dataNascimento"
-                                        type="date"
-                                        required={true}
-                                    />
+                                    <input id="dataNascimento" name="dataNascimento" type="date" required={true}/>
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="telefone">Telefone *</label>
-                                    <input
-                                        id="telefone"
-                                        name="telefone"
-                                        type="tel"
-                                        required={true}
-                                        placeholder="(00) 00000-0000"
-                                    />
+                                    <input id="telefone" name="telefone" type="tel" required={true}
+                                           placeholder="(00) 00000-0000"/>
                                 </div>
-                                <div className="form__content__form__input-group">
-                                    <label htmlFor="endereco">Endereço *</label>
-                                    <input
-                                        id="endereco"
-                                        name="endereco"
-                                        type="text"
-                                        required={true}
-                                        placeholder="Rua, número, bairro, cidade, estado"
-                                    />
-                                </div>
+                                <fieldset className="form__fieldset">
+                                    <legend>Endereço:</legend>
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="street">Logradouro *</label>
+                                        <input id="street" name="street" type="text" required={true}
+                                               placeholder="Rua, Avenida, etc."/>
+                                    </div>
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="number">Número *</label>
+                                        <input id="number" name="number" type="text" required={true}
+                                               placeholder="Ex: 123"/>
+                                    </div>
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="city">Cidade *</label>
+                                        <input id="city" name="city" type="text" required={true}
+                                               placeholder="Ex: Chapecó"/>
+                                    </div>
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="state">Estado (UF) *</label>
+                                        <input id="state" name="state" type="text" required={true} maxLength="2"
+                                               placeholder="Ex: SC"/>
+                                    </div>
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="country">País *</label>
+                                        <input id="country" name="country" type="text" required={true}
+                                               placeholder="Ex: Brasil"/>
+                                    </div>
+                                </fieldset>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="senha">Senha *</label>
-                                    <input
-                                        id="senha"
-                                        name="senha"
-                                        type="password"
-                                        required={true}
-                                        placeholder="Digite sua senha"
-                                    />
+                                    <input id="senha" name="senha" type="password" required={true}
+                                           placeholder="Digite sua senha"/>
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="confirmarSenha">Confirmar Senha *</label>
-                                    <input
-                                        id="confirmarSenha"
-                                        name="confirmarSenha"
-                                        type="password"
-                                        required={true}
-                                        placeholder="Confirme sua senha"
-                                    />
+                                    <input id="confirmarSenha" name="confirmarSenha" type="password" required={true}
+                                           placeholder="Confirme sua senha"/>
+                                </div>
+
+                                {userType === "paciente" && (
+                                    <div className="form__content__form__input-group">
+                                        <label htmlFor="codigoProfissional">Código do Profissional *</label>
+                                        <input id="codigoProfissional" name="codigoProfissional" type="text"
+                                               required={true}
+                                               placeholder="Ex: ABC01"/>
+                                        <p className="text-sm text-muted-foreground">
+                                            Informe o código fornecido pelo seu profissional de saúde:
+                                        </p>
+                                    </div>
+                                )}
+                                {userType === "prescritor" && (
+                                    <>
+                                        <div className="form__content__form__input-group">
+                                            <label htmlFor="profissao">Profissão *</label>
+                                            <input id="profissao" name="profissao" type="text" required={true}
+                                                   placeholder="Ex: Médico, Enfermeiro, Psicólogo"/>
+                                        </div>
+                                        <div className="form__content__form__input-group">
+                                            <label htmlFor="tipoRegistro">Tipo de Registro *</label>
+                                            <select id="tipoRegistro" name="tipoRegistro" required={true}>
+                                                <option value="">Selecione o tipo</option>
+                                                <option value="crm">CRM - Conselho Regional de Medicina</option>
+                                                <option value="coren">COREN - Conselho Regional de Enfermagem</option>
+                                                <option value="crbm">CRBM - Conselho Regional de Biomedicina</option>
+                                                <option value="crp">CRP - Conselho Regional de Psicologia</option>
+                                                <option value="crf">CRF - Conselho Regional de Farmácia</option>
+                                                <option value="crefito">CREFITO - Conselho Regional de Fisioterapia
+                                                </option>
+                                                <option value="cro">CRO - Conselho Regional de Odontologia</option>
+                                                <option value="crn">CRN - Conselho Regional de Nutrição</option>
+                                            </select>
+                                        </div>
+                                        <div className="form__content__form__input-group">
+                                            <label htmlFor="numeroRegistro">Número do Registro Profissional *</label>
+                                            <input id="numeroRegistro" name="numeroRegistro" type="text" required={true}
+                                                   placeholder="Ex: 123456"/>
+                                        </div>
+                                    </>
+                                )}
+                                <div className="form__content__form__actions">
+                                    {/* desabilita o botão enquanto carrega (maiqueli) */}
+                                    <button type="submit" disabled={isLoading}>
+                                        {isLoading ? "Cadastrando..." : "Cadastrar"}
+                                    </button>
                                 </div>
                             </>
-                        )}
-                        {userType === "paciente" && (
-                            <div className="form__content__form__input-group">
-                                <label htmlFor="codigoProfissional">Código do Profissional *</label>
-                                <input
-                                    id="codigoProfissional"
-                                    name="codigoProfissional"
-                                    type="text" required={true}
-                                    placeholder="Código fornecido pelo profissional"
-                                />
-                                <p className="text-sm text-muted-foreground">
-                                    Digite o código fornecido pelo seu profissional de saúde para estabelecer o vínculo.
-                                </p>
-                            </div>
-                        )}
-                        {userType === "prescritor" && (
-                            <>
-                                <div className="form__content__form__input-group">
-                                    <label htmlFor="profissao">Profissão *</label>
-                                    <input
-                                        id="profissao"
-                                        name="profissao"
-                                        type="text"
-                                        required={true}
-                                        placeholder="Ex: Médico, Enfermeiro, Psicólogo"
-                                    />
-                                </div>
-                                <div className="form__content__form__input-group">
-                                    <label htmlFor="tipoRegistro">Tipo de Registro *</label>
-                                    <select id="tipoRegistro" name="tipoRegistro" required={true}>
-                                        <option value="">Selecione o tipo</option>
-                                        <option value="crm">CRM - Conselho Regional de Medicina</option>
-                                        <option value="coren">COREN - Conselho Regional de Enfermagem</option>
-                                        <option value="crbm">CRBM - Conselho Regional de Biomedicina</option>
-                                        <option value="crp">CRP - Conselho Regional de Psicologia</option>
-                                        <option value="crf">CRF - Conselho Regional de Farmácia</option>
-                                        <option value="crefito">CREFITO - Conselho Regional de Fisioterapia</option>
-                                        <option value="cro">CRO - Conselho Regional de Odontologia</option>
-                                        <option value="crn">CRN - Conselho Regional de Nutrição</option>
-                                    </select>
-                                </div>
-                                <div className="form__content__form__input-group">
-                                    <label htmlFor="numeroRegistro">Número do Registro Profissional *</label>
-                                    <input
-                                        id="numeroRegistro"
-                                        name="numeroRegistro"
-                                        type="text"
-                                        required={true}
-                                        placeholder="Ex: 123456"
-                                    />
-                                </div>
-                                <div className="form__content__form__input-group">
-                                    <label htmlFor="codigoUnico">Código Único do Profissional *</label>
-                                    <input
-                                        id="codigoUnico"
-                                        name="codigoUnico"
-                                        type="text"
-                                        required={true}
-                                        placeholder="Código único gerado automaticamente" disabled
-                                    />
-                                    <p className="text-sm text-muted-foreground">
-                                        Este código será gerado automaticamente e utilizado pelos seus pacientes para estabelecer vínculo.
-                                    </p>
-                                </div>
-                            </>
-                        )}
-                        {userType && (
-                            <div className="form__content__form__actions">
-                                <button type="submit">Cadastrar</button>
-                            </div>
                         )}
                     </form>
                 </div>

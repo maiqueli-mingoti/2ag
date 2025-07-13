@@ -95,7 +95,7 @@ o esquema de segurança é com TOKEN, então você manda o email e a senha do us
 | `birthDate` | `string` | data de nascimento (`YYYY-MM-DD`) | - |
 | `phone` | `string` | telefone com ddd | só números |
 | `address` | `objeto` | objeto com os dados de endereço | - |
-| `professionalCode` | `string` | código do prescritor que vai cuidar dele | precisa ser um código válido |
+| `professionalCode` | `string` | código do prescritor que vai acompanhar ele | precisa ser um código válido: três letras inicias do nome em maiusculo e dois numeros aletórios |
 
 ##### **2. efetuar login**
 

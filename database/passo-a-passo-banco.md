@@ -1,4 +1,4 @@
-## configuração do PostgreSQL para o projeto doisag**
+## **configuração do PostgreSQL para o projeto doisag**
 
 **usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado**
 

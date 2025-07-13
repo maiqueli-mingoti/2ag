@@ -1,9 +1,9 @@
-## configuração do PostgreSQL para o projeto doisag**
+## **configuração do PostgreSQL para o projeto doisag**
 
-**usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado ainda**.
+**usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado**
 
 
-### ✅ **instalar o PostgreSQL**
+### **instalar o PostgreSQL**
 
 No terminal, rode:
 
@@ -45,7 +45,7 @@ postgres=#
 
 ### **criar o usuário da aplicação**
 
-Ainda dentro do psql, crie o usuário `admindoisag` com a senha que a aplicação espera.
+Ainda dentro do psql, crie o usuário `admindoisag` com a senha que a aplicação espera
 No nosso caso, vamos usar `123456`:
 
 ```sql
@@ -70,7 +70,7 @@ GRANT ALL PRIVILEGES ON DATABASE doisag TO admindoisag;
 
 ---
 
-### 🚪 **sair do console**
+### **sair do console**
 
 ```sql
 \q
@@ -78,7 +78,7 @@ GRANT ALL PRIVILEGES ON DATABASE doisag TO admindoisag;
 
 ---
 
-### ⚙️ **conferir a configuração no projeto**
+### **conferir a configuração no projeto**
 
 No arquivo:
 
@@ -98,9 +98,9 @@ spring:
 
 ---
 
-### ▶**rodar a aplicação**
+### **rodar a aplicação**
 
-Na pasta do projeto, rode:
+Na pasta do projeto rode:
 
 ```bash
 mvn clean install
@@ -113,11 +113,9 @@ Se tudo der certo, a API vai subir em:
 http://localhost:8080
 ```
 
----
-
 ### **usuário de teste já cadastrado**
 
-Ao rodar o projeto pela primeira vez, já existe um prescritor para testes:
+Ao rodar o projeto pela primeira vez já existe um prescritor para testes:
 
 * **Email:** [prescritor@email.com](mailto:prescritor@email.com)
 * **Senha:** 123456

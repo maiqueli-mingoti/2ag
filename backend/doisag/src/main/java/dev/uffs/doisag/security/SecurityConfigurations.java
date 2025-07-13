@@ -36,8 +36,10 @@ public class SecurityConfigurations {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // define as regras de acesso
                 .authorizeHttpRequests(req -> {
+                    // add isso pro navegador conseguir fazer a checagem do CORS sem ser bloqueado
+                    req.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     // permite o acesso público ao endpoint de login e register
-                    req.requestMatchers(HttpMethod.POST, "/login").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     // qualquer outra requisição exige autenticação
                     req.anyRequest().authenticated();

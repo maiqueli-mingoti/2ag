@@ -10,11 +10,9 @@ import dev.uffs.doisag.security.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/auth") // mudei a rota base para /auth para agrupar login e registro
 public class AuthenticationController {
@@ -42,6 +40,7 @@ public class AuthenticationController {
         // devolve o token para o frontend dentro do DTO correto
         return ResponseEntity.ok(new TokenDTO(tokenJWT));
     }
+
     // endpoint para registrar pacientes em /auth/register
     @PostMapping("/register")
     // o método retorna nosso DTO de resposta
@@ -50,5 +49,6 @@ public class AuthenticationController {
 
         // retorna 201 created com um corpo de mensagem
         var response = new ApiResponseDTO("cadastro realizado com sucesso, seja bem-vindo(a)!");
-        return ResponseEntity.status(201).body(response);    }
+        return ResponseEntity.status(201).body(response);
+    }
 }

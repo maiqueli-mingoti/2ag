@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -25,9 +26,15 @@ public class TokenService {
 
     // método para gerar o token
     public String generateToken(Users user) {
+        // a gente pega a lista de perfis do usuário e coloca dentro do token
+        var authorities = user.getAuthorities().stream()
+                .map(auth -> auth.getAuthority())
+                .collect(Collectors.toList());
+
         return Jwts.builder()
                 .setIssuer("API Doisag") // quem está emitindo o token
-                .setSubject(user.getEmail()) // quem é o "dono" do token (o email do usuario)
+                .setSubject(user.getEmail()) // quem é o dono do token (o email do usuario)
+                .claim("authorities", authorities) // adicionando a claim com os perfis
                 .setIssuedAt(new Date(System.currentTimeMillis())) // quando foi emitido
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // data de expiração
                 .signWith(getSigningKey()) // assina com a nossa chave secreta

@@ -3,7 +3,7 @@
 **usa Linux (Debian/Ubuntu)** e **não tem PostgreSQL instalado ainda**.
 
 
-### ✅ **instalar o PostgreSQL**
+### **instalar o PostgreSQL**
 
 No terminal, rode:
 

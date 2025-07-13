@@ -28,6 +28,7 @@ public class SleepLog extends BaseAssessment {
     private int napsTime;
     private int coffeeConsumption;
     private int nighttimeSmoking;
+    private int totalTimeAwakeDuringNight;
 
     public SleepLog(Long id, LocalDate assessmentDate, Patient patient, LocalTime bedTime, LocalTime wakeUpTime, float timeInBed, int timeToFallAsleep, int totalTimeAwake, int timesWokenUp, float totalSleepTime, Boolean isCommonDay, int fatigue, int stress, int daytimeSleepiness, int inattention, int irritability, int nighttimeSmoking, int coffeeConsumption, int napsTime, int alcoholConsumption, float timeAwayFromHome, Boolean usedSleepMedication, float physicalActivityTime, String healthPerception, int pain) {
         super(id, assessmentDate, patient);
@@ -232,5 +233,13 @@ public class SleepLog extends BaseAssessment {
 
     public void setNighttimeSmoking(int nighttimeSmoking) {
         this.nighttimeSmoking = nighttimeSmoking;
+    }
+
+    public int getTotalTimeAwakeDuringNight() {
+        return totalTimeAwakeDuringNight;
+    }
+
+    public void setTotalTimeAwakeDuringNight(int totalTimeAwakeDuringNight) {
+        this.totalTimeAwakeDuringNight = totalTimeAwakeDuringNight;
     }
 }

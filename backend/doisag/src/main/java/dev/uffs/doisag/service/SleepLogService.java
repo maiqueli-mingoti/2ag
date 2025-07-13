@@ -4,21 +4,51 @@ import dev.uffs.doisag.model.SleepLog;
 import dev.uffs.doisag.repository.SleepLogRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import dev.uffs.doisag.enums.ScaleType;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class SleepLogService {
     private final SleepLogRepository sleepLogRepository;
+    // aqui eh a injeçao do service q controla o status
+    private final ScaleAssignmentService scaleAssignmentService;
 
-    public SleepLogService(SleepLogRepository sleepLogRepository) {
+    public SleepLogService(SleepLogRepository sleepLogRepository, ScaleAssignmentService scaleAssignmentService) {
         this.sleepLogRepository = sleepLogRepository;
+        this.scaleAssignmentService = scaleAssignmentService;
     }
 
     // CREATE
     public SleepLog create(SleepLog sleepLog) {
-        return sleepLogRepository.save(sleepLog);
+
+        // tempo na cama em min
+        if (sleepLog.getBedTime() != null && sleepLog.getWakeUpTime() != null) {
+            float timeInBedMinutes = Duration.between(sleepLog.getBedTime(), sleepLog.getWakeUpTime()).toMinutes();
+            sleepLog.setTimeInBed(timeInBedMinutes);
+        }
+        // total acordado no horário do sono em min, tempo antes de dormir + tempo acordado
+        int totalTimeAwake = sleepLog.getTimeToFallAsleep() + sleepLog.getTotalTimeAwakeDuringNight();
+        sleepLog.setTotalTimeAwake(totalTimeAwake);
+
+        // tempo total de sono em minutos, tempo na cama - total acordado
+        float totalSleepTime = sleepLog.getTimeInBed() - totalTimeAwake;
+        sleepLog.setTotalSleepTime(totalSleepTime);
+
+        // salva no bancs
+        SleepLog savedLog = sleepLogRepository.save(sleepLog);
+
+        // depois de salvar, avisa o sistema pra dar baixa na tarefa
+        if (savedLog.getPatient() != null) {
+            scaleAssignmentService.completeAssignedScale(
+                    savedLog.getPatient().getId(),
+                    ScaleType.REGISTRO_SONO
+            );
+        }
+        // retorna a scala salva
+        return savedLog;
     }
 
     // READ ALL

@@ -1,62 +1,107 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../styles/colors.css";
 import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./dashboard-prescritor.css";
-import { useNavigate } from "react-router";
+
+function parseJwt(token) {
+    try {
+        return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+        return null;
+    }
+}
 
 export default function DashboardPrescritor() {
     const navigate = useNavigate();
 
+    const [prescritorInfo, setPrescritorInfo] = useState(null);
+    const [dashboardData, setDashboardData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                setError("Token de autenticação não encontrado.");
+                setIsLoading(false);
+                navigate("/login");
+                return;
+            }
+
+            const decodedToken = parseJwt(token);
+            const userId = decodedToken?.id;
+
+            if (!userId) {
+                setError("Não foi possível obter o ID do usuário a partir do token.");
+                setIsLoading(false);
+                return;
+            }
+
+            try {
+                const [prescritorResponse, dashboardResponse] = await Promise.all([
+                    fetch(`http://localhost:8080/prescritor/${userId}`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    } ),
+                    fetch(`http://localhost:8080/dashboard/prescritor/${userId}`, {
+                        headers: { "Authorization": `Bearer ${token}` }
+                    } )
+                ]);
+
+                if (!prescritorResponse.ok) {
+                    throw new Error(`Falha ao buscar dados do prescritor (Erro ${prescritorResponse.status})`);
+                }
+                if (!dashboardResponse.ok) {
+                    throw new Error(`Falha ao buscar dados do painel (Erro ${dashboardResponse.status})`);
+                }
+
+                const prescritorData = await prescritorResponse.json();
+                const dashboardApiData = await dashboardResponse.json();
+
+                setPrescritorInfo(prescritorData);
+                setDashboardData(dashboardApiData);
+
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [navigate]);
+
+
     const handleLogout = (e) => {
         e.preventDefault();
-
+        localStorage.removeItem("authToken");
         navigate("/login");
     };
 
-    const handleNewConsult = (e) => {
-        e.preventDefault();
+    const handleNewConsult = (e) => { e.preventDefault(); navigate("/consulta"); };
+    const handleNewPrescription = (e) => { e.preventDefault(); navigate("/prescricao"); };
+    const handleAgenda = (e) => { e.preventDefault(); navigate("/agendamento-prescritor"); };
+    const handleNotificacoes = (e) => { e.preventDefault(); navigate("/notificacoes-prescritor"); };
+    const handleSignup = (e) => { e.preventDefault(); navigate("/sign-up"); };
+    const handlePaciente = (e) => { e.preventDefault(); navigate("/lista-paciente"); };
 
-        navigate("/consulta");
+    if (isLoading) {
+        return <div className="dashboard-loading"><h1>Carregando dados do painel...</h1></div>;
     }
 
-    const handleNewPrescription = (e) => {
-        e.preventDefault();
-
-        navigate("/prescricao");
+    if (error) {
+        return <div className="dashboard-error"><h1>Erro ao carregar o painel</h1><p>{error}</p><button onClick={() => navigate('/login')}>Voltar ao Login</button></div>;
     }
-
-    const handleAgenda = (e) => {
-        e.preventDefault();
-
-        navigate("/agendamento-prescritor");
-    }
-
-    const handleNotificacoes = (e) => {
-        e.preventDefault();
-
-        navigate("/notificacoes-prescritor");
-    }
-
-    const handleSignup = (e) =>{
-        e.preventDefault();
-
-        navigate("/sign-up");
-    }
-
-    const handlePaciente = (e) =>{
-        e.preventDefault();
-
-        navigate("/lista-paciente");
-    }
-
 
     return (
         <div className="dashboard-prescritor">
             <header className="dashboard-header">
                 <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                 <div className="dashboard-header__user">
-                    <span>Dr. Maria Santos - CRM 12345</span>
+                    <span>{prescritorInfo?.name || 'Nome do Doutor'} - {prescritorInfo?.registryType || 'CRM'} {prescritorInfo?.registryNumber || '00000'}</span>
                     <button className="button-secondary" onClick={handleNotificacoes}>Notificações</button>
                     <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
@@ -71,19 +116,19 @@ export default function DashboardPrescritor() {
                 {/* Estatísticas Rápidas */}
                 <div className="stats-grid">
                     <div className="stat-card" onClick={handlePaciente}>
-                        <div className="stat-number">24</div>
+                        <div className="stat-number">{dashboardData?.stats?.pacientesAtivos ?? 0}</div>
                         <div className="stat-label">Pacientes Ativos</div>
                     </div>
                     <div className="stat-card">
-                        <div className="stat-number">8</div>
+                        <div className="stat-number">{dashboardData?.stats?.consultasHoje ?? 0}</div>
                         <div className="stat-label">Consultas Hoje</div>
                     </div>
                     <div className="stat-card">
-                        <div className="stat-number">12</div>
+                        <div className="stat-number">{dashboardData?.stats?.fichasPendentes ?? 0}</div>
                         <div className="stat-label">Fichas Pendentes</div>
                     </div>
                     <div className="stat-card warning">
-                        <div className="stat-number">3</div>
+                        <div className="stat-number">{dashboardData?.stats?.alertasClinicos ?? 0}</div>
                         <div className="stat-label">Alertas Clínicos</div>
                     </div>
                 </div>
@@ -120,30 +165,29 @@ export default function DashboardPrescritor() {
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Agendamentos de Hoje</h2>
-                            <span className="card-badge">8 consultas</span>
+                            <span className="card-badge">{dashboardData?.agendamentos?.length ?? 0} consultas</span>
                         </div>
                         <div className="card-content">
-                            <div className="agendamento-item">
-                                <div className="agendamento-time">09:00</div>
-                                <div className="agendamento-info">
-                                    <h3>João Silva</h3>
-                                    <p>Consulta de acompanhamento</p>
-                                    <span className="agendamento-tipo">Presencial</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Iniciar</button>
-                            <div className="agendamento-item">
-                                <div className="agendamento-time">10:30</div>
-                                <div className="agendamento-info">
-                                    <h3>Ana Costa</h3>
-                                    <p>Primeira consulta</p>
-                                    <span className="agendamento-tipo">Telemedicina</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Iniciar</button>
+                            {dashboardData?.agendamentos?.length > 0 ? (
+                                dashboardData.agendamentos.map(agendamento => (
+                                    <div key={agendamento.id} className="agendamento-item-wrapper">
+                                        <div className="agendamento-item">
+                                            <div className="agendamento-time">{agendamento.horario}</div>
+                                            <div className="agendamento-info">
+                                                <h3>{agendamento.nomePaciente}</h3>
+                                                <p>{agendamento.tipoConsulta}</p>
+                                                <span className={`agendamento-tipo ${agendamento.modalidade?.toLowerCase()}`}>{agendamento.modalidade}</span>
+                                            </div>
+                                        </div>
+                                        <button className="button-secondary">Iniciar</button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Nenhum agendamento para hoje.</p>
+                            )}
                         </div>
                         <div className="card-footer">
-                            <button className="button">Ver todos os agendamentos</button>
+                            <button className="button" onClick={handleAgenda}>Ver todos os agendamentos</button>
                         </div>
                     </section>
 
@@ -151,27 +195,26 @@ export default function DashboardPrescritor() {
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Fichas Pendentes de Análise</h2>
-                            <span className="card-badge warning">12 pendentes</span>
+                            <span className="card-badge warning">{dashboardData?.fichasPendentes?.length ?? 0} pendentes</span>
                         </div>
                         <div className="card-content">
-                            <div className="ficha-item">
-                                <div className="ficha-info">
-                                    <h3>Maria Santos</h3>
-                                    <p>Acompanhamento semanal</p>
-                                    <span className="ficha-data">Enviado há 2 dias</span>
-                                </div>
-                                <div className="ficha-priority high">Alta</div>
-                            </div>
-                            <button className="button-secondary">Analisar</button>
-                            <div className="ficha-item">
-                                <div className="ficha-info">
-                                    <h3>Pedro Lima</h3>
-                                    <p>Escala de ansiedade</p>
-                                    <span className="ficha-data">Enviado há 1 dia</span>
-                                </div>
-                                <div className="ficha-priority medium">Média</div>
-                            </div>
-                            <button className="button-secondary">Analisar</button>
+                            {dashboardData?.fichasPendentes?.length > 0 ? (
+                                dashboardData.fichasPendentes.map(ficha => (
+                                    <div key={ficha.id} className="ficha-item-wrapper">
+                                        <div className="ficha-item">
+                                            <div className="ficha-info">
+                                                <h3>{ficha.nomePaciente}</h3>
+                                                <p>{ficha.tipo}</p>
+                                                <span className="ficha-data">{ficha.dataEnvio}</span>
+                                            </div>
+                                            <div className={`ficha-priority ${ficha.prioridade?.toLowerCase()}`}>{ficha.prioridade}</div>
+                                        </div>
+                                        <button className="button-secondary">Analisar</button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Nenhuma ficha pendente.</p>
+                            )}
                         </div>
                         <div className="card-footer">
                             <button className="button">Ver todas as fichas</button>
@@ -182,30 +225,31 @@ export default function DashboardPrescritor() {
                     <section className="dashboard-card alert-card">
                         <div className="card-header">
                             <h2>Alertas Clínicos</h2>
-                            <span className="card-badge danger">3 alertas</span>
+                            <span className="card-badge danger">{dashboardData?.alertas?.length ?? 0} alertas</span>
                         </div>
                         <div className="card-content">
-                            <div className="alert-item critical">
-                                <div className="alert-icon">⚠️</div>
-                                <div className="alert-info">
-                                    <h3>Roberto Silva</h3>
-                                    <p>Relatou efeitos adversos graves</p>
-                                    <span className="alert-time">Há 30 minutos</span>
-                                </div>
-                            </div>
-                            <button className="button">Verificar</button>
-                            <div className="alert-item warning">
-                                <div className="alert-icon">⚡</div>
-                                <div className="alert-info">
-                                    <h3>Fernanda Costa</h3>
-                                    <p>Não preencheu acompanhamento há 2 semanas</p>
-                                    <span className="alert-time">Há 2 horas</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Contatar</button>
-                            <div className="alert-footer">
-                                <button className="button">Ver todos os alertas</button>
-                            </div>
+                            {dashboardData?.alertas?.length > 0 ? (
+                                dashboardData.alertas.map(alerta => (
+                                    <div key={alerta.id} className="alert-item-wrapper">
+                                        <div className={`alert-item ${alerta.nivel?.toLowerCase()}`}>
+                                            <div className="alert-icon">{alerta.nivel === 'CRITICAL' ? '⚠️' : '⚡'}</div>
+                                            <div className="alert-info">
+                                                <h3>{alerta.nomePaciente}</h3>
+                                                <p>{alerta.descricao}</p>
+                                                <span className="alert-time">{alerta.data}</span>
+                                            </div>
+                                        </div>
+                                        <button className={alerta.nivel === 'CRITICAL' ? 'button' : 'button-secondary'}>
+                                            {alerta.nivel === 'CRITICAL' ? 'Verificar' : 'Contatar'}
+                                        </button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Nenhum alerta clínico no momento.</p>
+                            )}
+                        </div>
+                        <div className="card-footer">
+                            <button className="button">Ver todos os alertas</button>
                         </div>
                     </section>
 
@@ -216,32 +260,29 @@ export default function DashboardPrescritor() {
                             <span className="card-badge">Últimas atividades</span>
                         </div>
                         <div className="card-content">
-                            <div className="paciente-item">
-                                <div className="paciente-avatar">JS</div>
-                                <div className="paciente-info">
-                                    <h3>João Silva</h3>
-                                    <p>Última consulta: 10/01/2025</p>
-                                    <span className="paciente-status ativo">Tratamento ativo</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Ver prontuário</button>
-                            <div className="paciente-item">
-                                <div className="paciente-avatar">AC</div>
-                                <div className="paciente-info">
-                                    <h3>Ana Costa</h3>
-                                    <p>Última consulta: 08/01/2025</p>
-                                    <span className="paciente-status acompanhamento">Em acompanhamento</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Ver prontuário</button>
+                            {dashboardData?.pacientesRecentes?.length > 0 ? (
+                                dashboardData.pacientesRecentes.map(paciente => (
+                                    <div key={paciente.id} className="paciente-item-wrapper">
+                                        <div className="paciente-item">
+                                            <div className="paciente-avatar">{paciente.iniciais}</div>
+                                            <div className="paciente-info">
+                                                <h3>{paciente.nome}</h3>
+                                                <p>Última consulta: {paciente.ultimaConsulta}</p>
+                                                <span className={`paciente-status ${paciente.status?.toLowerCase().replace(' ', '-')}`}>{paciente.status}</span>
+                                            </div>
+                                        </div>
+                                        <button className="button-secondary">Ver prontuário</button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Nenhuma atividade recente de pacientes.</p>
+                            )}
                         </div>
                         <div className="card-footer">
-                            <button className="button">Ver todos os pacientes</button>
+                            <button className="button" onClick={handlePaciente}>Ver todos os pacientes</button>
                         </div>
                     </section>
                 </div>
-
-
             </main>
         </div>
     );

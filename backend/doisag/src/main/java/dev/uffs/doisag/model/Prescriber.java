@@ -6,6 +6,8 @@ import jakarta.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 import java.time.LocalDate;
 
@@ -26,6 +28,8 @@ public class Prescriber extends Users {
     @Column(unique = true)
     private String professionalCode;
 
+    // anotacao para serialize lista de filhos normalmente
+    @JsonManagedReference
     @OneToMany(mappedBy = "prescriber")
     private List<Patient> patients = new ArrayList<>();
 

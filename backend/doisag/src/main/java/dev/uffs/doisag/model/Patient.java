@@ -4,12 +4,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import java.time.LocalDate;
 
 @Entity
 public class Patient extends Users {
 
+    // adicionei essa anotacao desse lado gerenciado para evitar a referência infinita
+    @JsonBackReference
     // muitos pacientes pertencem a um prescritor
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "prescriber_id") // nome da coluna da chave estrangeira no banco

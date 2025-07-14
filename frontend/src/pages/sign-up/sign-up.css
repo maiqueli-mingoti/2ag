@@ -140,6 +140,19 @@
     font-style: italic;
 }
 
+/* adiconei (respo: maiqueli)*/
+.sign-up__error-message {
+    color: #B00020; /* um vermelho escuro */
+    font-weight: 500;
+    background-color: #F8D7DA; /* um fundo rosa claro */
+    padding: 0.75rem;
+    border: 1px solid #F5C6CB; /* uma borda vermelha clara */
+    border-radius: 4px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box; /* garante que o padding não quebre o layout */
+}
+
 
 @media screen and (max-width: 1200px) {
     .sign__art {

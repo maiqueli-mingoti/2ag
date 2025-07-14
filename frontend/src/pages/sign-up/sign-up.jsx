@@ -46,7 +46,7 @@ export default function SignUp() {
 
         // validação simples pra ver se as senhas batem
         if (password !== confirmPassword) {
-            setError("as senhas não conferem!");
+            setError("As senhas não conferem!");
             setIsLoading(false);
             return;
         }
@@ -80,9 +80,9 @@ export default function SignUp() {
                 });
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(errorText || "falha ao cadastrar paciente :c");
+                    throw new Error(errorText || "Falha ao cadastrar paciente :c");
                 }
-                alert("paciente cadastrado com sucesso!");
+                alert("Paciente cadastrado com sucesso!");
                 navigate("/login");
             } catch (err) {
                 setError(err.message);
@@ -108,9 +108,9 @@ export default function SignUp() {
                 });
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(errorText || "falha ao cadastrar prescritor :c");
+                    throw new Error(errorText || "Falha ao cadastrar prescritor :c");
                 }
-                alert("prescritor cadastrado com sucesso!");
+                alert("Prescritor cadastrado com sucesso!");
                 navigate("/login");
             } catch (err) {
                 setError(err.message);
@@ -129,8 +129,6 @@ export default function SignUp() {
                         src="/images/logotipo-horizontal.svg"
                     />
                     <h2 className="form__content__title">Cadastro de Usuário</h2>
-                    {/* exibe a mensagem de erro, se houver (maiqueli) */}
-                    {error && <p className="sign-up__error-message">{error}</p>}
                     <form className="form__content__form" onSubmit={handleSubmit}>
                         <div className="form__content__form__input-group">
                             <label>Tipo de Usuário *</label>
@@ -230,13 +228,13 @@ export default function SignUp() {
 
                                 {userType === "paciente" && (
                                     <div className="form__content__form__input-group">
-                                        <label htmlFor="codigoProfissional">Código do Profissional *</label>
+                                        <label htmlFor="codigoProfissional">Código do Prescritor *</label>
+                                        <p className="text-sm text-muted-foreground">
+                                            Informe o código fornecido pelo seu prescritor:
+                                        </p>
                                         <input id="codigoProfissional" name="codigoProfissional" type="text"
                                                required={true}
                                                placeholder="Ex: ABC01"/>
-                                        <p className="text-sm text-muted-foreground">
-                                            Informe o código fornecido pelo seu profissional de saúde:
-                                        </p>
                                     </div>
                                 )}
                                 {userType === "prescritor" && (
@@ -268,6 +266,8 @@ export default function SignUp() {
                                         </div>
                                     </>
                                 )}
+                                {/* exibe a mensagem de erro, se houver (maiqueli) */}
+                                {error && <p className="sign-up__error-message">{error}</p>}
                                 <div className="form__content__form__actions">
                                     {/* desabilita o botão enquanto carrega (maiqueli) */}
                                     <button type="submit" disabled={isLoading}>

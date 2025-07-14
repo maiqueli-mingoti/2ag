@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import ScaleSelector from "../../components/scale-selector/scale-selector";
+import ScaleSelector from "../../components/scale-selector/scale-selector.jsx";
 import "./acompanhamento-semanal-paciente.css";
 import {useNavigate} from "react-router-dom";
 import Header from "../../components/header/header.jsx";
@@ -107,7 +107,6 @@ export default function AcompanhamentoSemanalPaciente() {
     const handleReturnDash = (e) => {
 
         e.preventDefault();
-
         navigate("/dashboard-paciente");
 
     };
@@ -117,17 +116,17 @@ export default function AcompanhamentoSemanalPaciente() {
     };
 
     return (
-        <div className="consulta-clinica">
+        <div>
             <Header
                 showBackButton={true}
                 backButtonText="Voltar"
                 onBackClick={handleBack}
             />
-            <div className="acompanhamento-paciente">
+            <div className="acompanhamento-paciente-page">
                 <div className="acompanhamento-paciente__content">
                     <div className="acompanhamento-paciente__header">
                         <h1>Acompanhamento Semanal</h1>
-                        <h2>Terapia Canabinoide</h2>
+                        <h2>Registre como foi sua semana nos últimos 7 dias:</h2>
                     </div>
                     <form className="acompanhamento-paciente__form" onSubmit={handleSubmit}>
                         <div className="acompanhamento-paciente__form__row">
@@ -249,7 +248,7 @@ export default function AcompanhamentoSemanalPaciente() {
                             <h3>Apetite</h3>
                             <ScaleSelector
                                 leftLabel="Apetite saudável"
-                                rightLabel="Sem apetite"
+                                rightLabel="Alteração no apetite"
                                 value={data.apetite}
                                 onChangeValue={(value) =>
                                     setData((prev) => ({...prev, apetite: value}))
@@ -334,7 +333,7 @@ export default function AcompanhamentoSemanalPaciente() {
                         <div className="acompanhamento-paciente__form__group">
                             <h3>Doença dermatológica</h3>
                             <ScaleSelector
-                                leftLabel="Leve"
+                                leftLabel="Nenhuma"
                                 rightLabel="Intensa"
                                 value={data.dermat}
                                 onChangeValue={(value) =>

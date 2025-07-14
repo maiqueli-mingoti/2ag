@@ -1,45 +1,93 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import "../../styles/colors.css";
 import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./dashboard-paciente.css";
-import { useNavigate } from "react-router";
+
+function parseJwt(token) {
+    try {
+        return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+        return null;
+    }
+}
 
 export default function DashboardPaciente() {
     const navigate = useNavigate();
 
+    const [pacienteInfo, setPacienteInfo] = useState(null);
+    const [dashboardData, setDashboardData] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const token = localStorage.getItem("authToken");
+            if (!token) {
+                setError("Token não encontrado.");
+                navigate("/login");
+                return;
+            }
+
+            const decodedToken = parseJwt(token);
+            const userId = decodedToken?.id;
+            if (!userId) {
+                setError("Usuário inválido.");
+                navigate("/login");
+                return;
+            }
+
+            try {
+                const [pacienteRes, dashRes] = await Promise.all([
+                    fetch(`http://localhost:8080/paciente/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }),
+                    fetch(`http://localhost:8080/dashboard/paciente/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    }),
+                ]);
+
+                if (!pacienteRes.ok) throw new Error("Erro ao buscar paciente");
+                if (!dashRes.ok) throw new Error("Erro ao buscar dados da dashboard");
+
+                const pacienteData = await pacienteRes.json();
+                const dashboard = await dashRes.json();
+
+                setPacienteInfo(pacienteData);
+                setDashboardData(dashboard);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [navigate]);
+
     const handleLogout = (e) => {
         e.preventDefault();
-
+        localStorage.removeItem("authToken");
         navigate("/login");
     };
 
-    const handleWeeklyMonitoring = (e) => {
-        e.preventDefault();
+    const handleWeeklyMonitoring = () => navigate("/acompanhamento-paciente");
+    const handleAgendarConsulta = () => navigate("/agendamento-consulta");
+    // falta ajustar com o retorno do backend para redirecionar para a escala hamilton
+    const handleOpenHamAScale = () => navigate("/escala-hamilton");
+    const handleNotificacoes = () => navigate("/notificacoes-paciente");
+    // falta ajustar com o retorno do backend para redirecionar para a diária do sono
+    const handleSleep = () => navigate("/diario-sono");
+    const handleAnamnese = () => navigate("/anamnese");
 
-        navigate("/acompanhamento-paciente");
+    if (isLoading) {
+        return <div className="dashboard-loading"><h1>Carregando painel...</h1></div>;
     }
 
-    const handleAgendarConsulta = (e) => {
-        e.preventDefault();
-
-        navigate("/agendamento-consulta");
-    }
-
-    const handleOpenHamAScale = (e) => {
-        e.preventDefault();
-        navigate("/escala-hamilton");
-    }
-
-
-    const handleNotificacoes = (e) => {
-        e.preventDefault();
-        navigate("/notificacoes-paciente");
-    }
-
-    const handleSleep = (e) =>{
-        e.preventDefault();
-        navigate("/diario-sono");
+    if (error) {
+        return <div className="dashboard-error"><h1>Erro</h1><p>{error}</p></div>;
     }
 
     return (
@@ -49,7 +97,7 @@ export default function DashboardPaciente() {
                     <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
                 </div>
                 <div className="dashboard-header__user">
-                    <span>Olá, João Silva</span>
+                    <span>Olá, {pacienteInfo?.name}</span>
                     <button className="button-secondary" onClick={handleNotificacoes}>Notificações</button>
                     <button className="button-secondary" onClick={handleLogout}>Sair</button>
                 </div>
@@ -61,7 +109,6 @@ export default function DashboardPaciente() {
                     <p>Acompanhe seu tratamento e mantenha-se em dia com suas consultas e escalas.</p>
                 </div>
 
-                {/* Ações Rápidas */}
                 <section className="dashboard-actions">
                     <h2>Ações Rápidas</h2>
                     <div className="actions-grid">
@@ -81,105 +128,61 @@ export default function DashboardPaciente() {
                             <span className="action-icon">📅</span>
                             <span>Agendar Consulta</span>
                         </button>
+                        <button className="action-button" onClick={handleAnamnese}>
+                            <span className="action-icon">🗒️</span>
+                            <span>Anamnese</span>
+                        </button>
                     </div>
                 </section>
 
                 <div className="dashboard-grid">
-                    {/* Próximas Consultas */}
+                    {/* Consultas */}
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Próximas Consultas</h2>
-                            <span className="card-badge">1 agendadas</span>
+                            <span className="card-badge">{dashboardData.upcomingAppointments.length} agendadas</span>
                         </div>
                         <div className="card-content">
-                            <div className="consulta-item">
-                                <div className="consulta-info">
-                                    <h3>Dr. Maria Santos</h3>
-                                    <p>Consulta de acompanhamento</p>
-                                    <span className="consulta-data">15/01/2025 - 14:30</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Ver detalhes</button>
+                            {dashboardData.upcomingAppointments.length > 0 ? (
+                                dashboardData.upcomingAppointments.map((consulta, index) => (
+                                    <div key={index} className="consulta-item">
+                                        <div className="consulta-info">
+                                            <h3>{consulta.nomePrescritor}</h3>
+                                            <p>{consulta.tipoConsulta}</p>
+                                            <span className="consulta-data">{consulta.data} - {consulta.horario}</span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Sem consultas agendadas</p>
+                            )}
                         </div>
                     </section>
 
-                    {/* Status de Formulários */}
+                    {/* Escalas Pendentes */}
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Status de Formulários</h2>
-                            <span className="card-badge warning">1 pendente</span>
+                            <span className="card-badge warning">{dashboardData.pendingScales.length} pendente(s)</span>
                         </div>
                         <div className="card-content">
-                            <div className="formulario-item">
-                                <div className="formulario-info">
-                                    <h3>Acompanhamento Semanal</h3>
-                                    <p>Registre sua evolução desta semana</p>
-                                    <span className="formulario-atraso">Atraso de: 1 dia</span>
-                                </div>
-                            </div>
-                            <button className="button" onClick={handleWeeklyMonitoring}>Preencher</button>
-                        </div>
-                    </section>
-
-                    {/* Lembretes de Escalas */}
-                    <section className="dashboard-card">
-                        <div className="card-header">
-                            <h2>Lembretes de Escalas</h2>
-                            <span className="card-badge">2 escalas</span>
-                        </div>
-                        <div className="card-content">
-                            <div className="escala-item">
-                                <div className="escala-info">
-                                    <h3>Escala de Hamilton</h3>
-                                    <p>Avaliação de ansiedade</p>
-                                    <span className="escala-frequencia">Semanal - Próxima: 20/01</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary" onClick={handleOpenHamAScale}>
-                                Preencher
-                            </button>
-
-                            <div className="escala-item">
-                                <div className="escala-info">
-                                    <h3>Índice de Qualidade do Sono</h3>
-                                    <p>Avaliação do padrão de sono</p>
-                                    <span className="escala-frequencia">Mensal - Próxima: 01/02</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary" onClick={handleSleep}>
-                              Preencher
-                            </button>
-                        </div>
-                    </section>
-
-                    {/* Prescrições Ativas */}
-                    <section className="dashboard-card">
-                        <div className="card-header">
-                            <h2>Prescrições Ativas</h2>
-                            <span className="card-badge">2 ativas</span>
-                        </div>
-                        <div className="card-content">
-                            <div className="prescricao-item">
-                                <div className="prescricao-info">
-                                    <h3>CBD Full Spectrum 5%</h3>
-                                    <p>2 gotas, 2x ao dia</p>
-                                    <span className="prescricao-numero">Prescrição #2024-001</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Ver detalhes</button>
-                            <div className="prescricao-item">
-                                <div className="prescricao-info">
-                                    <h3>THC Isolado 2.5%</h3>
-                                    <p>1 gota antes de dormir</p>
-                                    <span className="prescricao-numero">Prescrição #2024-002</span>
-                                </div>
-                            </div>
-                            <button className="button-secondary">Ver detalhes</button>
+                            {dashboardData.pendingScales.length > 0 ? (
+                                dashboardData.pendingScales.map((escala, index) => (
+                                    <div key={index} className="formulario-item">
+                                        <div className="formulario-info">
+                                            <h3>{escala.nome}</h3>
+                                            <p>{escala.descricao}</p>
+                                            <span className="formulario-atraso">Próxima: {escala.dataProxima}</span>
+                                        </div>
+                                        <button className="button" onClick={() => navigate(escala.rota)}>Preencher</button>
+                                    </div>
+                                ))
+                            ) : (
+                                <p>Sem formulários pendentes</p>
+                            )}
                         </div>
                     </section>
                 </div>
-
-
             </main>
         </div>
     );

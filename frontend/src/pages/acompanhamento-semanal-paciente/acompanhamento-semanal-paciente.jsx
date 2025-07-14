@@ -143,6 +143,7 @@ export default function AcompanhamentoSemanalPaciente() {
                                     }
                                     placeholder="Dose"
                                     type="number"
+                                    min="0"
                                     value={data.morningDrops}
                                 />
                             </div>
@@ -160,6 +161,7 @@ export default function AcompanhamentoSemanalPaciente() {
                                     }
                                     placeholder="Dose"
                                     type="number"
+                                    min="0"
                                     value={data.afternoonDrops}
                                 />
                             </div>

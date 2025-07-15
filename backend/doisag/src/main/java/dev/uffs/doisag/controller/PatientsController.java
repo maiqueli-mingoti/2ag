@@ -18,6 +18,12 @@ public class PatientsController {
         this.patientService = patientService;
     }
 
+    // endpoint para listar pacientes de um prescritor
+    @GetMapping("/prescritor/{prescriberId}")
+    public List<Patient> getPatientsByPrescriber(@PathVariable Long prescriberId) {
+        return patientService.getPatientsByPrescriberId(prescriberId);
+    }
+
     // create patient
     @PostMapping
     public Patient create(@RequestBody Patient patient){

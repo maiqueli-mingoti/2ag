@@ -42,6 +42,11 @@ public class PatientService {
         return patientRepository.findById(id);
     }
 
+    // buscar pacientes por prescritor
+    public List<Patient> getPatientsByPrescriberId(Long prescriberId) {
+        return patientRepository.findAllByPrescriberId(prescriberId);
+    }
+
     // update patient
     public Patient update(Long id, Patient patientDetails) {
         Patient patient = patientRepository.findById(id)

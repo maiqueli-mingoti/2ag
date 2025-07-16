@@ -489,11 +489,11 @@ export default function DiarioSono() {
                             ></textarea>
                         </div>
                         <div className="diario-sono_end">
-                            <button type="submit" className="button" disabled={isLoading}>
-                                {isLoading ? "Salvando..." : "Salvar"}
-                            </button>
                             <button type="button" className="button-secondary" onClick={handleCancel}>
                                 Cancelar
+                            </button>
+                            <button type="submit" className="button" disabled={isLoading}>
+                                {isLoading ? "Salvando..." : "Salvar"}
                             </button>
                         </div>
                     </form>

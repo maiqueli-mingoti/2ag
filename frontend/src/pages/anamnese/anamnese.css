@@ -102,11 +102,12 @@
 }
 
 .anamnese-actions {
+    border-bottom: 1px solid var(--color-border, #e5e7eb);
     display: flex;
-    justify-content: flex-end;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid var(--color-border-light);
+    gap: 20px;
+    padding: 15px;
+    align-items: flex-end;
+    width: 100%;
 }
 
 .anamnese-actions .button {
@@ -118,9 +119,11 @@
     .anamnese-main {
         padding: 1.5rem;
     }
+
     .form-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+
     .form-group.span-3 {
         grid-column: span 2;
     }
@@ -130,16 +133,20 @@
     .form-grid {
         grid-template-columns: 1fr;
     }
+
     .form-group.span-2,
     .form-group.span-3 {
         grid-column: span 1;
     }
+
     .anamnese-main {
         padding: 1rem;
     }
+
     .anamnese-header h1 {
         font-size: 1.2rem;
     }
+
     .anamnese-intro h2 {
         font-size: 1.5rem;
     }

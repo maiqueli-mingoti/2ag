@@ -74,7 +74,7 @@ public class PatientService {
 
         // busca o prescritor pelo código fornecido
         Prescriber prescriber = prescriberRepository.findByProfessionalCode(dados.professionalCode())
-                .orElseThrow(() -> new ValidationException("código do prescritor inválido!"));
+                .orElseThrow(() -> new ValidationException("Código do prescritor inválido!"));
 
         // cria a nova entidade paciente
         var patient = new Patient();

@@ -13,6 +13,7 @@ public class SleepLog extends BaseAssessment {
     private int timesWokenUp;
     private int totalTimeAwake;
     private float totalSleepTime;
+    private float totalAwakeSleep;
     private Boolean isCommonDay;
     private int fatigue;
     private int stress;
@@ -20,7 +21,7 @@ public class SleepLog extends BaseAssessment {
     private int inattention;
     private int irritability;
     private int pain;
-    private String healthPerception;
+    private int healthPerception;
     private float physicalActivityTime;
     private float timeAwayFromHome;
     private Boolean usedSleepMedication;
@@ -30,34 +31,38 @@ public class SleepLog extends BaseAssessment {
     private int nighttimeSmoking;
     private int totalTimeAwakeDuringNight;
 
-    public SleepLog(Long id, LocalDate assessmentDate, Patient patient, LocalTime bedTime, LocalTime wakeUpTime, float timeInBed, int timeToFallAsleep, int totalTimeAwake, int timesWokenUp, float totalSleepTime, Boolean isCommonDay, int fatigue, int stress, int daytimeSleepiness, int inattention, int irritability, int nighttimeSmoking, int coffeeConsumption, int napsTime, int alcoholConsumption, float timeAwayFromHome, Boolean usedSleepMedication, float physicalActivityTime, String healthPerception, int pain) {
-        super(id, assessmentDate, patient);
+
+    public SleepLog(int alcoholConsumption, LocalTime bedTime, int coffeeConsumption, int daytimeSleepiness, int fatigue, int healthPerception, int inattention, int irritability, Boolean isCommonDay, int napsTime, int nighttimeSmoking, int pain, float physicalActivityTime, int stress, float timeAwayFromHome, float timeInBed, int timesWokenUp, int timeToFallAsleep, float totalAwakeSleep, float totalSleepTime, int totalTimeAwake, int totalTimeAwakeDuringNight, Boolean usedSleepMedication, LocalTime wakeUpTime) {
+        this.alcoholConsumption = alcoholConsumption;
         this.bedTime = bedTime;
-        this.wakeUpTime = wakeUpTime;
-        this.timeInBed = timeInBed;
-        this.timeToFallAsleep = timeToFallAsleep;
-        this.totalTimeAwake = totalTimeAwake;
-        this.timesWokenUp = timesWokenUp;
-        this.totalSleepTime = totalSleepTime;
-        this.isCommonDay = isCommonDay;
-        this.fatigue = fatigue;
-        this.stress = stress;
+        this.coffeeConsumption = coffeeConsumption;
         this.daytimeSleepiness = daytimeSleepiness;
+        this.fatigue = fatigue;
+        this.healthPerception = healthPerception;
         this.inattention = inattention;
         this.irritability = irritability;
-        this.nighttimeSmoking = nighttimeSmoking;
-        this.coffeeConsumption = coffeeConsumption;
+        this.isCommonDay = isCommonDay;
         this.napsTime = napsTime;
-        this.alcoholConsumption = alcoholConsumption;
-        this.timeAwayFromHome = timeAwayFromHome;
-        this.usedSleepMedication = usedSleepMedication;
-        this.physicalActivityTime = physicalActivityTime;
-        this.healthPerception = healthPerception;
+        this.nighttimeSmoking = nighttimeSmoking;
         this.pain = pain;
+        this.physicalActivityTime = physicalActivityTime;
+        this.stress = stress;
+        this.timeAwayFromHome = timeAwayFromHome;
+        this.timeInBed = timeInBed;
+        this.timesWokenUp = timesWokenUp;
+        this.timeToFallAsleep = timeToFallAsleep;
+        this.totalAwakeSleep = totalAwakeSleep;
+        this.totalSleepTime = totalSleepTime;
+        this.totalTimeAwake = totalTimeAwake;
+        this.totalTimeAwakeDuringNight = totalTimeAwakeDuringNight;
+        this.usedSleepMedication = usedSleepMedication;
+        this.wakeUpTime = wakeUpTime;
     }
 
-    public SleepLog() {
-    }
+
+    public SleepLog(){
+
+ }
 
     public int getTotalTimeAwake() {
         return totalTimeAwake;
@@ -171,11 +176,11 @@ public class SleepLog extends BaseAssessment {
         this.pain = pain;
     }
 
-    public String getHealthPerception() {
+    public int getHealthPerception() {
         return healthPerception;
     }
 
-    public void setHealthPerception(String healthPerception) {
+    public void setHealthPerception(int healthPerception) {
         this.healthPerception = healthPerception;
     }
 
@@ -237,6 +242,14 @@ public class SleepLog extends BaseAssessment {
 
     public int getTotalTimeAwakeDuringNight() {
         return totalTimeAwakeDuringNight;
+    }
+
+    public float getTotalAwakeSleep() {
+        return totalAwakeSleep;
+    }
+
+    public void setTotalAwakeSleep(float totalAwakeSleep) {
+        this.totalAwakeSleep = totalAwakeSleep;
     }
 
     public void setTotalTimeAwakeDuringNight(int totalTimeAwakeDuringNight) {

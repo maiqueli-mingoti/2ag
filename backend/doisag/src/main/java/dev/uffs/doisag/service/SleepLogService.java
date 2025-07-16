@@ -21,23 +21,36 @@ public class SleepLogService {
         this.scaleAssignmentService = scaleAssignmentService;
     }
 
-    // CREATE
-    public SleepLog create(SleepLog sleepLog) {
-
-        // tempo na cama em min
+    // método pra centralizar a lógica de calc
+    private void calculateSleepMetrics(SleepLog sleepLog) {
+        // calcula o tempo na cama em minutos
         if (sleepLog.getBedTime() != null && sleepLog.getWakeUpTime() != null) {
-            float timeInBedMinutes = Duration.between(sleepLog.getBedTime(), sleepLog.getWakeUpTime()).toMinutes();
-            sleepLog.setTimeInBed(timeInBedMinutes);
+            Duration duration = Duration.between(sleepLog.getBedTime(), sleepLog.getWakeUpTime());
+            // se a duracao for negativa quer dizer que virou o dia
+            // entao a gente soma 24h pra corrigir o calculo
+            if (duration.isNegative()) {
+                duration = duration.plusDays(1);
+            }
+            sleepLog.setTimeInBed(duration.toMinutes());
         }
-        // total acordado no horário do sono em min, tempo antes de dormir + tempo acordado
+
+        // calcula o tempo total que a pessoa ficou acordada no periodo de sono
+        // eh a soma do tempo pra pegar no sono + o tempo que ficou acordada no meio da noite
         int totalTimeAwake = sleepLog.getTimeToFallAsleep() + sleepLog.getTotalTimeAwakeDuringNight();
         sleepLog.setTotalTimeAwake(totalTimeAwake);
 
-        // tempo total de sono em minutos, tempo na cama - total acordado
+        // calcula o tempo total de sono de fato
+        // eh o tempo na cama menos o tempo que ficou acordada
         float totalSleepTime = sleepLog.getTimeInBed() - totalTimeAwake;
         sleepLog.setTotalSleepTime(totalSleepTime);
+    }
 
-        // salva no bancs
+    // CREATE
+    public SleepLog create(SleepLog sleepLog) {
+        // chama nosso metodo central pra fazer todos os calculos de tempo
+        calculateSleepMetrics(sleepLog);
+
+        // salva no banco
         SleepLog savedLog = sleepLogRepository.save(sleepLog);
 
         // depois de salvar, avisa o sistema pra dar baixa na tarefa
@@ -47,7 +60,7 @@ public class SleepLogService {
                     ScaleType.REGISTRO_SONO
             );
         }
-        // retorna a scala salva
+        // retorna a escala salva
         return savedLog;
     }
 
@@ -63,20 +76,18 @@ public class SleepLogService {
 
     // UPDATE
     public SleepLog update(Long id, SleepLog logDetails) {
-        // busca o registro de sono ou lança uma exceção
+        // busca o registro de sono ou lanca uma excecao se nao achar
         SleepLog existingLog = sleepLogRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("registro de sono não encontrado com o id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Registro de sono não encontrado com o id: " + id));
 
-        // atualiza os campos
+        // atualiza todos os campos com os novos dados vindos do frontend
         existingLog.setAssessmentDate(logDetails.getAssessmentDate());
         existingLog.setPatient(logDetails.getPatient());
         existingLog.setBedTime(logDetails.getBedTime());
         existingLog.setWakeUpTime(logDetails.getWakeUpTime());
-        existingLog.setTimeInBed(logDetails.getTimeInBed());
         existingLog.setTimeToFallAsleep(logDetails.getTimeToFallAsleep());
         existingLog.setTimesWokenUp(logDetails.getTimesWokenUp());
-        existingLog.setTotalTimeAwake(logDetails.getTotalTimeAwake());
-        existingLog.setTotalSleepTime(logDetails.getTotalSleepTime());
+        existingLog.setTotalTimeAwakeDuringNight(logDetails.getTotalTimeAwakeDuringNight()); // importante atualizar esse
         existingLog.setCommonDay(logDetails.getCommonDay());
         existingLog.setFatigue(logDetails.getFatigue());
         existingLog.setStress(logDetails.getStress());
@@ -93,8 +104,12 @@ public class SleepLogService {
         existingLog.setCoffeeConsumption(logDetails.getCoffeeConsumption());
         existingLog.setNighttimeSmoking(logDetails.getNighttimeSmoking());
 
+        // depois de atualizar os dados, a gente recalcula as metricas de tempo
+        calculateSleepMetrics(existingLog);
+
         return sleepLogRepository.save(existingLog);
     }
+
 
     // DELETE
     public void delete(Long id) {

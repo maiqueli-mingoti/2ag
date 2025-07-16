@@ -7,7 +7,7 @@
     --text-secondary: #6c757d;
     --font-family: "Yaldevi Colombo", sans-serif;
 
-    /* Cores dos tipos de notificação */
+
     --color-appointment: #3498db;
     --color-form: #f39c12;
     --color-alert: #e74c3c;
@@ -18,7 +18,6 @@
     --selection-border-color: #007bff;
 }
 
-/* --- ESTRUTURA GERAL DA PÁGINA --- */
 .notifications-page {
     background-color: var(--background-color);
     min-height: 100vh;
@@ -31,11 +30,11 @@
     margin: 0 auto;
 }
 
-/* --- BARRA DE FILTROS SUPERIOR (TOPBAR) --- */
+/* topbar */
 .notifications-filter-bar {
     display: flex;
     align-items: center;
-    flex-wrap: wrap; /* Permite que os itens quebrem a linha em telas menores */
+    flex-wrap: wrap; /* permite que os itens quebrem a linha em telas menores */
     gap: 1.5rem;
     padding: 1rem 2rem;
     background-color: var(--surface-color);
@@ -61,7 +60,7 @@
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     background-color: #fdfdfd;
-    min-width: 180px; /* Garante um tamanho mínimo */
+    min-width: 180px; /* garante um tamanho mínimo */
 }
 
 .filter-actions {
@@ -117,14 +116,14 @@
     color: white;
 }
 
-/* --- CONTAINER PRINCIPAL (SIDEBAR + LISTA) --- */
+/* sidebar e lista */
 .notifications-container {
     display: grid;
     grid-template-columns: 240px 1fr;
     gap: 2rem;
 }
 
-/* --- SIDEBAR DE CATEGORIAS --- */
+/* sidebar categorias */
 .notifications-sidebar {
     background-color: var(--surface-color);
     padding: 1.5rem;
@@ -171,7 +170,7 @@
     font-weight: 600;
 }
 
-/* --- CONTEÚDO DA LISTA DE NOTIFICAÇÕES --- */
+/* conteudo lista de notif */
 .notifications-list-main {
     min-height: 500px;
 }
@@ -199,7 +198,6 @@
     cursor: pointer;
 }
 
-/* NOVO: Estilos para Agrupamento de Notificações */
 .notification-group {
     margin-bottom: 2.5rem;
 }
@@ -223,7 +221,6 @@
     gap: 1rem;
 }
 
-/* --- NOVO ESTILO DOS CARDS (PADRÃO PRESCRITOR) --- */
 .notification-card {
     background-color: white;
     border-radius: 1rem;
@@ -246,8 +243,9 @@
 .notification-card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+    gap: 12px;
+    padding: 12px;
+    width: 100%;
 }
 
 .notification-checkbox-wrapper {
@@ -266,7 +264,6 @@
     color: var(--color-default-icon);
 }
 
-/* Cores dos ícones por tipo */
 .notification-card[data-type="APPOINTMENT"] .notification-icon {
     color: var(--color-appointment);
 }
@@ -283,26 +280,27 @@
     border-left-color: var(--color-alert) !important;
 }
 
-/* Alerta sempre tem borda vermelha se não lido */
 
 .notification-meta {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .notification-type {
     color: var(--text-primary);
-    font-weight: 600;
-    font-size: 0.875rem;
+    font-weight: 800;
+    font-size: 1.1rem;
 }
 
 .notification-timestamp {
     color: #999;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
 }
 
 .notification-actions {
+    margin-left: auto;
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .notification-actions button {
@@ -332,9 +330,9 @@
 }
 
 .notification-card-content {
-    cursor: pointer; /* Indica que o corpo é clicável */
+    cursor: pointer;
     position: relative;
-    padding-left: 48px; /* Alinha com o texto do cabeçalho, após checkbox e icone */
+    padding-left: 48px;
 }
 
 .notification-title {

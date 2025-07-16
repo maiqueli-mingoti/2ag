@@ -366,7 +366,7 @@ export default function NotificacoesPaciente() {
                         {!isLoading && !error && filteredNotifications.length === 0 && (
                             <div className="no-notifications">
                                 <h3>Nenhuma notificação encontrada</h3>
-                                <p>Não há notificações que correspondam aos filtros selecionados.</p>
+                                <p>Não há notificações que correspondam aos filtros selecionados</p>
                             </div>
                         )}
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import './notiicacoes-paciente.css';
+import './notificacoes-paciente.css';
 import Header from "../../components/header/header.jsx";
 
 // funcao para pegar dados do usuario do token

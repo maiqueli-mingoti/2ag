@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         element: <EscalaPaciente />
     },
     {
-        path: "/selecao-escalas",
+        path: "/paciente/:pacienteId/selecao-escalas",
         element: <SelecaoEscalas />
     },
     {

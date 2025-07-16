@@ -85,4 +85,4 @@ agora só falta avisar pro projeto qual a senha do banco.
 
 ## conclusão
 
-agora seu ambiente tá todo configurado, quando você rodar o backend, ele vai conseguir conectar no banco de dados sem problemas, para mais detalhes veja ( [`passo-a-passo-banco.md`](./database/passo-a-passo-banco.md))
+agora seu ambiente tá todo configurado, quando você rodar o backend, ele vai conseguir conectar no banco de dados sem problemas, para mais detalhes veja ( [`passo-a-passo-banco.md`](./passo-a-passo-banco.md))

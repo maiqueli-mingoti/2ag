@@ -2,14 +2,15 @@ package dev.uffs.doisag;
 
 import dev.uffs.doisag.model.Patient;
 import dev.uffs.doisag.model.Prescriber;
-import dev.uffs.doisag.service.PrescriberService;
 import dev.uffs.doisag.repository.UsersRepository;
+import dev.uffs.doisag.service.NotificationService;
+import dev.uffs.doisag.service.PrescriberService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -20,52 +21,126 @@ public class DoisagApplication {
 		SpringApplication.run(DoisagApplication.class, args);
 	}
 
-	// este bean agora cria um prescritor e um paciente de teste se eles não existirem
 	@Bean
-	public CommandLineRunner initDatabase(UsersRepository usersRepository, PasswordEncoder passwordEncoder, PrescriberService prescriberService) {
+	public CommandLineRunner initDatabase(
+			UsersRepository usersRepository,
+			PasswordEncoder passwordEncoder,
+			PrescriberService prescriberService,
+			NotificationService notificationService
+	) {
 		return args -> {
-			// garantimos q o prescriber de teste exista
+			// cria o prescritor de teste
 			String prescriberEmail = "prescritor@email.com";
-			// a gente usa UserDetails aqui pra ser mais genérico
 			UserDetails prescriberDetails = usersRepository.findByEmail(prescriberEmail);
 			Prescriber testPrescriber;
 
-			// se não achou o prescritor no banco, a gente cria ele
 			if (prescriberDetails == null) {
 				System.out.println("CRIANDO USUARIO DE TESTE (PRESCRITOR): " + prescriberEmail);
-
 				var newPrescriber = new Prescriber();
-				newPrescriber.setName("Teste");
+				newPrescriber.setName("Bruna Varela");
 				newPrescriber.setEmail(prescriberEmail);
 				newPrescriber.setPassword("123456");
 				newPrescriber.setProfession("biomedica");
-				newPrescriber.setRegistryType("CRM");
-				newPrescriber.setRegistryNumber("1111");
+				newPrescriber.setRegistryType("CRBM");
+				newPrescriber.setRegistryNumber("12345");
 				testPrescriber = prescriberService.create(newPrescriber);
-
 			} else {
-				// se já existia, a gente só pega ele pra usar no vínculo
 				testPrescriber = (Prescriber) prescriberDetails;
 			}
 
-			// criamos o paciente de test se ele n existir
+			// cria o paciente de teste
 			String patientEmail = "paciente@email.com";
-			if (usersRepository.findByEmail(patientEmail) == null) {
-				System.out.println("CRIANDO USUARIO DE TESTE (PACIENTE): " + patientEmail);
+			UserDetails patientDetails = usersRepository.findByEmail(patientEmail);
+			Patient testPatient;
 
+			if (patientDetails == null) {
+				System.out.println("CRIANDO USUARIO DE TESTE (PACIENTE): " + patientEmail);
 				var newPatient = new Patient();
 				newPatient.setName("Paciente Teste da Silva");
 				newPatient.setEmail(patientEmail);
 				newPatient.setPassword(passwordEncoder.encode("123456"));
 				newPatient.setCpf("00000000000");
 				newPatient.setBirthDate(LocalDate.of(1990, 5, 15));
-
-				// vinculo os dois
-				// o paciente de teste pertence ao prescritor de teste
 				newPatient.setPrescriber(testPrescriber);
+				testPatient = usersRepository.save(newPatient);
+			} else {
+				testPatient = (Patient) patientDetails;
+			}
 
-				// salva o novo paciente no banco
-				usersRepository.save(newPatient);
+			if (notificationService.getNotificationsForUser(testPatient.getId()).isEmpty()) {
+				System.out.println("CRIANDO NOTIFICACOES DE TESTE PARA O PACIENTE...");
+
+				notificationService.createNotification(
+						testPatient,
+						"Novo Formulário Disponível",
+						"Sua prescritora solicitou o preenchimento do Diário do Sono. Por favor, responda assim que possível.",
+						"FORM",
+						"/diario-sono"
+				);
+
+				notificationService.createNotification(
+						testPatient,
+						"Lembrete de Consulta",
+						"Sua consulta de retorno com a Dra. Bruna Varela está marcada para depois de amanhã.",
+						"APPOINTMENT",
+						"/agendamento-consulta"
+				);
+				notificationService.createNotification(
+						testPatient,
+						"Lembrete de Consulta",
+						"Sua consulta de retorno com a Dra. Bruna Varela está marcada para depois de amanhã.",
+						"APPOINTMENT",
+						"/agendamento-consulta"
+				);
+
+				notificationService.createNotification(
+						testPatient,
+						"Ajuste na sua prescrição",
+						"Houve uma atualização na sua prescrição. Verifique as novas orientações de dosagem.",
+						"ALERT",
+						"/prescricao"
+				);
+			}
+
+			// teste notificações para o presc ---
+			if (notificationService.getNotificationsForUser(testPrescriber.getId()).isEmpty()) {
+				System.out.println("CRIANDO NOTIFICACOES DE TESTE PARA O PRESCRITOR...");
+
+				// notificação de novo paciente
+				notificationService.createNotification(
+						testPrescriber,
+						"Novo Paciente Vinculado",
+						"O paciente Paciente Teste da Silva acabou de se cadastrar e está vinculado a você.",
+						"PATIENT", // tipo para novo paciente
+						"/lista-pacientes"
+				);
+
+				// botificação de formulário respondido
+				notificationService.createNotification(
+						testPrescriber,
+						"Paciente respondeu formulário",
+						"O paciente Paciente Teste da Silva acabou de preencher o Diário do Sono.",
+						"FORM",
+						"/paciente/" + testPatient.getId() + "/historico"
+				);
+
+				// notificação de agendamento
+				notificationService.createNotification(
+						testPrescriber,
+						"Novo Agendamento",
+						"Você tem uma nova consulta com Paciente Teste da Silva em 20/07/2025 às 10:00.",
+						"APPOINTMENT",
+						"/agendamento-prescritor"
+				);
+
+				// notificação de alerta
+				notificationService.createNotification(
+						testPrescriber,
+						"Alerta Clínico de Paciente",
+						"Paciente Teste da Silva relatou efeitos adversos. Requer atenção.",
+						"ALERT",
+						"/paciente/" + testPatient.getId() + "/prontuario"
+				);
 			}
 		};
 	}

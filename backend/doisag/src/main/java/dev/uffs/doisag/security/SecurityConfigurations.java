@@ -43,6 +43,8 @@ public class SecurityConfigurations {
                     req.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
                     // aqui permito o cadastro de prescritores
                     req.requestMatchers(HttpMethod.POST, "/prescritor").permitAll();
+                    // notif
+                    req.requestMatchers("/notifications/**").authenticated();
                     // qualquer outra requisição exige autenticação
                     req.anyRequest().authenticated();
                 })

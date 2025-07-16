@@ -31,12 +31,16 @@ public class TokenService {
                 .map(auth -> auth.getAuthority())
                 .collect(Collectors.toList());
 
+        String role = authorities.contains("ROLE_USER") ? "PATIENT" : "PRESCRIBER";
+
+        System.out.println("Role definida para o token: " + role);
         return Jwts.builder()
                 .setIssuer("API Doisag") // quem está emitindo o token
                 .setSubject(user.getEmail()) // quem é o dono do token (o email do usuario)
                 .claim("authorities", authorities) // adicionando a claim com os perfis
                 .claim("id", user.getId()) // adicionei o id
                 .claim("name", user.getName()) // adicionei nome
+                .claim("role", role) // adicionei o role
                 .setIssuedAt(new Date(System.currentTimeMillis())) // quando foi emitido
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // data de expiração
                 .signWith(getSigningKey()) // assina com a nossa chave secreta

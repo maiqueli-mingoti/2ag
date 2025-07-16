@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ScaleSelector from "../../components/scale-selector/scale-selector.jsx";
 import "./acompanhamento-semanal-paciente.css";
 import {useNavigate} from "react-router-dom";
 import Header from "../../components/header/header.jsx";
 
-// função auxiliar pra pegar o id do usuário do token
+// funcao auxiliar pra pegar o id do usuario do token
 function getUserIdFromToken() {
     const token = localStorage.getItem("authToken");
     if (!token) return null;
@@ -12,6 +12,7 @@ function getUserIdFromToken() {
         const payload = JSON.parse(atob(token.split('.')[1]));
         return payload.id;
     } catch (e) {
+        console.error("Erro ao decodificar o token:", e);
         return null;
     }
 }
@@ -42,6 +43,15 @@ export default function AcompanhamentoSemanalPaciente() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    //  se nao tiver logado manda pra tela de login
+    useEffect(() => {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+            navigate("/login");
+        }
+    }, [navigate]);
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -49,17 +59,18 @@ export default function AcompanhamentoSemanalPaciente() {
 
         const patientId = getUserIdFromToken();
         if (!patientId) {
-            setError("Usuário não autenticado. Faça o login novamente.");
+            setError("Sua sessão expirou. Faça o login novamente.");
             setIsLoading(false);
+            navigate('/login'); // redireciona pro login
             return;
         }
 
-        // montagem do payload com os nomes corretos que o backend espera
+        // payload com os nomes corretos que o backend espera
         const payload = {
             assessmentDate: new Date().toISOString().split('T')[0],
             patient: {id: patientId},
-            morningDrops: Number(data.morningDrops),
-            afternoonDrops: Number(data.afternoonDrops),
+            morningDrops: Number(data.morningDrops) || 0,
+            afternoonDrops: Number(data.afternoonDrops) || 0,
             pain: data.pain,
             sleep: data.sleep,
             mood: data.mood,
@@ -74,7 +85,7 @@ export default function AcompanhamentoSemanalPaciente() {
             substanceReduction: data.substance,
             sportsPerformance: data.sport,
             nausea: data.vomit,
-            dermatologicalDisease: data.dermat, // dermatologicalDisease
+            dermatologicalDisease: data.dermat,
             comment: data.comment
         };
 
@@ -89,12 +100,22 @@ export default function AcompanhamentoSemanalPaciente() {
                 body: JSON.stringify(payload)
             });
 
+            // se o token for invalido ou expirou, o backend retorna 401 ou 403
+            if (response.status === 401 || response.status === 403) {
+                setError("Sua sessão expirou. Por favor, faça login novamente.");
+                localStorage.removeItem("authToken"); // limpa o token velho
+                navigate("/login");
+                return;
+            }
+
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(errorText || "Falha ao salvar acompanhamento.");
             }
 
+            // o alert pausa a execucao aqui ate o usuario clicar em OK
             alert("Acompanhamento salvo com sucesso!");
+            // so depois do OK a navegacao acontece
             navigate("/dashboard-paciente");
 
         } catch (err) {
@@ -104,15 +125,14 @@ export default function AcompanhamentoSemanalPaciente() {
         }
     };
 
-    const handleReturnDash = (e) => {
-
-        e.preventDefault();
-        navigate("/dashboard-paciente");
-
+    const handleBack = () => {
+        navigate(-1); // volta pra pagina anterior
     };
 
-    const handleBack = () => {
-        navigate(-1);
+    const handleCancel = () => {
+        if (window.confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos.')) {
+            navigate('/dashboard-paciente');
+        }
     };
 
     return (
@@ -129,19 +149,15 @@ export default function AcompanhamentoSemanalPaciente() {
                         <h2>Registre como foi sua semana nos últimos 7 dias:</h2>
                     </div>
                     <form className="acompanhamento-paciente__form" onSubmit={handleSubmit}>
+                        {error && <p className="error-message">{error}</p>}
                         <div className="acompanhamento-paciente__form__row">
-                            {error && <p className="error-message">{error}</p>}
                             <div>
                                 <label htmlFor="morningDrops">Nº gotas manhã</label>
                                 <input
                                     id="morningDrops"
-                                    onChange={(e) =>
-                                        setData((prev) => ({
-                                            ...prev,
-                                            morningDrops: e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Dose"
+                                    name="morningDrops"
+                                    onChange={(e) => setData(prev => ({...prev, morningDrops: e.target.value}))}
+                                    placeholder="Ex: 2"
                                     type="number"
                                     min="0"
                                     value={data.morningDrops}
@@ -153,19 +169,16 @@ export default function AcompanhamentoSemanalPaciente() {
                                 </label>
                                 <input
                                     id="afternoonDrops"
-                                    onChange={(e) =>
-                                        setData((prev) => ({
-                                            ...prev,
-                                            afternoonDrops: e.target.value,
-                                        }))
-                                    }
-                                    placeholder="Dose"
+                                    name="afternoonDrops"
+                                    onChange={(e) => setData(prev => ({...prev, afternoonDrops: e.target.value}))}
+                                    placeholder="Ex: 2"
                                     type="number"
                                     min="0"
                                     value={data.afternoonDrops}
                                 />
                             </div>
                         </div>
+                        {/* O resto dos seus ScaleSelectors continua aqui... */}
                         <div className="acompanhamento-paciente__form__group">
                             <h3>Dor</h3>
                             <ScaleSelector
@@ -358,7 +371,7 @@ export default function AcompanhamentoSemanalPaciente() {
                             <button type="submit" className="button" disabled={isLoading}>
                                 {isLoading ? "Salvando..." : "Salvar"}
                             </button>
-                            <button type="button" className="button-secondary" onClick={handleBack}>
+                            <button type="button" className="button-secondary" onClick={handleCancel}>
                                 Cancelar
                             </button>
                         </div>

@@ -1,24 +1,30 @@
 package dev.uffs.doisag.service;
 
-import dev.uffs.doisag.model.Patient;
-import dev.uffs.doisag.repository.PatientRepository;
-import org.springframework.stereotype.Service;
 import dev.uffs.doisag.dto.RegisterDTO;
+import dev.uffs.doisag.model.Patient;
 import dev.uffs.doisag.model.Prescriber;
+import dev.uffs.doisag.repository.PatientRepository;
 import dev.uffs.doisag.repository.PrescriberRepository;
 import dev.uffs.doisag.repository.UsersRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PatientService {
+
+    // injecoes
     private final PatientRepository patientRepository;
     private final UsersRepository usersRepository;
     private final PrescriberRepository prescriberRepository;
     private final PasswordEncoder passwordEncoder;
+    private NotificationService notificationService;
 
     public PatientService(PasswordEncoder passwordEncoder, PatientRepository patientRepository, UsersRepository usersRepository, PrescriberRepository prescriberRepository) {
         this.passwordEncoder = passwordEncoder;
@@ -26,31 +32,30 @@ public class PatientService {
         this.usersRepository = usersRepository;
         this.prescriberRepository = prescriberRepository;
     }
+    @Autowired
+    public void setNotificationService(@Lazy NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
-    // create patient
     public Patient create(Patient patient) {
         return patientRepository.save(patient);
     }
 
-    // read all patients
     public List<Patient> getAll() {
         return patientRepository.findAll();
     }
 
-    // read by id patient
     public Optional<Patient> getById(Long id) {
         return patientRepository.findById(id);
     }
 
-    // buscar pacientes por prescritor
     public List<Patient> getPatientsByPrescriberId(Long prescriberId) {
         return patientRepository.findAllByPrescriberId(prescriberId);
     }
 
-    // update patient
     public Patient update(Long id, Patient patientDetails) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com o id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado com o id: " + id));
 
         patient.setName(patientDetails.getName());
         patient.setEmail(patientDetails.getEmail());
@@ -63,25 +68,20 @@ public class PatientService {
         return patientRepository.save(patient);
     }
 
-    // delete patient
     public void delete(Long id) {
         Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com o id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado com o id: " + id));
         patientRepository.delete(patient);
     }
 
-    // método para registrar um paciente
     public Patient registerPatient(RegisterDTO dados) {
-        // verifica se o email já está em uso
         if (usersRepository.findByEmail(dados.email()) != null) {
             throw new ValidationException("email já cadastrado no sistema!");
         }
 
-        // busca o prescritor pelo código fornecido
         Prescriber prescriber = prescriberRepository.findByProfessionalCode(dados.professionalCode())
                 .orElseThrow(() -> new ValidationException("Código do prescritor inválido!"));
 
-        // cria a nova entidade paciente
         var patient = new Patient();
         patient.setName(dados.name());
         patient.setEmail(dados.email());
@@ -89,14 +89,15 @@ public class PatientService {
         patient.setPhone(dados.phone());
         patient.setBirthDate(dados.birthDate());
         patient.setAddress(dados.address());
-
-        // criptografa a senha antes de salvar
         patient.setPassword(passwordEncoder.encode(dados.senha()));
-
-        // faz o vínculo com o prescritor
         patient.setPrescriber(prescriber);
 
-        // salva o novo paciente no banco
-        return patientRepository.save(patient);
+        Patient savedPatient = patientRepository.save(patient);
+
+        String title = "Novo Paciente Vinculado";
+        String message = "O paciente " + savedPatient.getName() + " acabou de se cadastrar e está vinculado a você.";
+        notificationService.createNotification(prescriber, title, message, "ALERT", "/lista-paciente");
+
+        return savedPatient;
     }
 }

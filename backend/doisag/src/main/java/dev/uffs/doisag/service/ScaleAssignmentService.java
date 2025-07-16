@@ -7,57 +7,64 @@ import dev.uffs.doisag.model.AssignedScale;
 import dev.uffs.doisag.model.Patient;
 import dev.uffs.doisag.repository.AssignedScaleRepository;
 import dev.uffs.doisag.repository.PatientRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
 public class ScaleAssignmentService {
-
+    // injecoes
     private final AssignedScaleRepository assignedScaleRepository;
     private final PatientRepository patientRepository;
+    private NotificationService notificationService;
 
     public ScaleAssignmentService(AssignedScaleRepository assignedScaleRepository, PatientRepository patientRepository) {
         this.assignedScaleRepository = assignedScaleRepository;
         this.patientRepository = patientRepository;
     }
 
-    // criar a tarefa de preencher uma escala
-    public AssignedScale assignScaleToPatient(Long patientId, AssignScaleDTO assignScaleDTO) {
-        // a gente acha o paciente no banco
-        // se não achar o orElseThrow lança uma exceção
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado"));
+    @Autowired
+    public void setNotificationService(@Lazy NotificationService notificationService) {
+        this.notificationService = notificationService;
+    }
 
-        // agora cria o objeto da tarefa
+    public AssignedScale assignScaleToPatient(Long patientId, AssignScaleDTO assignScaleDTO) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
+
         AssignedScale newAssignment = new AssignedScale();
         newAssignment.setPatient(patient);
-        newAssignment.setPrescriber(patient.getPrescriber()); // pega o prescritor do próprio paciente
+        newAssignment.setPrescriber(patient.getPrescriber());
         newAssignment.setScaleType(assignScaleDTO.scaleType());
-
-        // usamos o enum diretamente,
-        newAssignment.setStatus(AssignmentStatus.PENDENTE); // começa como pendente
-
+        newAssignment.setStatus(AssignmentStatus.PENDENTE);
         newAssignment.setAssignedDate(LocalDate.now());
 
-        // salva no banco e retorna o objeto que o banco devolveu
-        return assignedScaleRepository.save(newAssignment);
+        AssignedScale savedAssignment = assignedScaleRepository.save(newAssignment);
+
+        String notificationTitle = "Nova Tarefa: " + formatScaleName(savedAssignment.getScaleType());
+        String notificationMessage = "Seu prescritor solicitou o preenchimento de uma nova escala. Acesse suas tarefas para responder.";
+        notificationService.createNotification(patient, notificationTitle, notificationMessage, "FORM", "/escala-clinica");
+
+        return savedAssignment;
     }
-    // marcar uma tarefa de escala como concluida
+
     public void completeAssignedScale(Long patientId, ScaleType scaleType) {
-        // busca a tarefa no banco usando o ultimo método q ta la no repo do scalessignment
         assignedScaleRepository.findFirstByPatientIdAndScaleTypeAndStatusOrderByAssignedDateDesc(
                 patientId,
                 scaleType,
                 AssignmentStatus.PENDENTE
         ).ifPresent(assignment -> {
-            // se a gente achar a tarefa pendente atualizamos ela
             assignment.setStatus(AssignmentStatus.CONCLUIDO);
             assignment.setCompletedDate(LocalDate.now());
-
-            // salva a alteração no banco
             assignedScaleRepository.save(assignment);
         });
-        // importante: se não achar nenhuma tarefa pendente (ifPresent), não faz nada
-        // ai evitamos caso o paciente preencha uma escala que não foi designada pelo pescr
+    }
+
+    private String formatScaleName(ScaleType scaleType) {
+        String name = scaleType.toString().replace("_", " ").toLowerCase();
+        name = name.replace("escala ", "").replace("registro ", "");
+        return name.substring(0, 1).toUpperCase() + name.substring(1);
     }
 }

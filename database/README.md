@@ -1,102 +1,88 @@
-# Configuração do Banco de Dados PostgreSQL para o Projeto "doisag"
+# configurando o banco postgres pro projeto doisag
 
-Este documento detalha o processo completo para instalar e configurar o ambiente de banco de dados PostgreSQL necessário para a execução do backend do projeto `doisag`.
+aqui tá o guia pra instalar e configurar o postgres pro backend do doisag rodar
 
-## Passo 1: Instalação do PostgreSQL
+## primeiro passo: instalar o postgresql
 
-Escolha o guia correspondente ao seu sistema operacional.
+escolha o guia pro seu sistema operacional
 
-### Windows
+### se você usa windows
 
-1.  **Download**: Baixe o instalador oficial na página [PostgreSQL Downloads](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads).
-2.  **Instalação**:
-    * Siga as instruções do instalador.
-    * **Defina uma senha para o superusuário `postgres`** quando solicitado. Anote esta senha.
-    * Garanta que a opção **"Command Line Tools"** esteja marcada para ser instalada.
-3.  **Configurar Variável de Ambiente (PATH)**:
-    * No menu Iniciar, pesquise por "Editar as variáveis de ambiente do sistema".
-    * Em "Variáveis de Ambiente" > "Variáveis do sistema", edite a variável `Path`.
-    * Adicione um novo caminho para a pasta `bin` da sua instalação, que geralmente é `C:\Program Files\PostgreSQL\<VERSÃO>\bin`.
+1.  **download**: baixa o instalador do site oficial do postgresql
+2.  **instalação**: executa o instalador e segue as instruções
+      - quando ele pedir pra criar uma senha pro usuário **postgres**, anota essa senha, você vai precisar dela
+      - garante que a opção de instalar as **'command line tools'** esteja marcada
+3.  **configurar o path**: você precisa adicionar o caminho da pasta `bin` do postgres nas variáveis de ambiente do seu sistema pra conseguir usar os comandos no terminal
+      - o caminho geralmente é algo como `c:\program files\postgresql\<versão>\bin`
 
-### macOS (via Homebrew)
+### se você usa macos
 
-1.  **Instalar Homebrew**: Se não tiver, instale-o a partir do site [brew.sh](https://brew.sh/).
-2.  **Instalar PostgreSQL**: Abra o Terminal e execute:
+1.  **instalar homebrew**: se você ainda não tiver o homebrew, instala ele primeiro
+2.  **instalar o postgres**: depois abre o terminal e roda:
     ```bash
     brew install postgresql
     ```
-3.  **Iniciar Serviço**: Para que o banco de dados esteja sempre em execução, inicie o serviço:
+3.  **iniciar o serviço**: pra garantir que o banco de dados esteja sempre rodando, você pode iniciar o serviço com:
     ```bash
     brew services start postgresql
     ```
 
-### Linux (Debian/Ubuntu)
+### se você usa linux 
 
-1.  **Instalar PostgreSQL**: Abra o Terminal e execute:
+1.  **instalar o postgres**: só abrir o terminal e rodar:
     ```bash
     sudo apt update
     sudo apt install postgresql postgresql-contrib
     ```
 
-## Passo 2: Criação de Usuários e Banco de Dados
+## segundo passo: criar o banco e os usuários
 
-Após a instalação, vamos configurar os usuários e o banco de dados específico da aplicação.
+depois de instalar, você precisa entrar no `psql` pra configurar as coisas.
 
-### 2.1. Acessando o `psql`
+  - **no windows**: abre o terminal e digita `psql -u postgres` e coloca a senha que você criou
+  - **no macos**: é só rodar `psql postgres` no terminal
+  - **no linux**: é `sudo -u postgres psql`
 
-* **Windows**: Abra o Terminal (CMD/PowerShell) e execute `psql -U postgres`. Digite a senha que você criou na instalação.
-* **macOS**: No Terminal, execute `psql postgres`.
-* **Linux**: No Terminal, execute `sudo -u postgres psql`.
+### criar um superusuário pessoal
 
-### 2.2. Criando um Superusuário Pessoal (Boa Prática)
-
-Dentro do `psql` (o prompt mudará para `postgres=#`), crie um usuário para você. **Substitua `<seu_nome_de_usuario>` e `<sua_senha_segura>` por suas credenciais.**
+é uma boa ideia criar um usuário só pra você não ficar usando o `postgres` padrão o tempo todo. dentro do `psql`, rode o comando:
 
 ```sql
-CREATE ROLE <seu_nome_de_usuario> WITH LOGIN SUPERUSER PASSWORD '<sua_senha_segura>';
+create role <seu_nome_de_usuario> with login superuser password '<sua_senha_segura>';
 ```
-Após criar, saia do `psql` com o comando `\q`.
 
-### 2.3. Criando o Usuário e o Banco de Dados da Aplicação
+*lembra de trocar `<seu_nome_de_usuario>` e `<sua_senha_segura>` pelos seus dados. depois de criar, pode sair do `psql` com `\q`.*
 
-1.  Acesse o `psql` novamente, desta vez com seu usuário recém-criado:
-    ```bash
-    psql -U <seu_nome_de_usuario> -d postgres
-    ```
-    O sistema pedirá a sua senha pessoal.
+### criar o usuário e o banco da aplicação
 
-2.  Crie o usuário `admindoisag`. **Escolha uma senha forte para a aplicação e anote-a.**
+1.  entra no `psql` de novo, mas dessa vez com o seu usuário: `psql -u <seu_nome_de_usuario> -d postgres`. ele vai pedir sua senha
+2.  lá dentro, cria o usuário que a aplicação vai usar, o nome dele é `admindoisag`:
     ```sql
-    CREATE USER admindoisag WITH PASSWORD '<senha_para_a_aplicacao>';
+    create user admindoisag with password '<senha_para_a_aplicacao>';
     ```
-
-3.  Crie o banco de dados `doisag` e defina `admindoisag` como seu dono:
+    *escolha uma senha forte e anote ela*
+3.  agora cria o banco de dados com o nome `doisag` e já define o `admindoisag` como dono:
     ```sql
-    CREATE DATABASE doisag OWNER admindoisag;
+    create database doisag owner admindoisag;
     ```
-4.  Saia do `psql` com `\q`.
+4.  pode sair do psql com `\q`
 
-## Passo 3: Configuração do Arquivo da Aplicação
+## terceiro passo: configurar o projeto
 
-Finalmente, atualize o projeto para que ele aponte para o banco de dados que você acabou de criar.
+agora só falta avisar pro projeto qual a senha do banco.
 
-1.  Navegue até a pasta do projeto e abra o arquivo: `src/main/resources/application.yml`.
-2.  Localize a seção `datasource` e substitua o `password` pelo que você criou no passo 2.3.
-
-    **Exemplo de alteração:**
-
+1.  vai na pasta do backend e abre o arquivo `src/main/resources/application.yml`
+2.  encontra a parte do `datasource` e troca o campo `password` pela senha que você criou para o usuário `admindoisag`
+3.  deve ficar parecido com isso:
     ```yaml
-    # src/main/resources/application.yml
-
     spring:
       datasource:
         url: jdbc:postgresql://localhost:5432/doisag
         username: admindoisag
-        password: '<sua_senha>' # substitua pela senha que você criou para o usuário admindoisag
-      ...
+        password: '<sua_senha>' 
     ```
-3.  Salve o arquivo.
+4.  salva o arquivo e pronto.
 
-## Conclusão
+## conclusão
 
-Seu ambiente de banco de dados agora está completamente configurado e pronto para ser utilizado pela aplicação `doisag`. Ao executar o backend, ele se conectará usando as credenciais que você definiu.
+agora seu ambiente tá todo configurado, quando você rodar o backend, ele vai conseguir conectar no banco de dados sem problemas, para mais detalhes veja ( [`passo-a-passo-banco.md`](./database/passo-a-passo-banco.md))

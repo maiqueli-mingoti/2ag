@@ -178,7 +178,6 @@ export default function AcompanhamentoSemanalPaciente() {
                                 />
                             </div>
                         </div>
-                        {/* O resto dos seus ScaleSelectors continua aqui... */}
                         <div className="acompanhamento-paciente__form__group">
                             <h3>Dor</h3>
                             <ScaleSelector

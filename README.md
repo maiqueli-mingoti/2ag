@@ -10,9 +10,11 @@ maiqueli mingoti (20230004643) e caroline de quadros (20230000690)
 - **`database/`**: Modelagem do banco de dados (Veja o [`README.md`](./database/README.md))
   - **`conceptual-model/`**: Arquivos do modelo conceitual
   - **`logical-model/`**: Arquivos do modelo logico
+  - **`physical-model/`**: Arquivos do modelo físico
 
 - **`docs/`**: Documentação do projeto
   - **`requisitos.pdf`**: Documento com os requisitos do sistema
+  - **`relatorio.pdf`**: Documento com os relatorio tecnico do sistema
 
 - **`frontend/`**: Código-fonte da aplicação frontend (Veja o [`README.md`](./frontend/README.md))
 

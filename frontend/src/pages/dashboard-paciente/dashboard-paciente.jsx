@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import {useEffect, useState} from "react";
+import {useNavigate} from "react-router";
 import "../../styles/colors.css";
 import "../../styles/fonts.css";
 import "../../styles/button.css";
@@ -42,10 +42,10 @@ export default function DashboardPaciente() {
             try {
                 const [pacienteRes, dashRes] = await Promise.all([
                     fetch(`http://localhost:8080/paciente/${userId}`, {
-                        headers: { Authorization: `Bearer ${token}` },
+                        headers: {Authorization: `Bearer ${token}`},
                     }),
                     fetch(`http://localhost:8080/dashboard/paciente/${userId}`, {
-                        headers: { Authorization: `Bearer ${token}` },
+                        headers: {Authorization: `Bearer ${token}`},
                     }),
                 ]);
 
@@ -71,6 +71,7 @@ export default function DashboardPaciente() {
         e.preventDefault();
         localStorage.removeItem("authToken");
         navigate("/login");
+        window.location.reload();
     };
 
     const handleWeeklyMonitoring = () => navigate("/acompanhamento-paciente");
@@ -94,7 +95,7 @@ export default function DashboardPaciente() {
         <div className="dashboard-paciente">
             <header className="dashboard-header">
                 <div className="dashboard-header__logo">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo" />
+                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo"/>
                 </div>
                 <div className="dashboard-header__user">
                     <span>Olá, {pacienteInfo?.name}</span>
@@ -174,7 +175,8 @@ export default function DashboardPaciente() {
                                             <p>{escala.descricao}</p>
                                             <span className="formulario-atraso">Próxima: {escala.dataProxima}</span>
                                         </div>
-                                        <button className="button" onClick={() => navigate(escala.rota)}>Preencher</button>
+                                        <button className="button" onClick={() => navigate(escala.rota)}>Preencher
+                                        </button>
                                     </div>
                                 ))
                             ) : (

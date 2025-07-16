@@ -1,308 +1,466 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import React, {useEffect, useMemo, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import './notificacoes-precritor.css';
-import Header from "../../components/header/header.jsx"; // Make sure this path is correct
+import Header from "../../components/header/header.jsx";
+
+// funcao para pegar dados do usuario do token
+function getUserDataFromToken() {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return {id: payload.id, name: payload.name, role: payload.role};
+    } catch (e) {
+        console.error("Erro ao decodificar token:", e);
+        return null;
+    }
+}
+
+// helper para traduzir os tipos de notificacao
+const getTypeLabel = (type) => {
+    switch (type) {
+        case 'APPOINTMENT':
+            return 'Compromissos';
+        case 'FORM':
+            return 'Formulários';
+        case 'ALERT':
+            return 'Alertas';
+        case 'PATIENT':
+            return 'Pacientes';
+        case 'PRESCRIPTION':
+            return 'Prescrições';
+        default:
+            return 'Geral';
+    }
+};
+
+const ICONS = {
+    APPOINTMENT: '📅',
+    FORM: '📋',
+    ALERT: '⚠️',
+    PATIENT: '👤',
+    PRESCRIPTION: '💊',
+    DEFAULT: '🔔'
+};
+
 
 export default function NotificacoesPrescritor() {
-    const [notifications, setNotifications] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0);
-    const [filter, setFilter] = useState('all');
-    const [typeFilter, setTypeFilter] = useState('all');
     const navigate = useNavigate();
+    const [notifications, setNotifications] = useState([]);
+    const [patientList, setPatientList] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [userData, setUserData] = useState(null);
+    const [activeFilter, setActiveFilter] = useState('ALL');
+
+    // filtros da topbar
+    const [stagedFilters, setStagedFilters] = useState({
+        patientId: 'ALL',
+        period: 'ALL',
+        sort: 'DESC'
+    });
+    const [appliedFilters, setAppliedFilters] = useState({
+        patientId: 'ALL',
+        period: 'ALL',
+        sort: 'DESC'
+    });
+    const [selectedNotifications, setSelectedNotifications] = useState(new Set());
 
     useEffect(() => {
-        const mockNotifications = [
-            {
-                id: 1,
-                type: 'appointment',
-                title: 'Compromisso Agendado',
-                message: 'Nova consulta agendada com João Silva para amanhã às 09:00',
-                timestamp: new Date(Date.now() - 30 * 60 * 1000),
-                read: false,
-                icon: '📅'
-            },
-            {
-                id: 2,
-                type: 'patient',
-                title: 'Novo Paciente',
-                message: 'Ana Costa foi registrada como nova paciente',
-                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-                read: false,
-                icon: '👤'
-            },
-            {
-                id: 3,
-                type: 'form',
-                title: 'Formulário Preenchido',
-                message: 'Maria Santos preencheu o formulário de acompanhamento semanal',
-                timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
-                read: false,
-                icon: '📋'
-            },
-            {
-                id: 4,
-                type: 'alert',
-                title: 'Alerta Clínico',
-                message: 'Roberto Silva relatou efeitos adversos - requer atenção imediata',
-                timestamp: new Date(Date.now() - 30 * 60 * 1000),
-                read: false,
-                icon: '⚠️',
-                priority: 'high'
-            },
-            {
-                id: 5,
-                type: 'prescription',
-                title: 'Prescrição Vencendo',
-                message: 'A prescrição de Pedro Lima vence em 2 dias',
-                timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
-                read: true,
-                icon: '💊'
-            },
-            {
-                id: 6,
-                type: 'appointment',
-                title: 'Consulta Cancelada',
-                message: 'A consulta com Carlos Oliveira foi cancelada pelo paciente',
-                timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
-                read: true,
-                icon: '📅'
-            },
-            {
-                id: 7,
-                type: 'form',
-                title: 'Formulário Pendente',
-                message: 'Lembrete: Fernanda Costa não preencheu o formulário há 3 dias',
-                timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
-                read: false,
-                icon: '📋'
-            },
-            {
-                id: 8,
-                type: 'patient',
-                title: 'Atualização de Dados',
-                message: 'Pedro Lima atualizou suas informações de contato',
-                timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
-                read: true,
-                icon: '👤'
+        const user = getUserDataFromToken();
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+        // protecao de rota: so prescritores podem ver esta tela
+        if (user.role !== 'PRESCRIBER') {
+            navigate("/dashboard-paciente"); // redireciona para a home do paciente
+            return;
+        }
+        setUserData(user);
+    }, [navigate]);
+
+    // fetch das notificacoes e da lista de pacientes
+    useEffect(() => {
+        if (!userData) return;
+
+        const fetchData = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const token = localStorage.getItem("authToken");
+                const headers = {"Authorization": `Bearer ${token}`};
+
+                // busca as notificacoes e os pacientes em paralelo
+                const [notificationsResponse, patientsResponse] = await Promise.all([
+                    fetch("http://localhost:8080/notifications", {headers}),
+                    fetch("http://localhost:8080/paciente", {headers}) // Endpoint para buscar pacientes do prescritor
+                ]);
+
+                if (!notificationsResponse.ok) throw new Error("Falha ao buscar notificações.");
+                if (!patientsResponse.ok) throw new Error("Falha ao buscar lista de pacientes.");
+
+                const notificationsData = await notificationsResponse.json();
+                const patientsData = await patientsResponse.json();
+
+                setNotifications(notificationsData.map(n => ({...n, read: n.isRead})));
+                setPatientList(patientsData);
+
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
             }
-        ];
+        };
 
-        setNotifications(mockNotifications);
-        setUnreadCount(mockNotifications.filter(n => !n.read).length);
-    }, []);
+        fetchData();
+    }, [userData]);
 
-    const handleBack = () => {
-        navigate(-1);
+    // logica de filtragem
+    const filteredNotifications = useMemo(() => {
+        let processed = [...notifications];
+        const {period, sort, patientId} = appliedFilters;
+
+        // filtro por paciente
+        if (patientId !== 'ALL') {
+            const selectedPatient = patientList.find(p => p.id === parseInt(patientId));
+            if (selectedPatient) {
+                // filtra verificando se o nome do paciente esta na mensagem
+                processed = processed.filter(n =>
+                    n.message.includes(selectedPatient.name) || n.title.includes(selectedPatient.name)
+                );
+            }
+        }
+
+        // filtro de periodo
+        const now = new Date();
+        if (period !== 'ALL') {
+            processed = processed.filter(n => {
+                const notificationDate = new Date(n.createdAt);
+                switch (period) {
+                    case '7_DAYS':
+                        return (now - notificationDate) / (1000 * 60 * 60 * 24) <= 7;
+                    case '30_DAYS':
+                        return (now - notificationDate) / (1000 * 60 * 60 * 24) <= 30;
+                    case 'THIS_MONTH':
+                        return notificationDate.getMonth() === now.getMonth() && notificationDate.getFullYear() === now.getFullYear();
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // filtro de categoria da sidebar
+        if (activeFilter !== 'ALL') {
+            if (activeFilter === 'UNREAD') {
+                processed = processed.filter(n => !n.read);
+            } else {
+                processed = processed.filter(n => n.type === activeFilter);
+            }
+        }
+
+        // ordenacao
+        processed.sort((a, b) => {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return sort === 'DESC' ? dateB - dateA : dateA - dateB;
+        });
+
+        return processed;
+    }, [notifications, activeFilter, appliedFilters, patientList]);
+
+
+    const groupedNotifications = useMemo(() => {
+        return filteredNotifications.reduce((acc, notification) => {
+            const type = notification.type || 'DEFAULT';
+            if (!acc[type]) {
+                acc[type] = [];
+            }
+            acc[type].push(notification);
+            return acc;
+        }, {});
+    }, [filteredNotifications]);
+
+    // funcao para o botao filtrar
+    const handleFilterClick = () => {
+        setAppliedFilters(stagedFilters);
+        setSelectedNotifications(new Set()); // limpa a selecao ao filtrar
     };
 
-    const markAsRead = (notificationId) => {
-        setNotifications(prev =>
-            prev.map(notification =>
-                notification.id === notificationId
-                    ? { ...notification, read: true }
-                    : notification
-            )
+    const handleClearFilters = () => {
+        setStagedFilters({period: 'ALL', sort: 'DESC'});
+        setAppliedFilters({period: 'ALL', sort: 'DESC'});
+        setActiveFilter('ALL');
+        setSelectedNotifications(new Set());
+    };
+
+    // controla a mudanca de um unico checkbox
+    const handleCheckboxChange = (id) => {
+        const newSelection = new Set(selectedNotifications);
+        if (newSelection.has(id)) newSelection.delete(id);
+        else newSelection.add(id);
+        setSelectedNotifications(newSelection);
+    };
+
+    // controla o checkbox selecionar todas
+    const handleSelectAll = (e) => {
+        if (e.target.checked) {
+            setSelectedNotifications(new Set(filteredNotifications.map(n => n.id)));
+        } else {
+            setSelectedNotifications(new Set());
+        }
+    };
+
+    // funcao helper para chamadas de API autenticadas
+    const makeAuthenticatedApiCall = async (url, options) => {
+        const token = localStorage.getItem("authToken");
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            ...options.headers,
+        };
+        try {
+            const response = await fetch(url, {...options, headers});
+            if (!response.ok) {
+                // lanca um erro para ser pego pelo Promise.all ou pelo try/catch
+                throw new Error(`API call failed: ${response.status}`);
+            }
+            return true;
+        } catch (error) {
+            console.error("API call error:", error);
+            setError("Ocorreu um erro ao processar sua solicitação.");
+            return false;
+        }
+    };
+
+    const handleMarkOneAsRead = async (id) => {
+        const success = await makeAuthenticatedApiCall(`http://localhost:8080/notifications/${id}/read`, {method: 'POST'});
+        if (success) {
+            setNotifications(prev =>
+                prev.map(n => n.id === id ? {...n, read: true} : n)
+            );
+        }
+    };
+
+    const handleDeleteOne = async (id) => {
+        const success = await makeAuthenticatedApiCall(`http://localhost:8080/notifications/${id}`, {method: 'DELETE'});
+        if (success) {
+            setNotifications(prev => prev.filter(n => n.id !== id));
+        }
+    };
+
+    const handleMarkSelectedAsRead = async () => {
+        const idsToMark = Array.from(selectedNotifications);
+
+        const promises = idsToMark.map(id =>
+            makeAuthenticatedApiCall(`http://localhost:8080/notifications/${id}/read`, {method: 'POST'})
         );
-        setUnreadCount(prev => Math.max(0, prev - 1));
+
+        const results = await Promise.all(promises);
+
+        if (results.every(res => res === true)) {
+            setNotifications(prev =>
+                prev.map(n => idsToMark.includes(n.id) ? {...n, read: true} : n)
+            );
+            setSelectedNotifications(new Set());
+        }
     };
 
-    const markAllAsRead = () => {
-        setNotifications(prev =>
-            prev.map(notification => ({ ...notification, read: true }))
+    const handleDeleteSelected = async () => {
+        const idsToDelete = Array.from(selectedNotifications);
+
+        const promises = idsToDelete.map(id =>
+            makeAuthenticatedApiCall(`http://localhost:8080/notifications/${id}`, {method: 'DELETE'})
         );
-        setUnreadCount(0);
+
+        const results = await Promise.all(promises);
+
+        if (results.every(res => res === true)) {
+            setNotifications(prev => prev.filter(n => !idsToDelete.includes(n.id)));
+            setSelectedNotifications(new Set());
+        }
     };
 
-    const deleteNotification = (notificationId) => {
-        setNotifications(prev => prev.filter(n => n.id !== notificationId));
-        const notification = notifications.find(n => n.id === notificationId);
-        if (notification && !notification.read) {
-            setUnreadCount(prev => Math.max(0, prev - 1));
+    const handleNotificationClick = (link, id) => {
+        if (link) {
+            // marcar como lida ao clicar no card (fora do checkbox)
+            const notification = notifications.find(n => n.id === id);
+            if (notification && !notification.read) {
+                handleMarkOneAsRead(id).then(() => {
+                    navigate(link);
+                });
+            } else {
+                navigate(link);
+            }
         }
     };
 
     const formatTimestamp = (timestamp) => {
         const now = new Date();
-        const diff = now - timestamp;
+        const notificationDate = new Date(timestamp);
+        const diff = now - notificationDate;
         const minutes = Math.floor(diff / (1000 * 60));
+        if (minutes < 1) return "agora";
+        if (minutes < 60) return `${minutes}m atrás`;
         const hours = Math.floor(diff / (1000 * 60 * 60));
+        if (hours < 24) return `${hours}h atrás`;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-        if (minutes < 60) {
-            return `${minutes}m atrás`;
-        } else if (hours < 24) {
-            return `${hours}h atrás`;
-        } else {
-            return `${days}d atrás`;
-        }
+        return `${days}d atrás`;
     };
 
-    const getNotificationTypeClass = (type, priority) => {
-        if (priority === 'high') return 'notification-high-priority';
-        switch (type) {
-            case 'appointment': return 'notification-appointment';
-            case 'patient': return 'notification-patient';
-            case 'form': return 'notification-form';
-            case 'alert': return 'notification-alert';
-            case 'prescription': return 'notification-prescription';
-            default: return '';
-        }
-    };
-
-    const getTypeLabel = (type) => {
-        switch (type) {
-            case 'appointment': return 'Compromissos';
-            case 'patient': return 'Pacientes';
-            case 'form': return 'Formulários';
-            case 'alert': return 'Alertas';
-            case 'prescription': return 'Prescrições';
-            default: return 'Todos';
-        }
-    };
-
-    const filteredNotifications = notifications.filter(notification => {
-        const statusMatch = filter === 'all' ||
-            (filter === 'unread' && !notification.read) ||
-            (filter === 'read' && notification.read);
-
-        const typeMatch = typeFilter === 'all' || notification.type === typeFilter;
-
-        return statusMatch && typeMatch;
-    });
 
     return (
         <div className="notifications-page">
             <Header
-                title="Dr. Maria Santos - CRM 12345"
+                title="Notificações"
                 showBackButton={true}
                 backButtonText="Voltar"
-                onBackClick={handleBack}
+                onBackClick={() => navigate(-1)}
             />
 
             <main className="notifications-main-content">
-                <div className="notifications-controls">
-                    <h1>Notificações</h1>
-                    <div className="header-actions">
-                        {unreadCount > 0 && (
-                            <button
-                                className="mark-all-read-btn"
-                                onClick={markAllAsRead}
-                            >
-                                Marcar todas como lidas ({unreadCount})
-                            </button>
+                <div className="notifications-filter-bar">
+                    <div className="filter-group">
+                        <label>Paciente</label>
+                        <select value={stagedFilters.patientId}
+                                onChange={e => setStagedFilters({...stagedFilters, patientId: e.target.value})}
+                                className="filter-select">
+                            <option value="ALL">Todos os Pacientes</option>
+                            {patientList.map(patient => (
+                                <option key={patient.id} value={patient.id}>{patient.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="filter-group">
+                        <label>Período</label>
+                        <select value={stagedFilters.period}
+                                onChange={e => setStagedFilters({...stagedFilters, period: e.target.value})}
+                                className="filter-select">
+                            <option value="ALL">Desde o início</option>
+                            <option value="7_DAYS">Últimos 7 dias</option>
+                            <option value="30_DAYS">Últimos 30 dias</option>
+                            <option value="THIS_MONTH">Este mês</option>
+                        </select>
+                    </div>
+                    <div className="filter-group">
+                        <label>Ordenar por</label>
+                        <select value={stagedFilters.sort}
+                                onChange={e => setStagedFilters({...stagedFilters, sort: e.target.value})}
+                                className="filter-select">
+                            <option value="DESC">Mais recentes</option>
+                            <option value="ASC">Mais antigas</option>
+                        </select>
+                    </div>
+                    <div className="filter-actions">
+                        {selectedNotifications.size > 0 ? (
+                            <>
+                                <span className="selection-count">{selectedNotifications.size} selecionada(s)</span>
+                                <button className="action-btn" onClick={handleMarkSelectedAsRead}>Marcar como lidas
+                                </button>
+                                <button className="action-btn delete-btn" onClick={handleDeleteSelected}>Excluir
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button className="clear-filters-btn" onClick={handleClearFilters}>Limpar filtros
+                                </button>
+                                <button className="filter-btn" onClick={handleFilterClick}>Filtrar</button>
+                            </>
                         )}
                     </div>
                 </div>
 
-                <div className="filters-and-summary-container">
-                    <div className="filters">
-                        <div className="filter-group">
-                            <label>Status:</label>
-                            <select
-                                value={filter}
-                                onChange={(e) => setFilter(e.target.value)}
-                                className="filter-select"
-                            >
-                                <option value="all">Todas</option>
-                                <option value="unread">Não lidas</option>
-                                <option value="read">Lidas</option>
-                            </select>
-                        </div>
+                <div className="notifications-container">
+                    <aside className="notifications-sidebar">
+                        <h3>Categorias</h3>
+                        <ul>
+                            <li className={activeFilter === 'ALL' ? 'active' : ''}
+                                onClick={() => setActiveFilter('ALL')}>Todas
+                            </li>
+                            <li className={activeFilter === 'UNREAD' ? 'active' : ''}
+                                onClick={() => setActiveFilter('UNREAD')}>Não Lidas
+                            </li>
+                            <li className={activeFilter === 'APPOINTMENT' ? 'active' : ''}
+                                onClick={() => setActiveFilter('APPOINTMENT')}>Compromissos
+                            </li>
+                            <li className={activeFilter === 'FORM' ? 'active' : ''}
+                                onClick={() => setActiveFilter('FORM')}>Formulários
+                            </li>
+                            <li className={activeFilter === 'ALERT' ? 'active' : ''}
+                                onClick={() => setActiveFilter('ALERT')}>Alertas
+                            </li>
+                            <li className={activeFilter === 'PATIENT' ? 'active' : ''}
+                                onClick={() => setActiveFilter('PATIENT')}>Pacientes
+                            </li>
+                        </ul>
+                    </aside>
+                    <div className="notifications-list-main">
+                        {isLoading && <p>Carregando...</p>}
+                        {error && <p className="error-message">{error}</p>}
 
-                        <div className="filter-group">
-                            <label>Tipo:</label>
-                            <select
-                                value={typeFilter}
-                                onChange={(e) => setTypeFilter(e.target.value)}
-                                className="filter-select"
-                            >
-                                <option value="all">Todos os tipos</option>
-                                <option value="appointment">Compromissos</option>
-                                <option value="patient">Pacientes</option>
-                                <option value="form">Formulários</option>
-                                <option value="alert">Alertas</option>
-                                <option value="prescription">Prescrições</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div className="notifications-summary">
-                        <div className="summary-item">
-                            <span className="summary-number">{notifications.length}</span>
-                            <span className="summary-label">Total</span>
-                        </div>
-                        <div className="summary-item">
-                            <span className="summary-number">{unreadCount}</span>
-                            <span className="summary-label">Não lidas</span>
-                        </div>
-                        <div className="summary-item">
-                            <span className="summary-number">{filteredNotifications.length}</span>
-                            <span className="summary-label">Filtradas</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="notifications-list">
-                    {filteredNotifications.length === 0 ? (
-                        <div className="no-notifications">
-                            <span className="no-notifications-icon">📭</span>
-                            <h3>Nenhuma notificação encontrada</h3>
-                            <p>Não há notificações que correspondam aos filtros selecionados.</p>
-                        </div>
-                    ) : (
-                        filteredNotifications.map(notification => (
-                            <div
-                                key={notification.id}
-                                className={`notification-card ${
-                                    !notification.read ? 'unread' : ''
-                                } ${getNotificationTypeClass(notification.type, notification.priority)}`}
-                            >
-                                <div className="notification-card-header">
-                                    <div className="notification-icon">
-                                        {notification.icon}
-                                    </div>
-                                    <div className="notification-meta">
-                                        <span className="notification-type">
-                                            {getTypeLabel(notification.type)}
-                                        </span>
-                                        <span className="notification-timestamp">
-                                            {formatTimestamp(notification.timestamp)}
-                                        </span>
-                                    </div>
-                                    <div className="notification-actions">
-                                        {!notification.read && (
-                                            <button
-                                                className="mark-read-btn"
-                                                onClick={() => markAsRead(notification.id)}
-                                                title="Marcar como lida"
-                                            >
-                                                ✓
-                                            </button>
-                                        )}
-                                        <button
-                                            className="delete-btn"
-                                            onClick={() => deleteNotification(notification.id)}
-                                            title="Excluir notificação"
-                                        >
-                                            🗑️
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <div className="notification-card-content">
-                                    <h3 className="notification-title">
-                                        {notification.title}
-                                        {!notification.read && (
-                                            <span className="unread-indicator"></span>
-                                        )}
-                                    </h3>
-                                    <p className="notification-message">
-                                        {notification.message}
-                                    </p>
+                        {!isLoading && !error && filteredNotifications.length > 0 && (
+                            <div className="notification-list-header">
+                                <div className="select-all-wrapper">
+                                    <input type="checkbox" id="select-all" onChange={handleSelectAll}
+                                           checked={filteredNotifications.length > 0 && selectedNotifications.size === filteredNotifications.length}/>
+                                    <label htmlFor="select-all">Selecionar Todas</label>
                                 </div>
                             </div>
-                        ))
-                    )}
+                        )}
+
+                        {!isLoading && !error && filteredNotifications.length === 0 && (
+                            <div className="no-notifications">
+                                <h3>Nenhuma notificação encontrada</h3>
+                                <p>Não há notificações que correspondam aos filtros selecionados.</p>
+                            </div>
+                        )}
+
+                        <div className="notifications-stack">
+                            {filteredNotifications.map(notification => (
+                                <div key={notification.id}
+                                     className={`notification-card ${!notification.read ? 'unread' : ''} ${selectedNotifications.has(notification.id) ? 'selected' : ''}`}
+                                     data-type={notification.type}>
+                                    <div className="notification-card-header">
+                                        <div className="notification-checkbox-wrapper">
+                                            <input type="checkbox" checked={selectedNotifications.has(notification.id)}
+                                                   onChange={(e) => {
+                                                       e.stopPropagation();
+                                                       handleCheckboxChange(notification.id);
+                                                   }} onClick={(e) => e.stopPropagation()}/>
+                                        </div>
+                                        <div
+                                            className="notification-icon">{ICONS[notification.type] || ICONS.DEFAULT}</div>
+                                        <div className="notification-meta">
+                                            <span className="notification-type">{getTypeLabel(notification.type)}</span>
+                                            <span
+                                                className="notification-timestamp">{formatTimestamp(notification.createdAt)}</span>
+                                        </div>
+                                        <div className="notification-actions">
+                                            {!notification.read && (
+                                                <button className="mark-read-btn" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleMarkOneAsRead(notification.id);
+                                                }} title="Marcar como lida">✓</button>
+                                            )}
+                                            <button className="delete-btn" onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteOne(notification.id);
+                                            }} title="Excluir">🗑️
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="notification-card-content"
+                                         onClick={() => notification.link && navigate(notification.link)}>
+                                        <h3 className="notification-title">
+                                            {notification.title}
+                                            {!notification.read && <span className="unread-indicator"></span>}
+                                        </h3>
+                                        <p className="notification-message">{notification.message}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

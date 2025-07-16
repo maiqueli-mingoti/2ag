@@ -130,7 +130,7 @@ export default function AcompanhamentoSemanalPaciente() {
     };
 
     const handleCancel = () => {
-        if (window.confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos.')) {
+        if (window.confirm('Tem certeza que deseja cancelar? Todos os dados serão perdidos')) {
             navigate('/dashboard-paciente');
         }
     };
@@ -367,11 +367,11 @@ export default function AcompanhamentoSemanalPaciente() {
                             ></textarea>
                         </div>
                         <div className="acompanhamento-paciente_end">
-                            <button type="submit" className="button" disabled={isLoading}>
-                                {isLoading ? "Salvando..." : "Salvar"}
-                            </button>
                             <button type="button" className="button-secondary" onClick={handleCancel}>
                                 Cancelar
+                            </button>
+                            <button type="submit" className="button" disabled={isLoading}>
+                                {isLoading ? "Salvando..." : "Salvar"}
                             </button>
                         </div>
                     </form>

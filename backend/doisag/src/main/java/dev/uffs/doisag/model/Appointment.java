@@ -1,6 +1,8 @@
 package dev.uffs.doisag.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import java.time.LocalDateTime;
 
@@ -25,17 +27,26 @@ public class Appointment {
     @JoinColumn(name = "prescriber_id", nullable = false) // fk pro prescritor
     private Prescriber prescriber;
 
-    public Appointment(String status, String therapeuticPlan, Prescriber prescriber, Patient patient, String modality, Long id, String evolution, String diagnosis, LocalDateTime dateTime, String clinicalObservation) {
+    // uma consulta pode ter várias prescrições
+    @OneToMany(
+            mappedBy = "appointment", // o lado Prescription gerencia a relação
+            cascade = CascadeType.ALL, // se salvar/deletar a consulta, faz o mesmo com as prescrições
+            orphanRemoval = true // remove prescrições que não estão mais na lista
+    )
+    private List<Prescription> prescriptions = new ArrayList<>();
+
+    public Appointment(String clinicalObservation, LocalDateTime dateTime, String diagnosis, String evolution, Long id, String modality, Patient patient, Prescriber prescriber, List<Prescription> prescriptions, String status, String therapeuticPlan) {
+        this.clinicalObservation = clinicalObservation;
+        this.dateTime = dateTime;
+        this.diagnosis = diagnosis;
+        this.evolution = evolution;
+        this.id = id;
+        this.modality = modality;
+        this.patient = patient;
+        this.prescriber = prescriber;
+        this.prescriptions = prescriptions;
         this.status = status;
         this.therapeuticPlan = therapeuticPlan;
-        this.prescriber = prescriber;
-        this.patient = patient;
-        this.modality = modality;
-        this.id = id;
-        this.evolution = evolution;
-        this.diagnosis = diagnosis;
-        this.dateTime = dateTime;
-        this.clinicalObservation = clinicalObservation;
     }
 
     // para o agendamento, torna os outros atributos opcionais;
@@ -129,6 +140,14 @@ public class Appointment {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 }
 

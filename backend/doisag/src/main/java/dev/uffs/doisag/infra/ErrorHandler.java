@@ -2,7 +2,9 @@ package dev.uffs.doisag.infra;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ValidationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -29,4 +31,13 @@ public class ErrorHandler {
         // e o front sabe exatamente qual parâmetro mandou errado
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity handleResourceNotFound(ResourceNotFoundException ex) {
+        // retorna um 404 not found com a mensagem da exceção
+        // assim o front-end sabe exatamente o que não foi encontrado
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+
 }

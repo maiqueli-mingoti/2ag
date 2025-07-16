@@ -1,9 +1,6 @@
 package dev.uffs.doisag.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Prescription {
@@ -17,10 +14,16 @@ public class Prescription {
     private String spectrum;
     private String observation;
 
+    // muitas prescrições podem pertencer a uma consulta
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "appointment_id", nullable = false) // cria a coluna fk, não pode ser nula
+    private Appointment appointment;
+
     public Prescription() {
     }
 
-    public Prescription(String brand, String concentration, Long id, String observation, String posology, String productDescription, String spectrum) {
+    public Prescription(Appointment appointment, String brand, String concentration, Long id, String observation, String posology, String productDescription, String spectrum) {
+        this.appointment = appointment;
         this.brand = brand;
         this.concentration = concentration;
         this.id = id;
@@ -84,5 +87,13 @@ public class Prescription {
 
     public void setSpectrum(String spectrum) {
         this.spectrum = spectrum;
+    }
+
+    public Appointment getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Appointment appointment) {
+        this.appointment = appointment;
     }
 }

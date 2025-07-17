@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.HamiltonScale;
 import dev.uffs.doisag.repository.HamiltonScaleRepository;
 import dev.uffs.doisag.enums.ScaleType;
@@ -63,8 +64,10 @@ public class HamiltonScaleService {
     }
 
     // READ BY ID
-    public Optional<HamiltonScale> getById(Long id) {
-        return hamiltonScaleRepository.findById(id);
+    public HamiltonScale getById(Long id) {
+        return hamiltonScaleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
+
     }
 
     // UPDATE

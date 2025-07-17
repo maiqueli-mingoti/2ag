@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.Appointment;
 import dev.uffs.doisag.repository.AppointmentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -60,8 +61,10 @@ public class AppointmentService {
         return appointmentRepository.findAll();
     }
 
-    public Optional<Appointment> getById(Long id) {
-        return appointmentRepository.findById(id);
+    public Appointment getById(Long id) {
+        return appointmentRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
+
     }
 
     public Appointment update(Long id, Appointment appointmentDetails) {

@@ -35,32 +35,23 @@ public class PainLogController {
     // GET /registro-dor/{id}
     @GetMapping("/{id}")
     public ResponseEntity<PainLog> getById(@PathVariable Long id) {
-        return painLogService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        PainLog painLog = painLogService.getById(id);
+        return ResponseEntity.ok(painLog);
     }
 
     // endpoint para ATUALIZAR um registro de dor
     // PUT /registro-dor/{id}
     @PutMapping("/{id}")
     public ResponseEntity<PainLog> update(@PathVariable Long id, @RequestBody PainLog logDetails) {
-        try {
             PainLog updatedLog = painLogService.update(id, logDetails);
             return ResponseEntity.ok(updatedLog);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR um registro de dor
     // DELETE /registro-dor/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             painLogService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

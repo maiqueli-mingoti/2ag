@@ -35,32 +35,23 @@ public class AnamnesisController {
     // GET /anamnese/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Anamnesis> getById(@PathVariable Long id) {
-        return anamnesisService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Anamnesis anamnesis = anamnesisService.getById(id);
+        return ResponseEntity.ok(anamnesis);
     }
 
     // endpoint para ATUALIZAR uma anamnese
     // PUT /anamnese/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Anamnesis> update(@PathVariable Long id, @RequestBody Anamnesis anamnesisDetails) {
-        try {
             Anamnesis updatedAnamnesis = anamnesisService.update(id, anamnesisDetails);
             return ResponseEntity.ok(updatedAnamnesis);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR uma anamnese
     // DELETE /anamnese/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             anamnesisService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

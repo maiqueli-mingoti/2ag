@@ -1,6 +1,7 @@
 package dev.uffs.doisag.service;
 
 import dev.uffs.doisag.dto.RegisterDTO;
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.Patient;
 import dev.uffs.doisag.model.Prescriber;
 import dev.uffs.doisag.repository.PatientRepository;
@@ -45,8 +46,9 @@ public class PatientService {
         return patientRepository.findAll();
     }
 
-    public Optional<Patient> getById(Long id) {
-        return patientRepository.findById(id);
+    public Patient getById(Long id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     public List<Patient> getPatientsByPrescriberId(Long prescriberId) {

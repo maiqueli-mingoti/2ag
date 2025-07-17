@@ -35,32 +35,23 @@ public class PittsburghScaleController {
     // GET /escala-pittsburgh/{id}
     @GetMapping("/{id}")
     public ResponseEntity<PittsburghScale> getById(@PathVariable Long id) {
-        return pittsburghScaleService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        PittsburghScale pittsburghScale = pittsburghScaleService.getById(id);
+        return ResponseEntity.ok(pittsburghScale);
     }
 
     // endpoint para ATUALIZAR uma escala pittsburgh
     // PUT /escala-pittsburgh/{id}
     @PutMapping("/{id}")
     public ResponseEntity<PittsburghScale> update(@PathVariable Long id, @RequestBody PittsburghScale scaleDetails) {
-        try {
             PittsburghScale updatedScale = pittsburghScaleService.update(id, scaleDetails);
             return ResponseEntity.ok(updatedScale);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR uma escala pittsburgh
     // DELETE /escala-pittsburgh/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             pittsburghScaleService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

@@ -38,29 +38,20 @@ public class PatientsController {
     // read by id patient
     @GetMapping("/{id}")
     public ResponseEntity<Patient> getById(@PathVariable Long id){
-        return patientService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Patient patient = patientService.getById(id);
+        return ResponseEntity.ok(patient);
     }
 
     // update patient
     @PutMapping("/{id}")
     public ResponseEntity<Patient> update(@PathVariable Long id, @RequestBody Patient patientDetails) {
-        try {
-            Patient updatedPatient = patientService.update(id, patientDetails);
-            return ResponseEntity.ok(updatedPatient);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Patient updatedPatient = patientService.update(id, patientDetails);
+        return ResponseEntity.ok(updatedPatient);
     }
     // delete patient
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            patientService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        patientService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

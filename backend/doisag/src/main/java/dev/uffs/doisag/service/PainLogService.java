@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.PainLog;
 import dev.uffs.doisag.repository.PainLogRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -42,8 +43,9 @@ public class PainLogService {
     }
 
     // READ BY ID
-    public Optional<PainLog> getById(Long id) {
-        return painLogRepository.findById(id);
+    public PainLog getById(Long id) {
+        return painLogRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     // UPDATE

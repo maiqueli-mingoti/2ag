@@ -52,8 +52,9 @@ public class PrescriptionService {
     }
 
     // READ BY ID
-    public Optional<Prescription> getById(Long id) {
-        return prescriptionRepository.findById(id);
+    public Prescription getById(Long id) {
+        return prescriptionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     // UPDATE

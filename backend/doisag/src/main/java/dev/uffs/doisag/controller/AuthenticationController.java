@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -44,11 +45,11 @@ public class AuthenticationController {
     // endpoint para registrar pacientes em /auth/register
     @PostMapping("/register")
     // o método retorna nosso DTO de resposta
-    public ResponseEntity<ApiResponseDTO> register(@RequestBody RegisterDTO dados) {
+    public ResponseEntity<ApiResponseDTO> register(@RequestBody @Valid RegisterDTO dados) { // adicionei o @Valid aqui para checar nosso registerDTO
         patientService.registerPatient(dados);
 
         // retorna 201 created com um corpo de mensagem
-        var response = new ApiResponseDTO("cadastro realizado com sucesso, seja bem-vindo(a)!");
+        var response = new ApiResponseDTO("Cadastro realizado com sucesso, seja bem-vindo(a)!");
         return ResponseEntity.status(201).body(response);
     }
 }

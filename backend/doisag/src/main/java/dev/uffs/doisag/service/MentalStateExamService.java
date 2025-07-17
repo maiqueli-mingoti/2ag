@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.MentalStateExam;
 import dev.uffs.doisag.repository.MentalStateExamRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,8 +42,9 @@ public class MentalStateExamService {
     }
 
     // READ BY ID
-    public Optional<MentalStateExam> getById(Long id) {
-        return mentalStateExamRepository.findById(id);
+    public MentalStateExam getById(Long id) {
+        return mentalStateExamRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     // UPDATE

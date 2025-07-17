@@ -35,32 +35,23 @@ public class FollowUpController {
     // GET /acompanhamento/{id}
     @GetMapping("/{id}")
     public ResponseEntity<FollowUp> getById(@PathVariable Long id) {
-        return followUpService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        FollowUp followUp = followUpService.getById(id);
+        return ResponseEntity.ok(followUp);
     }
 
     // endpoint para ATUALIZAR um followup
     // PUT /acompanhamento/{id}
     @PutMapping("/{id}")
     public ResponseEntity<FollowUp> update(@PathVariable Long id, @RequestBody FollowUp followUpDetails) {
-        try {
             FollowUp updatedFollowUp = followUpService.update(id, followUpDetails);
             return ResponseEntity.ok(updatedFollowUp);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR um followup
     // DELETE /acompanhamento/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            followUpService.delete(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        followUpService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

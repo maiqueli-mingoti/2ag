@@ -43,23 +43,17 @@ public class PrescriptionsController {
     // endpoint para LER uma prescrição por ID
     // GET /prescricao/{id}
     @GetMapping("/prescricao/{id}")
-    public ResponseEntity<PrescriptionResponseDTO> getById(
-            @PathVariable Long id) {
-        return prescriptionService.getById(id)
-                .map(prescription -> ResponseEntity.ok(new PrescriptionResponseDTO(prescription))) // Conversão para DTO
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PrescriptionResponseDTO> getById( @PathVariable Long id) {
+        Prescription prescription = prescriptionService.getById(id);
+        return ResponseEntity.ok(new PrescriptionResponseDTO(prescription));
     }
 
     // endpoint para ATUALIZAR uma prescrição
     // PUT /prescricao/{id}
     @PutMapping("/prescricao/{id}")
     public ResponseEntity<PrescriptionResponseDTO> update(@PathVariable Long id, @RequestBody PrescriptionUpdateDTO dto) {
-        try {
             Prescription updatedPrescription = prescriptionService.update(id, dto);
             return ResponseEntity.ok(new PrescriptionResponseDTO(updatedPrescription));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR uma prescrição

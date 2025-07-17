@@ -35,32 +35,23 @@ public class TEALogController {
     // GET /registro-tea/{id}
     @GetMapping("/{id}")
     public ResponseEntity<TEALog> getById(@PathVariable Long id) {
-        return teaLogService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        TEALog teaLog = teaLogService.getById(id);
+        return ResponseEntity.ok(teaLog);
     }
 
     // endpoint para ATUALIZAR um registro de tea
     // PUT /registro-tea/{id}
     @PutMapping("/{id}")
     public ResponseEntity<TEALog> update(@PathVariable Long id, @RequestBody TEALog logDetails) {
-        try {
             TEALog updatedLog = teaLogService.update(id, logDetails);
             return ResponseEntity.ok(updatedLog);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR um registro de tea
     // DELETE /registro-tea/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             teaLogService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

@@ -35,32 +35,23 @@ public class SleepLogController {
     // GET /registro-sono/{id}
     @GetMapping("/{id}")
     public ResponseEntity<SleepLog> getById(@PathVariable Long id) {
-        return sleepLogService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        SleepLog sleepLog = sleepLogService.getById(id);
+        return ResponseEntity.ok(sleepLog);
     }
 
     // endpoint para ATUALIZAR um registro de sono
     // PUT /registro-sono/{id}
     @PutMapping("/{id}")
     public ResponseEntity<SleepLog> update(@PathVariable Long id, @RequestBody SleepLog logDetails) {
-        try {
             SleepLog updatedLog = sleepLogService.update(id, logDetails);
             return ResponseEntity.ok(updatedLog);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR um registro de sono
     // DELETE /registro-sono/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             sleepLogService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

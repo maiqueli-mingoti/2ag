@@ -35,32 +35,23 @@ public class PrescribersController {
     // get /prescritor/{id}
     @GetMapping("/{id}")
     public ResponseEntity<Prescriber> getById(@PathVariable Long id) {
-        return prescriberService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Prescriber prescriber = prescriberService.getById(id);
+        return ResponseEntity.ok(prescriber);
     }
 
     // endpoint para ATUALIZAR um prescritor
     // put /prescritor/{id}
     @PutMapping("/{id}")
     public ResponseEntity<Prescriber> update(@PathVariable Long id, @RequestBody Prescriber prescriberDetails) {
-        try {
-            Prescriber updatedPrescriber = prescriberService.update(id, prescriberDetails);
-            return ResponseEntity.ok(updatedPrescriber);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Prescriber updatedPrescriber = prescriberService.update(id, prescriberDetails);
+        return ResponseEntity.ok(updatedPrescriber);
     }
 
     // endpoint para DELETAR um prescritor
     // delete /prescritor/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             prescriberService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

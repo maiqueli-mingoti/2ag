@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.Prescriber;
 import dev.uffs.doisag.repository.PrescriberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -61,8 +62,9 @@ public class PrescriberService {
     }
 
     // read by id prescriber
-    public Optional<Prescriber> getById(Long id) {
-        return prescriberRepository.findById(id);
+    public Prescriber getById(Long id) {
+        return prescriberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     // update prescriber

@@ -35,32 +35,23 @@ public class HamiltonScaleController {
     // GET /escala-hamilton/{id}
     @GetMapping("/{id}")
     public ResponseEntity<HamiltonScale> getById(@PathVariable Long id) {
-        return hamiltonScaleService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        HamiltonScale hamiltonScale = hamiltonScaleService.getById(id);
+        return ResponseEntity.ok(hamiltonScale);
     }
 
     // endpoint para ATUALIZAR uma escala hamilton
     // PUT /escala-hamilton/{id}
     @PutMapping("/{id}")
     public ResponseEntity<HamiltonScale> update(@PathVariable Long id, @RequestBody HamiltonScale scaleDetails) {
-        try {
             HamiltonScale updatedScale = hamiltonScaleService.update(id, scaleDetails);
             return ResponseEntity.ok(updatedScale);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR uma escala hamilton
     // DELETE /escala-hamilton/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             hamiltonScaleService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

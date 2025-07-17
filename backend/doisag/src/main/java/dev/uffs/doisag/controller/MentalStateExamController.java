@@ -35,32 +35,23 @@ public class MentalStateExamController {
     // GET /mini-exame/{id}
     @GetMapping("/{id}")
     public ResponseEntity<MentalStateExam> getById(@PathVariable Long id) {
-        return mentalStateExamService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        MentalStateExam mentalStateExam = mentalStateExamService.getById(id);
+        return ResponseEntity.ok(mentalStateExam);
     }
 
     // endpoint para ATUALIZAR um exame
     // PUT /mini-exame/{id}
     @PutMapping("/{id}")
     public ResponseEntity<MentalStateExam> update(@PathVariable Long id, @RequestBody MentalStateExam examDetails) {
-        try {
             MentalStateExam updatedExam = mentalStateExamService.update(id, examDetails);
             return ResponseEntity.ok(updatedExam);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     // endpoint para DELETAR um exame
     // DELETE /mini-exame/{id}
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
             mentalStateExamService.delete(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

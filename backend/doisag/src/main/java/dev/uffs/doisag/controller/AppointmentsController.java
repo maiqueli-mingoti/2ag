@@ -34,9 +34,8 @@ public class AppointmentsController {
     // read by id
     @GetMapping("/{id}")
     public ResponseEntity<Appointment> getById(@PathVariable Long id) {
-        return appointmentService.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Appointment appointment = appointmentService.getById(id);
+        return ResponseEntity.ok(appointment);
     }
 
     // update

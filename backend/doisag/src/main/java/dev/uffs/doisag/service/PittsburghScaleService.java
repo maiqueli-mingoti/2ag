@@ -1,5 +1,6 @@
 package dev.uffs.doisag.service;
 
+import dev.uffs.doisag.infra.ResourceNotFoundException;
 import dev.uffs.doisag.model.PittsburghScale;
 import dev.uffs.doisag.repository.PittsburghScaleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -65,8 +66,9 @@ public class PittsburghScaleService {
     }
 
     // READ BY ID
-    public Optional<PittsburghScale> getById(Long id) {
-        return pittsburghScaleRepository.findById(id);
+    public PittsburghScale getById(Long id) {
+        return pittsburghScaleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o id: " + id));
     }
 
     // UPDATE

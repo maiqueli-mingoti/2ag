@@ -1,14 +1,14 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import "../../styles/button.css";
 import "../../styles/colors.css";
 import "../../styles/fonts.css";
-import "../../styles/button.css";
 import "../../styles/input.css";
 import "./dashboard-paciente.css";
 
 function parseJwt(token) {
     try {
-        return JSON.parse(atob(token.split('.')[1]));
+        return JSON.parse(atob(token.split(".")[1]));
     } catch (e) {
         return null;
     }
@@ -42,15 +42,19 @@ export default function DashboardPaciente() {
             try {
                 const [pacienteRes, dashRes] = await Promise.all([
                     fetch(`http://localhost:8080/paciente/${userId}`, {
-                        headers: {Authorization: `Bearer ${token}`},
+                        headers: { Authorization: `Bearer ${token}` },
                     }),
-                    fetch(`http://localhost:8080/dashboard/paciente/${userId}`, {
-                        headers: {Authorization: `Bearer ${token}`},
-                    }),
+                    fetch(
+                        `http://localhost:8080/dashboard/paciente/${userId}`,
+                        {
+                            headers: { Authorization: `Bearer ${token}` },
+                        },
+                    ),
                 ]);
 
                 if (!pacienteRes.ok) throw new Error("Erro ao buscar paciente");
-                if (!dashRes.ok) throw new Error("Erro ao buscar dados da dashboard");
+                if (!dashRes.ok)
+                    throw new Error("Erro ao buscar dados da dashboard");
 
                 const pacienteData = await pacienteRes.json();
                 const dashboard = await dashRes.json();
@@ -91,40 +95,69 @@ export default function DashboardPaciente() {
     };
 
     if (isLoading) {
-        return <div className="dashboard-loading"><h1>Carregando painel...</h1></div>;
+        return (
+            <div className="dashboard-loading">
+                <h1>Carregando painel...</h1>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="dashboard-error"><h1>Erro</h1><p>{error}</p></div>;
+        return (
+            <div className="dashboard-error">
+                <h1>Erro</h1>
+                <p>{error}</p>
+            </div>
+        );
     }
 
     return (
         <div className="dashboard-paciente">
             <header className="dashboard-header">
                 <div className="dashboard-header__logo">
-                    <img src="/images/logotipo-icon.svg" alt="Logo" className="logo"/>
+                    <img
+                        src="/images/logotipo-icon.svg"
+                        alt="Logo"
+                        className="logo"
+                    />
                 </div>
                 <div className="dashboard-header__user">
                     <span>Olá, {pacienteInfo?.name}</span>
-                    <button className="button-secondary" onClick={handleNotificacoes}>Notificações</button>
-                    <button className="button-secondary" onClick={handleLogout}>Sair</button>
+                    <button
+                        className="button-secondary"
+                        onClick={handleNotificacoes}
+                    >
+                        Notificações
+                    </button>
+                    <button className="button-secondary" onClick={handleLogout}>
+                        Sair
+                    </button>
                 </div>
             </header>
 
             <main className="dashboard-main">
                 <div className="dashboard-welcome">
                     <h1>Painel do Paciente!</h1>
-                    <p>Acompanhe seu tratamento e mantenha-se em dia com suas consultas e escalas.</p>
+                    <p>
+                        Acompanhe seu tratamento e mantenha-se em dia com suas
+                        consultas e escalas.
+                    </p>
                 </div>
 
                 <section className="dashboard-actions">
                     <h2>Ações Rápidas</h2>
                     <div className="actions-grid">
-                        <button className="action-button" onClick={handleWeeklyMonitoring}>
+                        <button
+                            className="action-button"
+                            onClick={handleWeeklyMonitoring}
+                        >
                             <span className="action-icon">📋</span>
                             <span>Acompanhamento Semanal</span>
                         </button>
-                        <button className="action-button" onClick={handleEscalas}>
+                        <button
+                            className="action-button"
+                            onClick={handleEscalas}
+                        >
                             <span className="action-icon">📊</span>
                             <span>Ver Escalas</span>
                         </button>
@@ -132,11 +165,17 @@ export default function DashboardPaciente() {
                             <span className="action-icon">💊</span>
                             <span>Minhas Prescrições</span>
                         </button>
-                        <button className="action-button" onClick={handleAgendarConsulta}>
+                        <button
+                            className="action-button"
+                            onClick={handleAgendarConsulta}
+                        >
                             <span className="action-icon">📅</span>
                             <span>Agendar Consulta</span>
                         </button>
-                        <button className="action-button" onClick={handleAnamnese}>
+                        <button
+                            className="action-button"
+                            onClick={handleAnamnese}
+                        >
                             <span className="action-icon">🗒️</span>
                             <span>Anamnese</span>
                         </button>
@@ -148,19 +187,32 @@ export default function DashboardPaciente() {
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Próximas Consultas</h2>
-                            <span className="card-badge">{dashboardData.upcomingAppointments.length} agendadas</span>
+                            <span className="card-badge">
+                                {dashboardData.upcomingAppointments.length}{" "}
+                                agendadas
+                            </span>
                         </div>
                         <div className="card-content">
                             {dashboardData.upcomingAppointments.length > 0 ? (
-                                dashboardData.upcomingAppointments.map((consulta, index) => (
-                                    <div key={index} className="consulta-item">
-                                        <div className="consulta-info">
-                                            <h3>{consulta.nomePrescritor}</h3>
-                                            <p>{consulta.tipoConsulta}</p>
-                                            <span className="consulta-data">{consulta.data} - {consulta.horario}</span>
+                                dashboardData.upcomingAppointments.map(
+                                    (consulta, index) => (
+                                        <div
+                                            key={index}
+                                            className="consulta-item"
+                                        >
+                                            <div className="consulta-info">
+                                                <h3>
+                                                    {consulta.nomePrescritor}
+                                                </h3>
+                                                <p>{consulta.tipoConsulta}</p>
+                                                <span className="consulta-data">
+                                                    {consulta.data} -{" "}
+                                                    {consulta.horario}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))
+                                    ),
+                                )
                             ) : (
                                 <p>Sem consultas agendadas</p>
                             )}
@@ -171,21 +223,35 @@ export default function DashboardPaciente() {
                     <section className="dashboard-card">
                         <div className="card-header">
                             <h2>Status de Formulários</h2>
-                            <span className="card-badge warning">{dashboardData.pendingScales.length} pendente(s)</span>
+                            <span className="card-badge warning">
+                                {dashboardData.pendingScales.length} pendente(s)
+                            </span>
                         </div>
                         <div className="card-content">
                             {dashboardData.pendingScales.length > 0 ? (
-                                dashboardData.pendingScales.map((escala, index) => (
-                                    <div key={index} className="formulario-item">
-                                        <div className="formulario-info">
-                                            <h3>{escala.nome}</h3>
-                                            <p>{escala.descricao}</p>
-                                            <span className="formulario-atraso">Próxima: {escala.dataProxima}</span>
+                                dashboardData.pendingScales.map(
+                                    (escala, index) => (
+                                        <div
+                                            key={index}
+                                            className="formulario-item"
+                                        >
+                                            <div className="formulario-info">
+                                                <h3>{escala.name}</h3>
+                                                <span className="formulario-atraso">
+                                                    Status: {escala.status}
+                                                </span>
+                                            </div>
+                                            <button
+                                                className="button"
+                                                onClick={() =>
+                                                    navigate(escala.rota)
+                                                }
+                                            >
+                                                Preencher
+                                            </button>
                                         </div>
-                                        <button className="button" onClick={() => navigate(escala.rota)}>Preencher
-                                        </button>
-                                    </div>
-                                ))
+                                    ),
+                                )
                             ) : (
                                 <p>Sem formulários pendentes</p>
                             )}

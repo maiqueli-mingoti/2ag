@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router';
+import { useState, useEffect } from 'react';
 import './historico-clinico-prescritor.css';
 import '../../styles/colors.css';
 import '../../styles/fonts.css';
@@ -6,38 +7,193 @@ import '../../styles/button.css';
 import Header from "../../components/header/header.jsx";
 import React from "react";
 
-
-// Os dados seriam buscados de uma API usando o pacienteId
-const dadosHistoricoPacientes = {
-    '1': {
-        nome: 'João da Silva',
-        anamnese: "Paciente relata início de sintomas de ansiedade há cerca de 6 meses, associados a estresse no trabalho. Refere dificuldade para dormir, irritabilidade e falta de concentração. Nega histórico familiar de transtornos psiquiátricos. Tabagista (10 cigarros/dia), etilista social.",
-        diagnosticos: [
-            { id: 1, data: '15/05/2025', diagnostico: 'Transtorno de Ansiedade Generalizada (CID-10 F41.1)' },
-            { id: 2, data: '22/03/2025', diagnostico: 'Hipertensão Arterial Sistêmica (CID-10 I10)' },
-        ],
-        tratamentos: [
-            { id: 1, data: '15/05/2025', tratamento: 'Psicoterapia Cognitivo-Comportamental (TCC), sessões semanais.' },
-            { id: 2, data: '15/05/2025', tratamento: 'Atividade física regular (3x por semana).' },
-        ],
-        prescricoes: [
-            { id: 1, data: '15/05/2025', medicamento: 'Sertralina', dose: '50mg', posologia: '1 comprimido pela manhã' },
-            { id: 2, data: '22/03/2025', medicamento: 'Losartana Potássica', dose: '50mg', posologia: '1 comprimido pela manhã' },
-        ]
-    },
-};
+const API_BASE_URL = 'http://localhost:8080';
 
 export default function HistoricoClinicoPrescritor() {
     const navigate = useNavigate();
     const { pacienteId } = useParams();
 
-    // Busca os dados do paciente com base no ID da URL
-    const dadosPaciente = dadosHistoricoPacientes[pacienteId] || {};
-    const nomePaciente = dadosPaciente.nome || 'Paciente não encontrado';
+    const [dadosPaciente, setDadosPaciente] = useState({
+        nome: '',
+        anamnese: '',
+        diagnosticos: [],
+        tratamentos: [],
+        prescricoes: []
+    });
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const getAuthToken = () => {
+        return localStorage.getItem('authToken');
+    };
+
+    const fetchWithAuth = async (url) => {
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('Token de autenticação não encontrado');
+        }
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+        }
+
+        return response.json();
+    };
+
+    const buscarDadosPaciente = async () => {
+        try {
+            const dadosBasicos = await fetchWithAuth(`${API_BASE_URL}/paciente/${pacienteId}`);
+            return dadosBasicos;
+        } catch (error) {
+            console.error('Erro ao buscar dados básicos do paciente:', error);
+            throw error;
+        }
+    };
+
+    const buscarAnamnese = async () => {
+        try {
+            const anamneses = await fetchWithAuth(`${API_BASE_URL}/anamnese`);
+            const anamnesePaciente = anamneses.find(anamnese => anamnese.patient?.id === parseInt(pacienteId));
+            return anamnesePaciente?.description || 'Nenhuma informação de anamnese registrada.';
+        } catch (error) {
+            console.error('Erro ao buscar anamnese:', error);
+            return 'Erro ao carregar anamnese.';
+        }
+    };
+
+    const buscarConsultas = async () => {
+        try {
+            const consultas = await fetchWithAuth(`${API_BASE_URL}/consulta`);
+            const consultasPaciente = consultas.filter(consulta => consulta.patient?.id === parseInt(pacienteId));
+
+            const diagnosticos = consultasPaciente.map(consulta => ({
+                id: consulta.id,
+                data: new Date(consulta.consultationDate).toLocaleDateString('pt-BR'),
+                diagnostico: consulta.diagnosis || 'Diagnóstico não informado'
+            }));
+
+            const tratamentos = consultasPaciente.map(consulta => ({
+                id: consulta.id,
+                data: new Date(consulta.consultationDate).toLocaleDateString('pt-BR'),
+                tratamento: consulta.treatment || 'Tratamento não informado'
+            }));
+
+            return { diagnosticos, tratamentos };
+        } catch (error) {
+            console.error('Erro ao buscar consultas:', error);
+            return { diagnosticos: [], tratamentos: [] };
+        }
+    };
+
+    const buscarPrescricoes = async () => {
+        try {
+            const prescricoes = await fetchWithAuth(`${API_BASE_URL}/prescricao`);
+            const prescricoesPaciente = prescricoes.filter(prescricao => prescricao.patient?.id === parseInt(pacienteId));
+
+            return prescricoesPaciente.map(prescricao => ({
+                id: prescricao.id,
+                data: new Date(prescricao.createdAt || Date.now()).toLocaleDateString('pt-BR'),
+                medicamento: prescricao.productDescription || 'Medicamento não informado',
+                dose: prescricao.concentration || 'Dose não informada',
+                posologia: prescricao.posology || 'Posologia não informada'
+            }));
+        } catch (error) {
+            console.error('Erro ao buscar prescrições:', error);
+            return [];
+        }
+    };
+
+    useEffect(() => {
+        const carregarDados = async () => {
+            if (!pacienteId) {
+                setError('ID do paciente não fornecido');
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+                setError(null);
+
+                const [dadosBasicos, anamnese, consultas, prescricoes] = await Promise.all([
+                    buscarDadosPaciente(),
+                    buscarAnamnese(),
+                    buscarConsultas(),
+                    buscarPrescricoes()
+                ]);
+
+                setDadosPaciente({
+                    nome: dadosBasicos.name || 'Nome não informado',
+                    anamnese: anamnese,
+                    diagnosticos: consultas.diagnosticos,
+                    tratamentos: consultas.tratamentos,
+                    prescricoes: prescricoes
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar dados do paciente:', error);
+                setError('Erro ao carregar dados do paciente. Verifique sua conexão e tente novamente.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        carregarDados();
+    }, [pacienteId]);
 
     const handleBack = () => {
         navigate(-1);
     };
+
+    if (loading) {
+        return (
+            <div className="historico-prescritor-page">
+                <Header
+                    title="Dr. Maria Santos - CRM 12345"
+                    showBackButton={true}
+                    backButtonText="Voltar"
+                    onBackClick={handleBack}
+                />
+                <main className="historico-main">
+                    <div className="historico-title">
+                        <h1>Histórico Clínico do Paciente</h1>
+                    </div>
+                    <p className="historico-subtitle">Carregando dados do paciente...</p>
+                </main>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="historico-prescritor-page">
+                <Header
+                    title="Dr. Maria Santos - CRM 12345"
+                    showBackButton={true}
+                    backButtonText="Voltar"
+                    onBackClick={handleBack}
+                />
+                <main className="historico-main">
+                    <div className="historico-title">
+                        <h1>Histórico Clínico do Paciente</h1>
+                    </div>
+                    <p className="historico-subtitle error-message">{error}</p>
+                    <button onClick={() => window.location.reload()} className="retry-button">
+                        Tentar Novamente
+                    </button>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="historico-prescritor-page">
@@ -53,14 +209,14 @@ export default function HistoricoClinicoPrescritor() {
                     <h1>Histórico Clínico do Paciente</h1>
                 </div>
                 <p className="historico-subtitle">
-                    Visualizando o histórico completo de <strong>{nomePaciente}</strong>.
+                    Visualizando o histórico completo de <strong>{dadosPaciente.nome}</strong>.
                 </p>
 
                 <div className="historico-content">
                     {/* Seção de Anamnese */}
                     <section className="historico-section">
                         <h2>Anamnese</h2>
-                        <p>{dadosPaciente.anamnese || 'Nenhuma informação de anamnese registrada.'}</p>
+                        <p>{dadosPaciente.anamnese}</p>
                     </section>
 
                     {/* Seção de Diagnósticos */}

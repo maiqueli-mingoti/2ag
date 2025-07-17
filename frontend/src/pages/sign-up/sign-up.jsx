@@ -128,7 +128,7 @@ export default function SignUp() {
                         className="form__content__logo"
                         src="/images/logotipo-horizontal.svg"
                     />
-                    <h2 className="form__content__title">Cadastro de Usuário</h2>
+                    <h2 className="form__content__title">Cadastro de usuário</h2>
                     <form className="form__content__form" onSubmit={handleSubmit}>
                         <div className="form__content__form__input-group">
                             <label>Tipo de Usuário *</label>

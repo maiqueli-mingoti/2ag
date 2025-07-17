@@ -8,5 +8,6 @@ public enum ScaleType {
     REGISTRO_DOR,
     REGISTRO_SONO,
     REGISTRO_TEA,
+    ANAMNESE,
     ACOMPANHAMENTO_SEMANAL
 }

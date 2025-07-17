@@ -1,7 +1,6 @@
 package dev.uffs.doisag.controller;
 
 import dev.uffs.doisag.dto.AssignScaleDTO;
-import dev.uffs.doisag.model.AssignedScale;
 import dev.uffs.doisag.service.ScaleAssignmentService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import dev.uffs.doisag.dto.AssignedScaleResponseDTO;
-import dev.uffs.doisag.dto.AssignedScaleResponseDTO;
+import dev.uffs.doisag.dto.PatientScalesPageDTO;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
@@ -42,9 +41,15 @@ public class ScaleAssignmentController {
     }
 
     @GetMapping
-// o tipo da resposta agora é uma lista do nosso DTO
+    // o tipo da resposta agora é uma lista do nosso DTO
     public ResponseEntity<List<AssignedScaleResponseDTO>> getAssignedScales(@PathVariable Long patientId) {
         List<AssignedScaleResponseDTO> scalesDto = scaleAssignmentService.getAssignedScalesForPatient(patientId);
         return ResponseEntity.ok(scalesDto);
+    }
+
+    @GetMapping("/central") // sub-path para ser mais específico
+    public ResponseEntity<PatientScalesPageDTO> getPatientScalesPage(@PathVariable Long patientId) {
+        PatientScalesPageDTO pageData = scaleAssignmentService.getPatientScalesPageData(patientId);
+        return ResponseEntity.ok(pageData);
     }
 }

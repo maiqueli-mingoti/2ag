@@ -83,12 +83,13 @@ public class DashboardService {
 
         // busca as escalas pendentes para o paciente logado
         List<PatientDashboardDTO.PendingScaleDTO> pendingScales = assignedScaleRepository
-                // CORREÇÃO AQUI: Usar o enum importado diretamente
                 .findByPatientIdAndStatus(patientId, AssignmentStatus.PENDENTE)
                 .stream()
                 .map(scale -> new PatientDashboardDTO.PendingScaleDTO(
-                        scale.getScaleType().toString(),
-                        scale.getStatus().toString()
+                        // Usamos os novos métodos do enum para preencher o DTO
+                        scale.getScaleType().getDisplayName(), // pega o nome amigável
+                        scale.getStatus().toString(),
+                        scale.getScaleType().getPath()      // pega a rota
                 ))
                 .collect(Collectors.toList());
 

@@ -23,6 +23,8 @@ import ListaPaciente from "../pages/lista-paciente/lista-paciente.jsx";
 import Anamnese from "../pages/anamnese/anamnese.jsx";
 import NotificacoesPrescritor from "../pages/notificacoes-prescritor/notificacoes-prescritor.jsx";
 import NotificacoesPaciente from "../pages/notificacoes-paciente/notificacoes-paciente.jsx";
+import Perfil from "../pages/perfil/perfil.jsx";
+
 
 const router = createBrowserRouter([
     {
@@ -117,8 +119,11 @@ const router = createBrowserRouter([
     {
         path: "/notificacoes-paciente",
         element: <NotificacoesPaciente/>
-    }
-
+    },
+    {
+        path: "/perfil",
+        element: <Perfil/>
+    },
     // "/escala-pittsburgh";
     // "/diario-dor";
     // "/diario-tea";

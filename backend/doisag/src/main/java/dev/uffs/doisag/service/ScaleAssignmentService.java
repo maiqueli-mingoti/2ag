@@ -1,6 +1,7 @@
 package dev.uffs.doisag.service;
 
 import dev.uffs.doisag.dto.AssignScaleDTO;
+import dev.uffs.doisag.dto.AssignedScaleResponseDTO;
 import dev.uffs.doisag.enums.AssignmentStatus;
 import dev.uffs.doisag.enums.ScaleType;
 import dev.uffs.doisag.model.AssignedScale;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
+import java.util.List;
+import org.springframework.context.MessageSource;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 public class ScaleAssignmentService {
@@ -19,10 +24,13 @@ public class ScaleAssignmentService {
     private final AssignedScaleRepository assignedScaleRepository;
     private final PatientRepository patientRepository;
     private NotificationService notificationService;
+    private final MessageSource messageSource;
 
-    public ScaleAssignmentService(AssignedScaleRepository assignedScaleRepository, PatientRepository patientRepository) {
+    public ScaleAssignmentService(AssignedScaleRepository assignedScaleRepository, PatientRepository patientRepository, MessageSource messageSource, NotificationService notificationService) {
         this.assignedScaleRepository = assignedScaleRepository;
         this.patientRepository = patientRepository;
+        this.messageSource = messageSource;
+        this.notificationService = notificationService;
     }
 
     @Autowired
@@ -30,7 +38,7 @@ public class ScaleAssignmentService {
         this.notificationService = notificationService;
     }
 
-    public AssignedScale assignScaleToPatient(Long patientId, AssignScaleDTO assignScaleDTO) {
+    public AssignedScaleResponseDTO assignScaleToPatient(Long patientId, AssignScaleDTO assignScaleDTO) {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new EntityNotFoundException("Paciente não encontrado"));
 
@@ -41,13 +49,16 @@ public class ScaleAssignmentService {
         newAssignment.setStatus(AssignmentStatus.PENDENTE);
         newAssignment.setAssignedDate(LocalDate.now());
 
+        // a gente salva a entidade no banco
         AssignedScale savedAssignment = assignedScaleRepository.save(newAssignment);
 
-        String notificationTitle = "Nova Tarefa: " + formatScaleName(savedAssignment.getScaleType());
-        String notificationMessage = "Seu prescritor solicitou o preenchimento de uma nova escala. Acesse suas tarefas para responder.";
+        String scaleName = formatScaleName(savedAssignment.getScaleType());
+        String notificationTitle = messageSource.getMessage("notification.new_task.title", new Object[]{scaleName}, Locale.getDefault());
+        String notificationMessage = messageSource.getMessage("notification.new_task.message", null, Locale.getDefault());
+
         notificationService.createNotification(patient, notificationTitle, notificationMessage, "FORM", "/escala-clinica");
 
-        return savedAssignment;
+        return new AssignedScaleResponseDTO(savedAssignment);
     }
 
     public void completeAssignedScale(Long patientId, ScaleType scaleType) {
@@ -66,5 +77,16 @@ public class ScaleAssignmentService {
         String name = scaleType.toString().replace("_", " ").toLowerCase();
         name = name.replace("escala ", "").replace("registro ", "");
         return name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
+    // busca a lista de escalas designadas para um paciente
+    public List<AssignedScaleResponseDTO> getAssignedScalesForPatient(Long patientId) {
+        // a gente busca a lista de entidades do banco
+        List<AssignedScale> scales = assignedScaleRepository.findByPatientIdOrderByAssignedDateDesc(patientId);
+
+        // transforma cada entidade em um DTO antes de retornar
+        return scales.stream()
+                .map(AssignedScaleResponseDTO::new) // para cada escala cria um dto
+                .collect(Collectors.toList());
     }
 }

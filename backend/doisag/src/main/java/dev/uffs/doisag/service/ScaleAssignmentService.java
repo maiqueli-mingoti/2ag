@@ -61,7 +61,9 @@ public class ScaleAssignmentService {
         String notificationTitle = messageSource.getMessage("notification.new_task.title", new Object[]{scaleName}, Locale.getDefault());
         String notificationMessage = messageSource.getMessage("notification.new_task.message", null, Locale.getDefault());
 
-        notificationService.createNotification(patient, notificationTitle, notificationMessage, "FORM", "/escala-clinica");
+        String linkParaCentralDeEscalas = String.format("/pacientes/%d/escalas", patient.getId());
+
+        notificationService.createNotification(patient, notificationTitle, notificationMessage, "FORM", linkParaCentralDeEscalas);
 
         return new AssignedScaleResponseDTO(savedAssignment);
     }

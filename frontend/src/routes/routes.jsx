@@ -1,6 +1,8 @@
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
-import AcompanhamentoSemanalPaciente from "../pages/acompanhamento-semanal-paciente/acompanhamento-semanal-paciente.jsx";
-import AcompanhamentoSemanalPrescritor from "../pages/acompanhamento-semanal-prescritor/acompanhamento-semanal-prescritor.jsx";
+import {createBrowserRouter, Navigate, RouterProvider} from "react-router";
+import AcompanhamentoSemanalPaciente
+    from "../pages/acompanhamento-semanal-paciente/acompanhamento-semanal-paciente.jsx";
+import AcompanhamentoSemanalPrescritor
+    from "../pages/acompanhamento-semanal-prescritor/acompanhamento-semanal-prescritor.jsx";
 import ConsultaClinica from "../pages/consulta-clinica/consulta-clinica.jsx";
 import DadosConsultorio from "../pages/dados-consultorio/dados-consultorio.jsx";
 import DashboardPaciente from "../pages/dashboard-paciente/dashboard-paciente.jsx";
@@ -25,100 +27,105 @@ import NotificacoesPaciente from "../pages/notificacoes-paciente/notificacoes-pa
 const router = createBrowserRouter([
     {
         path: "/login",
-        element: <Login />,
+        element: <Login/>,
     },
     {
         path: "/", //direciona para o login
-        element: <Navigate to="/login" replace />,
+        element: <Navigate to="/login" replace/>,
     },
     {
         path: "/acompanhamento-prescritor",
-        element: <AcompanhamentoSemanalPrescritor />,
+        element: <AcompanhamentoSemanalPrescritor/>,
     },
     {
         path: "/acompanhamento-paciente",
-        element: <AcompanhamentoSemanalPaciente />,
+        element: <AcompanhamentoSemanalPaciente/>,
     },
     {
         path: "/dados-consultorio",
-        element: <DadosConsultorio />,
+        element: <DadosConsultorio/>,
     },
     {
         path: "/dashboard-paciente",
-        element: <DashboardPaciente />,
+        element: <DashboardPaciente/>,
     },
     {
         path: "/dashboard-prescritor",
-        element: <DashboardPrescritor />,
+        element: <DashboardPrescritor/>,
     },
     {
         path: "/prescricao",
-        element: <Prescricao />,
+        element: <Prescricao/>,
     },
     {
         path: "/consulta",
-        element: <ConsultaClinica />,
+        element: <ConsultaClinica/>,
     },
     {
         path: "/sign-up",
-        element: <SignUp />,
+        element: <SignUp/>,
     },
     {
         path: "/diario-sono",
-        element: <DiarioSono />,
+        element: <DiarioSono/>,
     },
     {
         path: "/mini-exame",
-        element: <MiniExame />
+        element: <MiniExame/>
     },
     {
         path: "/agendamento-consulta",
-        element: <AgendamentoConsultaPaciente />
+        element: <AgendamentoConsultaPaciente/>
     },
     {
         path: "/agendamento-prescritor",
-        element: <AgendamentoPrescritor />
+        element: <AgendamentoPrescritor/>
     },
     {
-        path: "/escala-clinica",
-        element: <EscalaPaciente />
+        // alterei para a rota esperar um id de paciente
+        path: "/pacientes/:patientId/escalas",
+        element: <EscalaPaciente/>
     },
     {
         path: "/paciente/:pacienteId/selecao-escalas",
-        element: <SelecaoEscalas />
+        element: <SelecaoEscalas/>
     },
     {
         path: "/historico-paciente",
-        element: <HistoricoPaciente />
+        element: <HistoricoPaciente/>
     },
     {
         path: "/escala-hamilton",
-        element: <HamAScale />
+        element: <HamAScale/>
     },
     {
         path: "/paciente/:pacienteId/historico",
-        element: <HistoricoClinicoPrescritor />
+        element: <HistoricoClinicoPrescritor/>
     },
     {
         path: "/lista-paciente",
-        element: <ListaPaciente />
+        element: <ListaPaciente/>
     },
     {
         path: "/anamnese",
-        element: <Anamnese />
+        element: <Anamnese/>
     },
     {
         path: "/notificacoes-prescritor",
-        element: <NotificacoesPrescritor />
+        element: <NotificacoesPrescritor/>
     },
     {
         path: "/notificacoes-paciente",
-        element: <NotificacoesPaciente />
+        element: <NotificacoesPaciente/>
     }
+
+    // "/escala-pittsburgh";
+    // "/diario-dor";
+    // "/diario-tea";
 
 ]);
 
 export default function Routes() {
-    return <RouterProvider router={router} />;
+    return <RouterProvider router={router}/>;
 
 }

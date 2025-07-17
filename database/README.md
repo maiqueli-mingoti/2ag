@@ -39,9 +39,9 @@ escolha o guia pro seu sistema operacional
 
 depois de instalar, você precisa entrar no `psql` pra configurar as coisas.
 
-  - **no windows**: abre o terminal e digita `psql -u postgres` e coloca a senha que você criou
+  - **no windows**: abre o terminal e digita `psql -U postgres` e coloca a senha que você criou
   - **no macos**: é só rodar `psql postgres` no terminal
-  - **no linux**: é `sudo -u postgres psql`
+  - **no linux**: é `sudo -U postgres psql`
 
 ### criar um superusuário pessoal
 

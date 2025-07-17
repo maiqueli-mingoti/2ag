@@ -82,6 +82,13 @@ export default function DashboardPaciente() {
     // falta ajustar com o retorno do backend para redirecionar para a diária do sono
     const handleSleep = () => navigate("/diario-sono");
     const handleAnamnese = () => navigate("/anamnese");
+    const handleEscalas = () => {
+        if (pacienteInfo?.id) {
+            navigate(`/pacientes/${pacienteInfo.id}/escalas`);
+        } else {
+            console.error("ID do paciente não encontrado");
+        }
+    };
 
     if (isLoading) {
         return <div className="dashboard-loading"><h1>Carregando painel...</h1></div>;
@@ -117,7 +124,7 @@ export default function DashboardPaciente() {
                             <span className="action-icon">📋</span>
                             <span>Acompanhamento Semanal</span>
                         </button>
-                        <button className="action-button">
+                        <button className="action-button" onClick={handleEscalas}>
                             <span className="action-icon">📊</span>
                             <span>Ver Escalas</span>
                         </button>

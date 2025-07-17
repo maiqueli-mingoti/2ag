@@ -6,7 +6,6 @@ import "./prescricao.css";
 import { useNavigate } from "react-router";
 import Header from "../../components/header/header.jsx";
 import React, { useState, useEffect } from "react";
-import apiService from "../../services/apiService.js";
 
 // Função auxiliar para decodificar JWT
 function parseJwt(token) {

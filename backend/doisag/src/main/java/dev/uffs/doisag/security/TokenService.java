@@ -7,7 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.JwtBuilder;
+
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -28,29 +28,25 @@ public class TokenService {
 
     // método para gerar o token
     public String generateToken(Users user) {
+        // a gente pega a lista de perfis do usuário e coloca dentro do token
         var authorities = user.getAuthorities().stream()
                 .map(auth -> auth.getAuthority())
                 .collect(Collectors.toList());
 
         String role = authorities.contains("ROLE_USER") ? "PATIENT" : "PRESCRIBER";
 
-        var builder = Jwts.builder()
-                .setIssuer("API Doisag")
-                .setSubject(user.getEmail())
-                .claim("authorities", authorities)
-                .claim("id", user.getId())
-                .claim("name", user.getName())
-                .claim("role", role)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME));
-
-        // adiciono o professionalCode se for prescriber, necessario para o cadastro
-        if (user instanceof Prescriber) {
-            Prescriber prescriber = (Prescriber) user;
-            builder.claim("professionalCode", prescriber.getProfessionalCode());
-        }
-
-        return builder.signWith(getSigningKey()).compact();
+        System.out.println("Role definida para o token: " + role);
+        return Jwts.builder()
+                .setIssuer("API Doisag") // quem está emitindo o token
+                .setSubject(user.getEmail()) // quem é o dono do token (o email do usuario)
+                .claim("authorities", authorities) // adicionando a claim com os perfis
+                .claim("id", user.getId()) // adicionei o id
+                .claim("name", user.getName()) // adicionei nome
+                .claim("role", role) // adicionei o role
+                .setIssuedAt(new Date(System.currentTimeMillis())) // quando foi emitido
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME)) // data de expiração
+                .signWith(getSigningKey()) // assina com a nossa chave secreta
+                .compact();
     }
 
     // método pra validar o token e pegar o email do usuario de volta

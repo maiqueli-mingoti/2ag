@@ -1,11 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, {useState} from "react";
 import "../../styles/colors.css";
 import "../../styles/fonts.css";
 import "../../styles/button.css";
 import "../../styles/input.css";
 import "./agendamento-consulta-paciente.css";
-import { useNavigate } from "react-router";
+import {useNavigate} from "react-router";
 import Header from "../../components/header/header.jsx";
+
+
+function getUserIdFromToken() {
+    const token = localStorage.getItem("authToken");
+    if (!token) return null;
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.id;
+    } catch (e) {
+        console.error("Erro ao decodificar o token:", e);
+        return null;
+    }
+}
 
 export default function AgendamentoConsultaPaciente() {
     const navigate = useNavigate();
@@ -84,21 +97,53 @@ export default function AgendamentoConsultaPaciente() {
         setSelectedTime(time);
     };
 
-    const handleConfirmarAgendamento = () => {
+    const handleConfirmarAgendamento = async () => {
         if (!selectedPrescritor || !selectedDate || !selectedTime) {
             alert("Por favor, selecione prescritor, data e horário.");
             return;
         }
 
-        // Simular envio do agendamento
-        alert(`Consulta agendada com sucesso!\n\nPrescritor: ${selectedPrescritor.nome}\nData: ${formatDate(selectedDate)}\nHorário: ${selectedTime}\nTipo: ${consultaType === "presencial" ? "Presencial" : "Telemedicina"}\n\nVocê receberá uma confirmação por email.`);
+        const token = localStorage.getItem("authToken");
+        const pacienteId = getUserIdFromToken();
 
-        // Resetar formulário
-        setSelectedPrescritor(null);
-        setSelectedDate(null);
-        setSelectedTime(null);
-        setObservacoes("");
+        if (!token || !pacienteId) {
+            alert("Usuário não autenticado.");
+            navigate("/login");
+            return;
+        }
+
+        const consultaData = {
+            pacienteId: pacienteId,
+            prescritorId: selectedPrescritor.id,
+            data: selectedDate,
+            horario: selectedTime,
+            tipoConsulta: consultaType,
+            observacoes: observacoes
+        };
+
+        try {
+            const response = await fetch("http://localhost:8080/consultas", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(consultaData)
+            });
+
+            if (!response.ok) {
+                throw new Error("Erro ao agendar a consulta.");
+            }
+
+            alert("Consulta agendada com sucesso!");
+            navigate("/dashboard"); // ou a rota que quiser após o agendamento
+
+        } catch (error) {
+            console.error(error);
+            alert("Falha ao agendar consulta.");
+        }
     };
+
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -122,7 +167,7 @@ export default function AgendamentoConsultaPaciente() {
             days.push({
                 date: dateString,
                 day: date.getDate(),
-                dayName: date.toLocaleDateString("pt-BR", { weekday: "short" }),
+                dayName: date.toLocaleDateString("pt-BR", {weekday: "short"}),
                 available: isDateAvailable(dateString)
             });
         }
@@ -314,7 +359,7 @@ export default function AgendamentoConsultaPaciente() {
                                         Cancelar
                                     </button>
                                     <button className="button" onClick={handleConfirmarAgendamento}>
-                                        Confirmar Agendamento
+                                        Confirmar agendamento
                                     </button>
                                 </div>
                             </div>

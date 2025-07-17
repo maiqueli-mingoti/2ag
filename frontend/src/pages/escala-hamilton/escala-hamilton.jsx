@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
-import ScaleSelector from "../../components/scale-selector/scale-selector";
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router';
+import ScaleSelector from "../../components/scale-selector/scale-selector.jsx";
 import './escala-hamilton.css';
 import Header from "../../components/header/header.jsx";
 
@@ -153,7 +153,7 @@ export default function HamAScale() {
     const anxietyLevel = getAnxietyLevel(total);
 
     return (
-        <div className="consulta-clinica">
+        <div className="escala-hamilton-algo">
             <Header
                 title="João Silva"
                 showBackButton={true}
@@ -161,16 +161,16 @@ export default function HamAScale() {
                 onBackClick={handleBack}
             />
 
-            <div className="acompanhamento-paciente">
-                <div className="acompanhamento-paciente__content">
-                    <div className="acompanhamento-paciente__header">
+            <div className="escala-hamilton ">
+                <div className="escala-hamilton__content">
+                    <div className="escala-hamilton__header">
                         <h1>Escala de Avaliação de Ansiedade de Hamilton</h1>
                         <h2>HAM-A - Instrumento para avaliação da intensidade de sintomas de ansiedade</h2>
                     </div>
 
-                    <div className="acompanhamento-paciente__form">
+                    <div className="escala-hamilton__form">
                         {/* Data da Avaliação */}
-                        <div className="acompanhamento-paciente__form__row">
+                        <div className="escala-hamilton__form__row">
                             <div>
                                 <label htmlFor="evaluationDate">Data da Avaliação</label>
                                 <input
@@ -196,7 +196,7 @@ export default function HamAScale() {
 
                         {/* Itens da Escala HAM-A */}
                         {hamAItems.map((item) => (
-                            <div key={item.id} className="acompanhamento-paciente__form__group">
+                            <div key={item.id} className="escala-hamilton__form__group">
                                 <h3>{item.id}. {item.title}</h3>
                                 <p className="ham-a-description">{item.description}</p>
                                 <ScaleSelector
@@ -209,7 +209,7 @@ export default function HamAScale() {
                         ))}
 
                         {/* Observações */}
-                        <div className="acompanhamento-paciente__form__group">
+                        <div className="escala-hamilton__form__group">
                             <h3>Observações</h3>
                             <textarea
                                 id="observations"
@@ -226,7 +226,7 @@ export default function HamAScale() {
                         </div>
 
                         {/* Interpretação */}
-                        <div className="acompanhamento-paciente__form__group">
+                        <div className="escala-hamilton__form__group">
                             <h3>Interpretação dos Resultados</h3>
                             <div className="ham-a-interpretation">
                                 <ul>
@@ -242,7 +242,7 @@ export default function HamAScale() {
                         </div>
 
                         {/* Botões de Ação */}
-                        <div className="acompanhamento-paciente_end">
+                        <div className="escala-hamilton_end">
                             <button className="button" onClick={handleSave}>
                                 Salvar Avaliação
                             </button>

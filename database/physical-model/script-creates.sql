@@ -1,71 +1,67 @@
+-- pra começar do zero
+DROP DATABASE IF EXISTS doisag;
+DROP TYPE IF EXISTS scale_type_enum;
+DROP TYPE IF EXISTS assignment_status_enum;
+
+-- crio o banco e me conecta a ele
 CREATE DATABASE doisag;
 \c doisag
 
--- enums que vão ser úteis:
+-- enums uteis
+CREATE TYPE assignment_status_enum AS ENUM (
+    'PENDENTE',
+    'CONCLUIDO'
+);
 
 CREATE TYPE scale_type_enum AS ENUM (
     'ESCALA_HAMILTON',
-    'REGISTRO_DOR',
-    'DIARIO_SONO',
-    'MEEM',
     'ESCALA_PITTSBURGH',
-    'DIARIO_TEA'
+    'MINI_EXAME_ESTADO_MENTAL',
+    'REGISTRO_DOR',
+    'REGISTRO_SONO',
+    'REGISTRO_TEA',
+    'ANAMNESE',
+    'ACOMPANHAMENTO_SEMANAL'
 );
 
-CREATE TYPE assignment_status_enum AS ENUM (
-    'PENDENTE',
-    'CONCLUIDA',
-    'ATRASADA',
-    'CANCELADA'
-);
+-- mias entidades, são anotadas como @Entity no backend:
 
--- mias tabelas (entidades), usei a anotação @Entity nos model para identificar:
-
--- usa @Inheritance(strategy = InheritanceType.JOINED)
--- campos comuns entre todos os usuários
+-- tabela base para todos os usuários
 CREATE TABLE users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255),
-    cpf VARCHAR(255),
-    email VARCHAR(255) UNIQUE, -- email é unico
-    password VARCHAR(255),
+    cpf VARCHAR(14),
+    email VARCHAR(255) UNIQUE NOT NULL, 
+    password VARCHAR(255) NOT NULL, 
     birth_date DATE,
-    phone VARCHAR(255),
-    -- usei @Embedded Address, porque criei uma classe do objeto address
+    phone VARCHAR(50),
     street VARCHAR(255),
-    "number" VARCHAR(255), -- number entre aspas pra não dar conflito
+    "number" VARCHAR(255),
     city VARCHAR(255),
     state VARCHAR(255),
     country VARCHAR(255)
 );
 
--- tabela especializada
--- herda de users então o id aqui é PK e FK ao mesmo tempo
+-- tabela de prescritores, especialização de users
 CREATE TABLE prescriber (
     id BIGINT PRIMARY KEY,
     profession VARCHAR(255),
     registry_type VARCHAR(255),
     registry_number VARCHAR(255),
-    professional_code VARCHAR(255) UNIQUE, -- codigo unico do profissional
-    -- definindo a fk para a tabela base
+    professional_code VARCHAR(255) UNIQUE,
     CONSTRAINT fk_prescriber_users FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
-    -- definindo a constraint de unicidade para tipo e numero de registro
     CONSTRAINT uk_registry_type_number UNIQUE (registry_type, registry_number)
 );
 
--- especialização patient
--- também herda de users e tem seu próprio campo 
+-- tabela de pacientes, especialização de users
 CREATE TABLE patient (
     id BIGINT PRIMARY KEY,
-    -- fk para o prescritor responsável pelo paciente
     prescriber_id BIGINT,
-    -- fk para a tabela base
     CONSTRAINT fk_patient_users FOREIGN KEY (id) REFERENCES users(id) ON DELETE CASCADE,
-    -- definindo a fk para o prescritor
     CONSTRAINT fk_patient_prescriber FOREIGN KEY (prescriber_id) REFERENCES prescriber(id) ON DELETE SET NULL
 );
 
--- consultas e agendamentos)
+-- tabela de consultas e agendamentos
 CREATE TABLE appointment (
     id BIGSERIAL PRIMARY KEY,
     date_time TIMESTAMP,
@@ -81,7 +77,7 @@ CREATE TABLE appointment (
     FOREIGN KEY (prescriber_id) REFERENCES prescriber(id) ON DELETE CASCADE
 );
 
--- prescrições do tratamento
+-- tabela de prescrições de produtos
 CREATE TABLE prescription (
     id BIGSERIAL PRIMARY KEY,
     product_description TEXT,
@@ -94,9 +90,7 @@ CREATE TABLE prescription (
     FOREIGN KEY (appointment_id) REFERENCES appointment(id) ON DELETE CASCADE
 );
 
--- entidades de forms e scales, todas elas herdam de BaseAssessment
-
--- anamnese ou avaliação inicial
+-- tabela de anamnese
 CREATE TABLE anamnesis (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -125,13 +119,14 @@ CREATE TABLE anamnesis (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- acompanhamento semanal
+-- tabela de acompanhamento semanal
 CREATE TABLE follow_up (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
     patient_id BIGINT NOT NULL,
     morning_drops INTEGER,
     afternoon_drops INTEGER,
+    comment TEXT,
     tremor INTEGER,
     rigidity_spasticity INTEGER,
     nausea INTEGER,
@@ -147,11 +142,10 @@ CREATE TABLE follow_up (
     sleep INTEGER,
     dermatological_disease INTEGER,
     mood INTEGER,
-    comment TEXT,
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- escala de hamilton de ansiedade
+-- tabela da escala de ansiedade de hamilton
 CREATE TABLE hamilton_scale (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -173,7 +167,7 @@ CREATE TABLE hamilton_scale (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- diario de dor
+-- tabela para registro diário de dor
 CREATE TABLE pain_log (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -187,7 +181,7 @@ CREATE TABLE pain_log (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- mini exame mental realizado em consulta
+-- tabela do mini-exame do estado mental (meem)
 CREATE TABLE mental_state_exam (
     id BIGSERIAL PRIMARY KEY,
     appointment_id BIGINT NOT NULL,
@@ -203,7 +197,7 @@ CREATE TABLE mental_state_exam (
     FOREIGN KEY (appointment_id) REFERENCES appointment(id) ON DELETE CASCADE
 );
 
--- scale de pittsburgh de qualidade de sono
+-- tabela da escala de qualidade de sono de pittsburgh
 CREATE TABLE pittsburgh_scale (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -211,7 +205,7 @@ CREATE TABLE pittsburgh_scale (
     usual_bed_time TIME,
     minutes_to_fall_asleep INTEGER,
     usual_wake_up_time TIME,
-    actual_sleep_hours REAL, -- float vira REAL ou NUMERIC
+    actual_sleep_hours REAL,
     freq_cannot_fall_asleep INTEGER,
     freq_wakes_up_middle_night INTEGER,
     freq_wake_up_for_bathroom INTEGER,
@@ -221,7 +215,7 @@ CREATE TABLE pittsburgh_scale (
     freq_feel_hot INTEGER,
     freq_have_bad_dreams INTEGER,
     freq_have_pain INTEGER,
-    other_reason_to_trouble_sleep TEXT, -- @Lob vira TEXT
+    other_reason_to_trouble_sleep TEXT,
     sleep_quality_rating INTEGER,
     freq_use_sleep_medication INTEGER,
     freq_trouble_staying_awake INTEGER,
@@ -231,7 +225,7 @@ CREATE TABLE pittsburgh_scale (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- diario de sono
+-- tabela para registro diário de sono
 CREATE TABLE sleep_log (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -248,7 +242,7 @@ CREATE TABLE sleep_log (
     fatigue INTEGER,
     stress INTEGER,
     daytime_sleepiness INTEGER,
-    inattention INTEGER,
+inattention INTEGER,
     irritability INTEGER,
     pain INTEGER,
     health_perception INTEGER,
@@ -263,7 +257,7 @@ CREATE TABLE sleep_log (
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- acompanhamento pacisntes tea
+-- tabela para registro de acompanhamento de TEA
 CREATE TABLE tea_log (
     id BIGSERIAL PRIMARY KEY,
     assessment_date DATE NOT NULL,
@@ -274,12 +268,12 @@ CREATE TABLE tea_log (
     freq_social_interaction INTEGER,
     freq_stereotypy INTEGER,
     freq_appetite_issues INTEGER,
-    observation TEXT, -- @Lob
+    observation TEXT,
     tea_score INTEGER,
     FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
 );
 
--- tabelas que precisei criar para controle e utilidades que notei durante o desenvolvimento do front e backend
+-- tabela para controlar as escalas que o prescritor envia pro paciente
 CREATE TABLE assigned_scale (
     id BIGSERIAL PRIMARY KEY,
     patient_id BIGINT NOT NULL,
@@ -292,7 +286,7 @@ CREATE TABLE assigned_scale (
     FOREIGN KEY (prescriber_id) REFERENCES prescriber(id) ON DELETE CASCADE
 );
 
--- não estava previsto mas adicionei, porque o front criou a tela
+-- tabela para as notificações do sistema
 CREATE TABLE notification (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,

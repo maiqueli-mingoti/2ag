@@ -1,5 +1,6 @@
 package dev.uffs.doisag.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 
@@ -12,7 +13,8 @@ public class PainLog extends BaseAssessment {
     private int sleepInterference;
     private int productivityInterference;
     private int extraMedication;
-    @Lob // campo longo
+    @Lob
+    @Column(columnDefinition = "TEXT")
     private String observation;
 
     public PainLog(Long id, LocalDate assessmentDate, Patient patient, int socialActivityInterference, int basicActivityInterference, int sleepInterference, int productivityInterference, int extraMedication, String observation) {

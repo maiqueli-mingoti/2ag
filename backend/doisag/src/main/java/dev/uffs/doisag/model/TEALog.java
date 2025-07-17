@@ -1,5 +1,6 @@
 package dev.uffs.doisag.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ public class TEALog extends BaseAssessment {
     private int freqStereotypy;
     private int freqAppetiteIssues;
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String observation;
     private int teaScore;
 

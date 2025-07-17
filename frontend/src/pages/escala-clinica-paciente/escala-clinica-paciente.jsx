@@ -19,7 +19,6 @@ export default function CentralEscalas() {
             const token = localStorage.getItem('authToken');
 
             try {
-                // A sintaxe da chamada fetch foi corrigida aqui
                 const response = await fetch(`http://localhost:8080/pacientes/${patientId}/escalas/central`, {
                     headers: {
                         'Authorization': `Bearer ${token}`

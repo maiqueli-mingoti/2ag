@@ -14,5 +14,5 @@ public record PatientDashboardDTO(
     public record UpcomingAppointmentDTO(Long appointmentId, String prescriberName, LocalDate date) {}
 
     // um lembrete das escalas que o paciente ainda não preencheu
-    public record PendingScaleDTO(String scaleName, String status) {}
+    public record PendingScaleDTO(String name, String status, String rota) {}
 }

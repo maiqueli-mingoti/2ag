@@ -72,14 +72,6 @@ public class DoisagApplication {
 
 				notificationService.createNotification(
 						testPatient,
-						"Novo Formulário Disponível",
-						"Sua prescritora solicitou o preenchimento do Diário do Sono. Por favor, responda assim que possível.",
-						"FORM",
-						"/diario-sono"
-				);
-
-				notificationService.createNotification(
-						testPatient,
 						"Lembrete de Consulta",
 						"Sua consulta de retorno com a Dra. Bruna Varela está marcada para depois de amanhã.",
 						"APPOINTMENT",

@@ -9,7 +9,7 @@ function getUserDataFromToken() {
     if (!token) return null;
     try {
         const payload = JSON.parse(atob(token.split('.')[1]));
-        return {id: payload.id, name: payload.name, role: payload.role}; // ex: role: 'PATIENT' ou 'PRESCRIBER'
+        return {id: payload.id, name: payload.name, role: payload.role};
     } catch (e) {
         console.error("Erro ao decodificar token:", e);
         return null;

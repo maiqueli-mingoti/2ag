@@ -8,7 +8,7 @@ export default function SignUp() {
     const [cpf, setCpf] = useState("");
     // estados para controlar o carregamento e os erros (resp: maiqueli)
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [formErrors, setFormErrors] = useState({});
 
     // adicionei um novo estado para controlar o feedback da troca, um loading para o usuário ver a troca de forms
     // (maiqueli)
@@ -38,7 +38,7 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        setError(null);
+        setFormErrors({}); // limpa os erros antigos antes de cada nova tentativa
 
         const form = e.target;
         const password = form.senha.value;
@@ -46,7 +46,7 @@ export default function SignUp() {
 
         // validação simples pra ver se as senhas batem
         if (password !== confirmPassword) {
-            setError("As senhas não conferem!");
+            setFormErrors({confirmarSenha: "As senhas não conferem!"});
             setIsLoading(false);
             return;
         }
@@ -60,9 +60,12 @@ export default function SignUp() {
             country: form.country.value
         };
 
-        // a estrutura de if/else foi corrigida para não ficar uma dentro da outra
+        let endpoint = "";
+        let data = {};
+
         if (userType === "paciente") {
-            const patientData = {
+            endpoint = "http://localhost:8080/auth/register";
+            data = {
                 name: form.nomeCompleto.value,
                 email: form.email.value,
                 senha: password,
@@ -72,23 +75,9 @@ export default function SignUp() {
                 address: addressObject,
                 professionalCode: form.codigoProfissional.value
             };
-            try {
-                const response = await fetch("http://localhost:8080/auth/register", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(patientData),
-                });
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText || "Falha ao cadastrar paciente :c");
-                }
-                alert("Paciente cadastrado com sucesso!");
-                navigate("/login");
-            } catch (err) {
-                setError(err.message);
-            }
         } else if (userType === "prescritor") {
-            const prescriberData = {
+            endpoint = "http://localhost:8080/prescritor";
+            data = {
                 name: form.nomeCompleto.value,
                 email: form.email.value,
                 password: password,
@@ -100,23 +89,43 @@ export default function SignUp() {
                 registryType: form.tipoRegistro.value.toUpperCase(),
                 registryNumber: form.numeroRegistro.value
             };
-            try {
-                const response = await fetch("http://localhost:8080/prescritor", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify(prescriberData),
-                });
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText || "Falha ao cadastrar prescritor :c");
-                }
-                alert("Prescritor cadastrado com sucesso!");
-                navigate("/login");
-            } catch (err) {
-                setError(err.message);
-            }
         }
-        setIsLoading(false);
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+
+                // verificamos se a resposta tem a nossa lista errors
+                if (errorData.errors) {
+                    // transformamos a lista de erros em um objeto mais fácil de usar
+                    const newErrors = errorData.errors.reduce((acc, error) => {
+                        acc[error.field] = error.message;
+                        return acc;
+                    }, {});
+                    setFormErrors(newErrors);
+                } else {
+                    // se for outro tipo de erro, usamos a mensagem geral
+                    setFormErrors({general: errorData.message || "Ocorreu um erro."});
+                }
+                throw new Error("Erro de validação"); // lança um erro para parar a execução
+            }
+
+            alert(`Cadastro de ${userType} realizado com sucesso!`);
+            navigate("/login");
+
+        } catch (err) {
+            // o console.log é bom para debugar, mas não afeta o usuário
+            console.error(err.message);
+        } finally {
+            // o finally garante que o loading sempre será desativado
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -131,7 +140,7 @@ export default function SignUp() {
                     <h2 className="form__content__title">Cadastro de usuário</h2>
                     <form className="form__content__form" onSubmit={handleSubmit}>
                         <div className="form__content__form__input-group">
-                            <label>Tipo de Usuário *</label>
+                            <label>Tipo de usuário *</label>
                             <div>
                                 <input
                                     type="radio"
@@ -167,25 +176,33 @@ export default function SignUp() {
                                     <label htmlFor="nomeCompleto">Nome Completo *</label>
                                     <input id="nomeCompleto" name="nomeCompleto" type="text" required={true}
                                            placeholder="Digite seu nome completo"/>
+                                    {formErrors.name && <span className="input-error-message">{formErrors.name}</span>}
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="cpf">CPF *</label>
                                     <input type="text" id="cpf" name="cpf" value={cpf} onChange={handleCpf}
                                            placeholder="000.000.000-00" maxLength="14"/>
+                                    {formErrors.cpf && <span className="input-error-message">{formErrors.cpf}</span>}
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="email">E-mail *</label>
                                     <input id="email" name="email" type="email" required={true}
                                            placeholder="seu@email.com"/>
+                                    {formErrors.email &&
+                                        <span className="input-error-message">{formErrors.email}</span>}
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="dataNascimento">Data de Nascimento *</label>
                                     <input id="dataNascimento" name="dataNascimento" type="date" required={true}/>
+                                    {formErrors.birthDate &&
+                                        <span className="input-error-message">{formErrors.birthDate}</span>}
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="telefone">Telefone *</label>
                                     <input id="telefone" name="telefone" type="tel" required={true}
                                            placeholder="(00) 00000-0000"/>
+                                    {formErrors.phone &&
+                                        <span className="input-error-message">{formErrors.phone}</span>}
                                 </div>
                                 <fieldset className="form__fieldset">
                                     <legend>Endereço:</legend>
@@ -193,32 +210,45 @@ export default function SignUp() {
                                         <label htmlFor="street">Logradouro *</label>
                                         <input id="street" name="street" type="text" required={true}
                                                placeholder="Rua, Avenida, etc."/>
+                                        {formErrors['address.street'] &&
+                                            <span className="input-error-message">{formErrors['address.street']}</span>}
                                     </div>
                                     <div className="form__content__form__input-group">
                                         <label htmlFor="number">Número *</label>
                                         <input id="number" name="number" type="text" required={true}
                                                placeholder="Ex: 123"/>
+                                        {formErrors['address.number'] &&
+                                            <span className="input-error-message">{formErrors['address.number']}</span>}
                                     </div>
                                     <div className="form__content__form__input-group">
                                         <label htmlFor="city">Cidade *</label>
                                         <input id="city" name="city" type="text" required={true}
                                                placeholder="Ex: Chapecó"/>
+                                        {formErrors['address.city'] &&
+                                            <span className="input-error-message">{formErrors['address.city']}</span>}
                                     </div>
                                     <div className="form__content__form__input-group">
                                         <label htmlFor="state">Estado (UF) *</label>
                                         <input id="state" name="state" type="text" required={true} maxLength="2"
                                                placeholder="Ex: SC"/>
+                                        {formErrors['address.state'] &&
+                                            <span className="input-error-message">{formErrors['address.state']}</span>}
                                     </div>
                                     <div className="form__content__form__input-group">
                                         <label htmlFor="country">País *</label>
                                         <input id="country" name="country" type="text" required={true}
                                                placeholder="Ex: Brasil"/>
+                                        {formErrors['address.country'] &&
+                                            <span
+                                                className="input-error-message">{formErrors['address.country']}</span>}
                                     </div>
                                 </fieldset>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="senha">Senha *</label>
                                     <input id="senha" name="senha" type="password" required={true}
                                            placeholder="Digite sua senha"/>
+                                    {formErrors.senha &&
+                                        <span className="input-error-message">{formErrors.senha}</span>}
                                 </div>
                                 <div className="form__content__form__input-group">
                                     <label htmlFor="confirmarSenha">Confirmar Senha *</label>
@@ -235,6 +265,8 @@ export default function SignUp() {
                                         <input id="codigoProfissional" name="codigoProfissional" type="text"
                                                required={true}
                                                placeholder="Ex: ABC01"/>
+                                        {formErrors.professionalCode &&
+                                            <span className="input-error-message">{formErrors.professionalCode}</span>}
                                     </div>
                                 )}
                                 {userType === "prescritor" && (
@@ -267,7 +299,7 @@ export default function SignUp() {
                                     </>
                                 )}
                                 {/* exibe a mensagem de erro, se houver (maiqueli) */}
-                                {error && <p className="sign-up__error-message">{error}</p>}
+                                {formErrors.general && <p className="sign-up__error-message">{formErrors.general}</p>}
                                 <div className="form__content__form__actions">
                                     {/* desabilita o botão enquanto carrega (maiqueli) */}
                                     <button type="submit" disabled={isLoading}>

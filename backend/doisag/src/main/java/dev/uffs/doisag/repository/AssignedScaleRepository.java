@@ -21,4 +21,7 @@ public interface AssignedScaleRepository extends JpaRepository<AssignedScale, Lo
             ScaleType scaleType,
             AssignmentStatus status
     );
+    // busca todas as escalas de um paciente, ordenando pela data que foram designadas
+    List<AssignedScale> findByPatientIdOrderByAssignedDateDesc(Long patientId);
+
 }

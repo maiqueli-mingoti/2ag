@@ -5,7 +5,7 @@
 }
 
 .dashboard-header {
-    background-color: #193E21;
+    background-color: #193e21;
     color: white;
     padding: 1rem 2rem;
     display: flex;
@@ -29,7 +29,7 @@
 }
 
 .dashboard-header__user span {
-    color: var( --color-text-on-primary);
+    color: var(--color-text-on-primary);
     font-weight: 500;
 }
 
@@ -60,7 +60,7 @@
 
 /* Ações */
 
-.dashboard-actions{
+.dashboard-actions {
     margin-bottom: 2rem;
 }
 
@@ -80,6 +80,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid var(--color-border-light);
     transition: transform 0.2s;
+}
+
+.stat-number {
+    font-size: 1.25rem;
 }
 
 .stat-card:hover {
@@ -131,23 +135,23 @@
 
 /* Agendamentos */
 
-.agendamento-item{
+.agendamento-item {
     display: grid;
     background-color: var(--color-surface-alt);
     border-radius: 0.5rem;
 }
 
-.card-footer{
+.card-footer {
     display: grid;
 }
 
-.card-footer .button{
+.card-footer .button {
     margin-top: 1rem;
 }
 
 /* Fichas */
 
-.ficha-item{
+.ficha-item {
     display: grid;
     background-color: var(--color-surface-alt);
     border-radius: 0.5rem;
@@ -155,20 +159,66 @@
 
 /* Alertas */
 
-.alert-item{
+.alert-item {
     display: grid;
     background-color: var(--color-surface-alt);
     border-radius: 0.5rem;
 }
 
-.alert-footer{
+.alert-footer {
     display: grid;
 }
 
 /* Pacientes */
 
-.paciente-item{
+.paciente-item {
     display: grid;
     background-color: var(--color-surface-alt);
     border-radius: 0.5rem;
+}
+
+.new-patient {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1rem;
+}
+
+.new-patient__row {
+    align-items: flex-start;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.new-patient__field {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+.new-patient__field.small {
+    flex: 0;
+    width: 96px;
+}
+
+.new-patient__actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1.25rem;
+}
+
+.new-patient__actions button:first-child {
+    background-color: var(--color-accent-disagree);
+    border-color: var(--color-accent-disagree);
+}
+
+@media screen and (max-width: 578px) {
+    .new-patient__row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .new-patient__field.small {
+        flex: 1;
+        width: auto;
+    }
 }
